@@ -50,35 +50,30 @@
 	<!--[if lt IE 9]>
 	<script src="js/respond.min.js"></script>
 	<![endif]-->
-	<script>
-		$(document).ready(function(){
-			$("#campionati").append("<li>ciao</li>");
-		});
-	</script>
 	</head>
 	<body style="background-image: url(images/newmessi.jpg);">
 		<div id="fh5co-wrapper">
 		<div id="fh5co-page">
 		<div id="fh5co-header">
 			<header id="fh5co-header-section">
-			<c:if test="${loggato}">
-				<div>
-					<span class="col-sm-9"></span>
-					<span class="col-sm-3"> 
-						${mex}
-						<a href="login" class="btn btn-primary"> LOG-OUT </a>
-					</span>
-				</div>
-			</c:if>
+				<c:if test="${loggato}">
+					<div>
+						<span class="col-sm-9"></span>
+						<span class="col-sm-3"> 
+							${mex}
+							<a href="login" class="btn btn-primary"> LOG-OUT </a>
+						</span>
+					</div>
+				</c:if>
 				<div class="container">
 					<div class="nav-header">
 						<a href="#" class="js-fh5co-nav-toggle fh5co-nav-toggle"><i></i></a>
-						<h1 id="fh5co-logo"><a href="index.html">Crypto<span>Bet</span></a></h1>
+						<h1 id="fh5co-logo"><a href="index.jsp">Crypto<span>Bet</span></a></h1>
 						<!-- START #fh5co-menu-wrap -->
 						<nav id="fh5co-menu-wrap" role="navigation">
 							<ul class="sf-menu" id="fh5co-primary-menu">
 								<li class="active">
-									<a href="index.html">Home</a>
+									<a href="index.jsp">Home</a>
 								</li>
 								<li >
 									<a id="scom" class="fh5co-sub-ddown">Scommesse</a>
@@ -87,7 +82,7 @@
 									</ul>
 								</li>
 								<li>
-									<a href="schedule.html" class="fh5co-sub-ddown">Il Mio Conto</a>
+									<a href="MioConto.jsp" class="fh5co-sub-ddown">Il Mio Conto</a>
 								</li>
 								<li><a href="about.html">About</a></li>
 								<li><a href="contact.html">Contact</a></li>
@@ -95,8 +90,8 @@
 						</nav>
 					</div>
 				</div>
+			</header>		
 		</div>
-		</header>		
 		<!-- end:fh5co-header -->
 		<div class="fh5co-hero">
 			<div class="fh5co-overlay"></div>
@@ -124,6 +119,11 @@
 											<div class="form-group">
 												<span class="col-sm-6"><input class="btn btn-primary" type="submit" name="accesso" value="Accedi"/></span>
 												<span class="col-sm-6"><a class="btn btn-primary" href="Registrati.html">Registrati</a></span>
+											</div>
+											<div class="form-group">
+												<span class="col-sm-3"></span>
+												<span class="col-sm-6"><input class="btn btn-primary" type="submit" name="accesso" value="Accedi Admin"/></span>
+												<span class="col-sm-3"></span>	
 											</div>
 										</form>
 									</c:if>							

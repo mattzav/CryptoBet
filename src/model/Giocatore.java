@@ -45,5 +45,14 @@ public class Giocatore {
 		// TODO Auto-generated method stub
 		return conto;
 	}
+	public void setCognome(String string) {
+		cognome=string;		
+	}
+	public void setNome(String string) {
+		nome=string;
+	}
+	public void setConto(Conto c) {
+		conto=c;
+	}
 	
 }

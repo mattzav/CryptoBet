@@ -36,4 +36,8 @@ public class Conto {
 		// TODO Auto-generated method stub
 		return carta;
 	}
+
+	public void setCodice(long long1) {
+		codice=long1;
+	}
 }

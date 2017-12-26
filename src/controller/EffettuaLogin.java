@@ -10,6 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.websocket.Session;
 
+import model.Credenziali;
+import model.Giocatore;
+import persistence.DAOFactory;
+import persistence.PostgresDAOFactory;
+
 public class EffettuaLogin extends HttpServlet {
 
 	@Override
@@ -17,10 +22,16 @@ public class EffettuaLogin extends HttpServlet {
 
 		HttpSession session=req.getSession();
 		String username=req.getParameter("user");
-		String messaggio="Benvenuto "+username;
-		session.setAttribute("username", username);
-		session.setAttribute("mex", messaggio);
-		session.setAttribute("loggato", true);
+		String pwd=req.getParameter("pwd");
+		Credenziali c=new Credenziali(username, pwd);
+		Giocatore g=PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getGiocatoreDAO().findByCerdenziali(c);
+		if(g!=null) {
+			String messaggio="Benvenuto "+username+"  ";
+			session.setAttribute("username", username);
+			session.setAttribute("mex", messaggio);
+			session.setAttribute("loggato", true);
+			session.setAttribute("conto", g.getConto().getCodice());
+		}
 		RequestDispatcher disp= req.getRequestDispatcher("index.jsp");
 		disp.forward(req, resp);
 	}
