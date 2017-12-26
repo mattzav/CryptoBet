@@ -3138,6 +3138,7 @@ output {
   height: 42px;
   padding: 10px 20px;
   font-size: 14px;
+  text-align:center;
   line-height: 1.42857;
   color: #555555;
   background-color: #fff;
@@ -3230,6 +3231,7 @@ input[type="search"] {
     line-height: 46px;
   }
 }
+
 .form-group {
   margin-bottom: 15px;
 }
@@ -5333,7 +5335,7 @@ tbody.collapse.in {
 .label {
   display: inline;
   padding: .2em .6em .3em;
-  font-size: 75%;
+  font-size: 100%;
   font-weight: bold;
   line-height: 1;
   color: #fff;

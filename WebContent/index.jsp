@@ -1,5 +1,7 @@
-
-<!DOCTYPE html>
+<%@ page contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
@@ -41,20 +43,33 @@
 
 	<link rel="stylesheet" href="css/style.css">
 
-
 	<!-- Modernizr JS -->
 	<script src="js/modernizr-2.6.2.min.js"></script>
+
 	<!-- FOR IE9 below -->
 	<!--[if lt IE 9]>
 	<script src="js/respond.min.js"></script>
 	<![endif]-->
-
+	<script>
+		$(document).ready(function(){
+			$("#campionati").append("<li>ciao</li>");
+		});
+	</script>
 	</head>
 	<body style="background-image: url(images/newmessi.jpg);">
 		<div id="fh5co-wrapper">
 		<div id="fh5co-page">
 		<div id="fh5co-header">
 			<header id="fh5co-header-section">
+			<c:if test="${loggato}">
+				<div>
+					<span class="col-sm-9"></span>
+					<span class="col-sm-3"> 
+						${mex}
+						<a href="login" class="btn btn-primary"> LOG-OUT </a>
+					</span>
+				</div>
+			</c:if>
 				<div class="container">
 					<div class="nav-header">
 						<a href="#" class="js-fh5co-nav-toggle fh5co-nav-toggle"><i></i></a>
@@ -65,10 +80,10 @@
 								<li class="active">
 									<a href="index.html">Home</a>
 								</li>
-								<li id="campionati">
-									<a href="paginaQuote.html" class="fh5co-sub-ddown">Scommesse</a>
-									 <ul class="fh5co-sub-menu">
-									 	 
+								<li >
+									<a id="scom" class="fh5co-sub-ddown">Scommesse</a>
+									<ul  class="fh5co-sub-menu" id="campionati">
+									
 									</ul>
 								</li>
 								<li>
@@ -80,8 +95,8 @@
 						</nav>
 					</div>
 				</div>
-			</header>		
 		</div>
+		</header>		
 		<!-- end:fh5co-header -->
 		<div class="fh5co-hero">
 			<div class="fh5co-overlay"></div>
@@ -93,24 +108,25 @@
 								<h2><a href="scommesse.html">Bet &amp; Win</a><br><b>Unisciti a CryptoBet</b></h2>
 							</div>
 							<div class="col-sm-4">
-							 
-								<form method="post" action="login">
-									<div class="form-group">
-										<label for="usr"> Username: </label>
-										<input type="text" class="form-control" id="usr">
-									</div>
-									<div class="form-group">
-										<label for="pwd"> Password: </label>
-										<input type="password" class="form-control" id="pwd">
-									</div>
-									<div>
-										<span class="label"></span>
-									</div>
-									<div class="form-group">
-										<span class="col-sm-6"><input class="btn btn-primary" type="submit" value="Accedi"/></span>
-										<span class="col-sm-6"><a class="btn btn-primary" href="Registrati.html">Registrati</a></span>
-									</div>
-								</form>
+									<c:if test="${not loggato}">
+										<form method="post" action="login">
+											<div class="form-group">
+												<label for="user"> Username: </label>
+												<input type="text" class="form-control" name="user">
+											</div>
+											<div class="form-group">
+												<label for="pwd"> Password: </label>
+												<input type="password" class="form-control" name="pwd">
+											</div>
+											<div>
+												<span class="label"></span>
+											</div>
+											<div class="form-group">
+												<span class="col-sm-6"><input class="btn btn-primary" type="submit" name="accesso" value="Accedi"/></span>
+												<span class="col-sm-6"><a class="btn btn-primary" href="Registrati.html">Registrati</a></span>
+											</div>
+										</form>
+									</c:if>							
 							</div>
 						</div>
 					</div>

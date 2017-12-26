@@ -1,0 +1,172 @@
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+	<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Fitness &mdash; 100% Free Fully Responsive HTML5 Template by FREEHTML5.co</title>
+
+
+	<link rel="shortcut icon" href="favicon.ico">
+
+	<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700,900' rel='stylesheet' type='text/css'>
+	
+	<!-- Animate.css -->
+	<link rel="stylesheet" href="css/animate.css">
+	<!-- Icomoon Icon Fonts-->
+	<link rel="stylesheet" href="css/icomoon.css">
+	<!-- Bootstrap  -->
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<!-- Superfish -->
+	<link rel="stylesheet" href="css/superfish.css">
+
+	<link rel="stylesheet" href="css/style.css">
+
+
+	<!-- Modernizr JS -->
+	<script src="js/modernizr-2.6.2.min.js"></script>
+	<!-- FOR IE9 below -->
+	<!--[if lt IE 9]>
+	<script src="js/respond.min.js"></script>
+	<![endif]-->
+	
+	<!-- Utility script -->
+	<script type="text/javascript">
+		function checkName(){
+			var value=document.getElementById("name").value;
+			var error= value.match(/\d+/g);
+			if (error != null) {
+				document.getElementById("nameError").style.display = "block";
+			}
+			else{
+				document.getElementById("nameError").style.display = "none";
+			}
+		}
+		function checkSurname(){
+			
+			var value=document.getElementById("surname").value;
+			var error= value.match(/\d+/g);
+			if (error != null) {
+				document.getElementById("surnameError").style.display = "block";
+			}
+			else{
+				document.getElementById("surnameError").style.display = "none";
+			}
+		}
+		
+		function checkCreditCard(){
+			// da rifare
+			
+		}
+		
+		
+		function checkCheckPwd(){
+			var confPwd=document.getElementById("checkPwd").value;
+			var pwd=document.getElementById("password").value;
+			if (confPwd != password) {
+				document.getElementById("checkPwdError").style.display = "block";
+			}
+			else{
+				document.getElementById("checkPwdError").style.display = "none";
+			}
+		}
+	</script>
+
+	</head>
+	<body style="background-image: url(images/home-image-3.jpg);">
+		<div class="container">
+			<div class="nav-header">
+				<a href="#" class="js-fh5co-nav-toggle fh5co-nav-toggle"><i></i></a>
+				<h1 id="fh5co-logo"><a href="index.html">CRYPTO<span>BET</span></a></h1>
+				<!-- START #fh5co-menu-wrap -->
+				<nav id="fh5co-menu-wrap" role="navigation">
+					<ul class="sf-menu" id="fh5co-primary-menu">
+						<li class="active">
+							<a href="index.html">Home</a>
+						</li>
+						<li id="campionati">
+							<a href="paginaQuote.html" class="fh5co-sub-ddown">Scommesse</a>
+							 <ul class="fh5co-sub-menu">
+							 	 
+							</ul>
+						</li>
+						<li>
+							<a href="schedule.html" class="fh5co-sub-ddown">Il Mio Conto</a>
+						</li>
+						<li><a href="about.html">About</a></li>
+						<li><a href="contact.html">Contact</a></li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+		<div data-stellar-background-ratio="0.5">
+			<div class="overlay"></div>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2 col-sm-12 col-sm-offset-0 col-xs-12 col-xs-offset-0 text-center fh5co-table">
+						<div class="fh5co-intro fh5co-table-cell animate-box">
+							<form method="post" action="sendData">
+								<div class="form-group" id="nameDiv">
+									<label class="label" for="name"> Nome: </label>
+									<input type="text" class="form-control" name="name" onkeyup="checkName();">
+									<span class="label glyphicon glyphicon-remove" id="nameError" style="display:none"> Errore non può contenere numeri </span>
+								</div>
+								<div class="form-group">
+									<label for="surname" class="label"> Cognome </label>
+									<input type="text" class="form-control" name="surname" onkeyup="checkSurname();">
+									<span class="label glyphicon glyphicon-remove" id="surnameError" style="display:none"> Errore non può contenere numeri </span>
+								</div>
+								<div class="form-group">
+									<label for="creditCard" class="label"> Codice carta di credito: </label>
+									<input type="text" class="form-control" name="creditCard">
+									<span class="label glyphicon glyphicon-remove" id="creditCardError" style="display:none"> Errore non può contenere numeri </span>
+								</div>
+								<div class="form-group">
+									<label for="usr" class="label"> Username: </label>
+									<input type="text" class="form-control" name="usr" onkeyup="checkUsername();">
+									<span class="label glyphicon glyphicon-remove" id="userError" style="display:none"> Errore non può contenere numeri </span>
+								</div>
+								<div class="form-group">
+									<label for="password" class="label"> Password: </label>
+									<input type="password" class="form-control" name="password" onkeyup="checkPassword();">
+									<span class="label glyphicon glyphicon-remove" id="passwordError" style="display:none"> Errore non può contenere numeri </span>
+								</div>
+								<div class="form-group">
+									<label for="checkPwd" class="label"> Conferma password: </label>
+									<input type="text" class="form-control" name="checkPwd" onkeyup="checkCheckPwd();">
+									<span class="label glyphicon glyphicon-remove" id="checkPwdError" style="display:none"> La password non coincide </span>
+								</div>
+								<div class="form-group">
+									<input type="submit" class="btn btn-primary" id="registerUser">
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!-- end: fh5co-parallax -->
+	<!-- jQuery -->
+
+
+	<script src="js/jquery.min.js"></script>
+	<!-- jQuery Easing -->
+	<script src="js/jquery.easing.1.3.js"></script>
+	<!-- Bootstrap -->
+	<script src="js/bootstrap.min.js"></script>
+	<!-- Waypoints -->
+	<script src="js/jquery.waypoints.min.js"></script>
+	<!-- Stellar -->
+	<script src="js/jquery.stellar.min.js"></script>
+	<!-- Superfish -->
+	<script src="js/hoverIntent.js"></script>
+	<script src="js/superfish.js"></script>
+
+	<!-- Main JS (Do not remove) -->
+	<script src="js/main.js"></script>
+
+	</body>
+</html>
+

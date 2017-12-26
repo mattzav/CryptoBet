@@ -1,0 +1,46 @@
+package persistence;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+
+public class IdBroker {
+
+	// Standard SQL (queste stringhe andrebbero scritte in un file di configurazione
+	// private static final String query = "SELECT NEXT VALUE FOR SEQ_ID AS id";
+	// postgresql
+
+	private String tableName;
+	private static IdBroker istance;
+	
+	private IdBroker(String classIdGenerator) {
+		this.tableName = classIdGenerator;
+	}
+	
+	public static IdBroker getIstance(String _tableName) {
+		if(istance == null) {
+			istance=new IdBroker(_tableName);
+		}
+		return istance;
+	}
+
+	public Long getId(Connection connection) {
+		Long id = null;
+		String query = "SELECT max(T.codice) from "+tableName+" as T";
+		try {
+			PreparedStatement statement = connection.prepareStatement(query);
+			ResultSet result = statement.executeQuery();
+			if(result==null) {
+				id=new Long(0);
+			}else {
+				result.next();
+				id = result.getLong(1);
+			}
+		} catch (SQLException e) {
+			throw new PersistenceException(e.getMessage());
+		}
+		return id+1;
+	}
+}
