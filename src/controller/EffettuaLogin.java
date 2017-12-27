@@ -33,7 +33,8 @@ public class EffettuaLogin extends HttpServlet {
 			session.setAttribute("conto", g.getConto().getCodice());
 		}
 		RequestDispatcher disp;
-		if(session.getAttribute("page").equals("mioconto"))
+		String page=(String) session.getAttribute("page");
+		if(page!=null && page.equals("mioconto"))
 			disp= req.getRequestDispatcher("MioConto.jsp");
 		else disp= req.getRequestDispatcher("index.jsp");
 		disp.forward(req, resp);
@@ -45,7 +46,8 @@ public class EffettuaLogin extends HttpServlet {
 		session.removeAttribute("username");
 		session.setAttribute("loggato", false);
 		RequestDispatcher disp;
-		if(session.getAttribute("page").equals("mioconto"))
+		String page=(String) session.getAttribute("page");
+		if(page!=null && page.equals("mioconto"))
 			disp= req.getRequestDispatcher("MioConto.jsp");
 		else disp= req.getRequestDispatcher("index.jsp");
 		disp.forward(req, resp);
