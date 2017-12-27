@@ -31,12 +31,4 @@
     <url-pattern>/campionati</url-pattern>
   </servlet-mapping>  
   
-  <servlet>
-    <servlet-name>MioConto</servlet-name>
-    <servlet-class>controller.CaricaConto</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>MioConto</servlet-name>
-    <url-pattern>/apriAreaConto</url-pattern>
-  </servlet-mapping>
 </web-app>

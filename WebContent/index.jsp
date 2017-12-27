@@ -50,6 +50,24 @@
 	<!--[if lt IE 9]>
 	<script src="js/respond.min.js"></script>
 	<![endif]-->
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	
+	<script>
+		$(document).ready(function() {
+			$.ajax({
+				  headers: { 'X-Auth-Token': '9c8c10fb6ee545a5a46161e402d73dee'},
+				  url: 'http://api.football-data.org/v1/competitions/?season=2015',
+				  dataType: 'json',
+				  type: 'GET',
+				}).done(function(response) {
+					$.each(response, function(index, item){
+					var new_li= $("<li>").text(item.caption);
+						 $(".campionati").append(new_li);
+					});
+				}); 
+		});
+	</script>
 	</head>
 	<body style="background-image: url(images/newmessi.jpg);">
 		<div id="fh5co-wrapper">
@@ -76,8 +94,8 @@
 									<a href="index.jsp">Home</a>
 								</li>
 								<li >
-									<a id="scom" class="fh5co-sub-ddown">Scommesse</a>
-									<ul  class="fh5co-sub-menu" id="campionati">
+									<a class="fh5co-sub-ddown">Scommesse</a>
+									<ul  class="fh5co-sub-menu campionati">
 									
 									</ul>
 								</li>
@@ -114,7 +132,8 @@
 												<input type="password" class="form-control" name="pwd">
 											</div>
 											<div>
-												<span class="label"></span>
+												<label class="col-sm-8 label" for="admin"> Sei un Admin? </label>
+												<span class="col-sm-4"><input type="checkbox" name="admin"></span>
 											</div>
 											<div class="form-group">
 												<span class="col-sm-6"><input class="btn btn-primary" type="submit" name="accesso" value="Accedi"/></span>

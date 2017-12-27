@@ -74,7 +74,7 @@
 						<span class="col-sm-9"></span>
 						<span class="col-sm-3"> 
 							${mex}
-							<a href="login" class="btn btn-primary"> LOG-OUT </a>
+							<a href="login"><input type="button" class="btn btn-primary"value=LOG-OUT onclick="<c:set var="page" value="mioconto" scope="session"  />"></a>
 						</span>
 					</div>
 				</c:if>
@@ -135,7 +135,7 @@
 												<span class="label"></span>
 											</div>
 											<div class="form-group">
-												<input class="btn btn-primary" type="submit" name="accesso" value="Accedi"/>
+												<input class="btn btn-primary" type="submit" name="accesso" value="Accedi" onclick="<c:set var="page" value="mioconto" scope="session"/>"/>
 												<a class="btn btn-primary" href="Registrati.html">Registrati</a>
 											</div>
 										</form>
