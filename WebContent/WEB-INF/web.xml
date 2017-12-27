@@ -23,12 +23,12 @@
   </servlet-mapping>  
   
    <servlet>
-    <servlet-name>PrendiCampionati</servlet-name>
-    <servlet-class>controller.Campionati</servlet-class>
+    <servlet-name>AggiornaDati</servlet-name>
+    <servlet-class>controller.AggiornaDati</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>PrendiCampionati</servlet-name>
-    <url-pattern>/campionati</url-pattern>
+    <servlet-name>AggiornaDati</servlet-name>
+    <url-pattern>/aggiornaDati</url-pattern>
   </servlet-mapping>  
   
 </web-app>

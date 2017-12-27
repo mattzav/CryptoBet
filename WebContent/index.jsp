@@ -1,160 +1,190 @@
+<%@page import="java.util.ArrayList"%>
 <%@ page contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+	pageEncoding="ISO-8859-1"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-	<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>CryptoBet</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="Free HTML5 Template by FREEHTML5.CO" />
-	<meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive" />
-	<meta name="author" content="FREEHTML5.CO" />
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>CryptoBet</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Free HTML5 Template by FREEHTML5.CO" />
+<meta name="keywords"
+	content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive" />
+<meta name="author" content="FREEHTML5.CO" />
 
-  
-  	<!-- Facebook and Twitter integration -->
-	<meta property="og:title" content=""/>
-	<meta property="og:image" content=""/>
-	<meta property="og:url" content=""/>
-	<meta property="og:site_name" content=""/>
-	<meta property="og:description" content=""/>
-	<meta name="twitter:title" content="" />
-	<meta name="twitter:image" content="" />
-	<meta name="twitter:url" content="" />
-	<meta name="twitter:card" content="" />
 
-	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-	<link rel="shortcut icon" href="favicon.ico">
+<!-- Facebook and Twitter integration -->
+<meta property="og:title" content="" />
+<meta property="og:image" content="" />
+<meta property="og:url" content="" />
+<meta property="og:site_name" content="" />
+<meta property="og:description" content="" />
+<meta name="twitter:title" content="" />
+<meta name="twitter:image" content="" />
+<meta name="twitter:url" content="" />
+<meta name="twitter:card" content="" />
 
-	<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700,900' rel='stylesheet' type='text/css'>
-	
-	<!-- Animate.css -->
-	<link rel="stylesheet" href="css/animate.css">
-	<!-- Icomoon Icon Fonts-->
-	<link rel="stylesheet" href="css/icomoon.css">
-	<!-- Bootstrap  -->
-	<link rel="stylesheet" href="css/bootstrap.css">
-	<!-- Superfish -->
-	<link rel="stylesheet" href="css/superfish.css">
+<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+<link rel="shortcut icon" href="favicon.ico">
 
-	<link rel="stylesheet" href="css/style.css">
+<link
+	href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700,900'
+	rel='stylesheet' type='text/css'>
 
-	<!-- Modernizr JS -->
-	<script src="js/modernizr-2.6.2.min.js"></script>
+<!-- Animate.css -->
+<link rel="stylesheet" href="css/animate.css">
+<!-- Icomoon Icon Fonts-->
+<link rel="stylesheet" href="css/icomoon.css">
+<!-- Bootstrap  -->
+<link rel="stylesheet" href="css/bootstrap.css">
+<!-- Superfish -->
+<link rel="stylesheet" href="css/superfish.css">
 
-	<!-- FOR IE9 below -->
-	<!--[if lt IE 9]>
+<link rel="stylesheet" href="css/style.css">
+
+<!-- Modernizr JS -->
+<script src="js/modernizr-2.6.2.min.js"></script>
+
+<!-- FOR IE9 below -->
+<!--[if lt IE 9]>
 	<script src="js/respond.min.js"></script>
 	<![endif]-->
-	
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	
-	<script>
-		$(document).ready(function() {
-			$.ajax({
-				  headers: { 'X-Auth-Token': '9c8c10fb6ee545a5a46161e402d73dee'},
-				  url: 'http://api.football-data.org/v1/competitions/?season=2015',
-				  dataType: 'json',
-				  type: 'GET',
-				}).done(function(response) {
-					$.each(response, function(index, item){
-					var new_li= $("<li>").text(item.caption);
-						 $(".campionati").append(new_li);
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script>
+	$(document).ready(function() {
+		var squadre = [];
+		$.ajax({
+			headers : {
+				'X-Auth-Token' : '9c8c10fb6ee545a5a46161e402d73dee'
+			},
+			url : 'http://api.football-data.org/v1/competitions/?season=2017',
+			dataType : 'json',
+			type : 'GET',
+			async : false,
+		}).done(function(response) {
+			$.each(response, function(index, item) {
+				var _url = item._links.teams.href;
+				$.ajax({
+					headers : {
+						'X-Auth-Token' : '9c8c10fb6ee545a5a46161e402d73dee'
+					},
+					url : _url,
+					dataType : 'json',
+					type : 'GET',
+					async : false,
+				}).done(function(_response) {
+					$.each(_response, function(i, _item) {
+						if (i == "teams") {
+							$.each(_item, function(_i, item2) {
+								squadre.push(item2.name);
+								alert(item2.name);
+							});
+						}
 					});
-				}); 
+				});
+			});
+
 		});
-	</script>
-	</head>
-	<body style="background-image: url(images/newmessi.jpg);">
-		<div id="fh5co-wrapper">
+
+});
+</script>
+</head>
+<body style="background-image: url(images/newmessi.jpg);">
+	<div id="fh5co-wrapper">
 		<div id="fh5co-page">
-		<div id="fh5co-header">
-			<header id="fh5co-header-section">
-				<c:if test="${loggato}">
+			<div id="fh5co-header">
+				<header id="fh5co-header-section"> <c:if test="${loggato}">
 					<div>
-						<span class="col-sm-9"></span>
-						<span class="col-sm-3"> 
-							${mex}
-							<a href="login" class="btn btn-primary"> LOG-OUT </a>
+						<span class="col-sm-9"></span> <span class="col-sm-3">
+							${mex} <a href="login" class="btn btn-primary"> LOG-OUT </a>
 						</span>
 					</div>
 				</c:if>
 				<div class="container">
 					<div class="nav-header">
 						<a href="#" class="js-fh5co-nav-toggle fh5co-nav-toggle"><i></i></a>
-						<h1 id="fh5co-logo"><a href="index.jsp">Crypto<span>Bet</span></a></h1>
+						<h1 id="fh5co-logo">
+							<a href="index.jsp">Crypto<span>Bet</span></a>
+						</h1>
 						<!-- START #fh5co-menu-wrap -->
 						<nav id="fh5co-menu-wrap" role="navigation">
-							<ul class="sf-menu" id="fh5co-primary-menu">
-								<li class="active">
-									<a href="index.jsp">Home</a>
-								</li>
-								<li >
-									<a class="fh5co-sub-ddown">Scommesse</a>
-									<ul  class="fh5co-sub-menu campionati">
-									
-									</ul>
-								</li>
-								<li>
-									<a href="MioConto.jsp" class="fh5co-sub-ddown">Il Mio Conto</a>
-								</li>
-								<li><a href="about.html">About</a></li>
-								<li><a href="contact.html">Contact</a></li>
-							</ul>
+						<ul class="sf-menu" id="fh5co-primary-menu">
+							<li class="active"><a href="index.jsp">Home</a></li>
+							<li><a class="fh5co-sub-ddown">Scommesse</a>
+								<ul class="fh5co-sub-menu campionati">
+
+								</ul></li>
+							<li><a href="MioConto.jsp" class="fh5co-sub-ddown">Il
+									Mio Conto</a></li>
+							<li><a href="about.html">About</a></li>
+							<li><a href="contact.html">Contact</a></li>
+						</ul>
 						</nav>
 					</div>
 				</div>
-			</header>		
-		</div>
-		<!-- end:fh5co-header -->
-		<div class="fh5co-hero">
-			<div class="fh5co-overlay"></div>
-			<div class="fh5co-cover" data-stellar-background-ratio="0.5">
-				<div class="desc animate-box">
-					<div class="container ">
-						<div class="row" style="margin-left: 250px">
-							<div class="col-sm-8">
-								<h2><a href="scommesse.html">Bet &amp; Win</a><br><b>Unisciti a CryptoBet</b></h2>
-							</div>
-							<div class="col-sm-4">
+				</header>
+			</div>
+			<!-- end:fh5co-header -->
+			<div class="fh5co-hero">
+				<div class="fh5co-overlay"></div>
+				<div class="fh5co-cover" data-stellar-background-ratio="0.5">
+					<div class="desc animate-box">
+						<div class="container ">
+							<div class="row" style="margin-left: 250px">
+								<div class="col-sm-8">
+									<h2>
+										<a href="scommesse.html">Bet &amp; Win</a><br> <b>Unisciti
+											a CryptoBet</b>
+									</h2>
+								</div>
+								<div class="col-sm-4">
 									<c:if test="${not loggato}">
 										<form method="post" action="login">
 											<div class="form-group">
-												<label for="user"> Username: </label>
-												<input type="text" class="form-control" name="user">
+												<label for="user"> Username: </label> <input type="text"
+													class="form-control" name="user">
 											</div>
 											<div class="form-group">
-												<label for="pwd"> Password: </label>
-												<input type="password" class="form-control" name="pwd">
+												<label for="pwd"> Password: </label> <input type="password"
+													class="form-control" name="pwd">
 											</div>
 											<div>
-												<label class="col-sm-8 label" for="admin"> Sei un Admin? </label>
-												<span class="col-sm-4"><input type="checkbox" name="admin"></span>
+												<label class="col-sm-8 label" for="admin"> Sei un
+													Admin? </label> <span class="col-sm-4"><input
+													type="checkbox" name="admin"></span>
 											</div>
 											<div class="form-group">
-												<span class="col-sm-6"><input class="btn btn-primary" type="submit" name="accesso" value="Accedi"/></span>
-												<span class="col-sm-6"><a class="btn btn-primary" href="Registrati.html">Registrati</a></span>
+												<span class="col-sm-6"><input class="btn btn-primary"
+													type="submit" name="accesso" value="Accedi" /></span> <span
+													class="col-sm-6"><a class="btn btn-primary"
+													href="aggiornaDati">Registrati</a></span>
 											</div>
 											<div class="form-group">
-												<span class="col-sm-3"></span>
-												<span class="col-sm-6"><input class="btn btn-primary" type="submit" name="accesso" value="Accedi Admin"/></span>
-												<span class="col-sm-3"></span>	
+												<span class="col-sm-3"></span> <span class="col-sm-6"><input
+													class="btn btn-primary" type="submit" name="accesso"
+													value="Accedi Admin" /></span> <span class="col-sm-3"></span>
 											</div>
 										</form>
-									</c:if>							
+									</c:if>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		</div>
-		</div>
-		<!-- end:fh5co-hero -->
+	</div>
+	<!-- end:fh5co-hero -->
 
 	<!-- jQuery -->
 
@@ -176,6 +206,6 @@
 	<!-- Main JS (Do not remove) -->
 	<script src="js/main.js"></script>
 
-	</body>
+</body>
 </html>
 
