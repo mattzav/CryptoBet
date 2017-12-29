@@ -62,7 +62,7 @@
 
 <script>
 	$(document).ready(function() {
-		var squadre = [];
+		var squadre;
 		$.ajax({
 			headers : {
 				'X-Auth-Token' : '9c8c10fb6ee545a5a46161e402d73dee'
@@ -86,8 +86,7 @@
 					$.each(_response, function(i, _item) {
 						if (i == "teams") {
 							$.each(_item, function(_i, item2) {
-								squadre.push(item2.name);
-								alert(item2.name);
+								squadre+=item2.name;
 							});
 						}
 					});
@@ -95,6 +94,8 @@
 			});
 
 		});
+		
+		<c:set var="squadre" value=squadre.toString() scope="session"/>'
 
 });
 </script>
