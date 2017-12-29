@@ -12,6 +12,7 @@ import model.Giocatore;
 import persistence.dao.GiocatoreDao;
 
 public class GiocatoreDaoJDBC implements GiocatoreDao {
+	
 	private DataSource dataSource;
 
 	public GiocatoreDaoJDBC(DataSource dataSource) {
@@ -75,10 +76,10 @@ public class GiocatoreDaoJDBC implements GiocatoreDao {
 	}
 
 	@Override
-	public Giocatore findByCerdenziali(Credenziali credenziali) {
+	public Giocatore findByCredenziali(Credenziali credenziali) {
 		Connection connection = this.dataSource.getConnection();
 		try {
-			String insert = "select g.nome,g.cognome, g.conto from giocatore as g, credenziali as c where g.username=? and g.username=c.username and c.password=?";
+			String insert = "select g.nome,g.cognome, g.conto from giocatore as g, credenziali as c where g.username=? and g.username=c.username and c.password=? and c.tipo=\"USER\"";
 			PreparedStatement statement = connection.prepareStatement(insert);
 			statement.setString(1, credenziali.getUsername());
 			statement.setString(2, credenziali.getPassword());
