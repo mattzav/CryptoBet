@@ -98,10 +98,6 @@ public class SquadraDaoJDBC implements SquadraDao{
 
 	}
 
-	@Override
-	public void delete(Squadra squadra) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 }

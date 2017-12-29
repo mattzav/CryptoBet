@@ -3,6 +3,15 @@ package persistence;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Date;
+
+import javafx.geometry.Pos;
+import model.Campionato;
+import model.Partita;
+import model.Squadra;
+import persistence.dao.CampionatoDao;
+import persistence.dao.PartitaDao;
+import persistence.dao.SquadraDao;
 
 public class UtilDao {
 
@@ -25,7 +34,9 @@ public void dropDatabase(){
 				+ "drop table if exists corsodilaurea;"
 				+ "drop table if exists dipartimento;"
 				+ "drop table if exists indirizzo;"
-				+ "drop table if exists gruppo;";
+				+ "drop table if exists partita;"
+				+"drop table if exists squadra;"
+				+ "drop table if exists campionato;";
 		PreparedStatement statement = connection.prepareStatement(delete);
 		
 		statement.executeUpdate();
@@ -48,6 +59,36 @@ public static void main(String[] args) {
 	DataSource d=PostgresDAOFactory.dataSource;
 	UtilDao u=new UtilDao(d);
 	u.createDatabase();
+//	SquadraDao squadraDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getSquadraDAO();
+//	CampionatoDao campionatoDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCampionatoDao();
+//	PartitaDao partitaDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getPartitaDao();
+//
+//	Squadra squadra = new Squadra("milan");
+//	Squadra squadra2 = new Squadra("juventus");
+//	Squadra squadra3 = new Squadra("roma");
+//	Squadra squadra4 = new Squadra("napoli");
+//	Campionato campionato = new Campionato(new Long(1), "serie A");
+//	Campionato campionato2 = new Campionato(new Long(2), "serie B");
+//
+//	Partita partita = new Partita(new Long(1), squadra, squadra2, 2, 1, campionato, new java.util.Date(117,11,29,12,25), false);
+//	Partita partita1 = new Partita(new Long(2), squadra3, squadra4, 2, 2, campionato, new java.util.Date(29,12,20,45,0), true);
+//	
+//	squadraDao.save(squadra);
+//	squadraDao.save(squadra2);
+//	squadraDao.save(squadra3);
+//	squadraDao.save(squadra4);
+//	campionatoDao.save(campionato);
+//	partitaDao.save(partita);
+//	partitaDao.save(partita1);
+//	
+//	for(Partita p:partitaDao.findAll()) 
+//		System.out.println(p);
+//	
+//	for(Campionato c:campionatoDao.findAll())
+//		System.out.println(c);
+//
+//	for(Squadra s:squadraDao.findAll())
+//		System.out.println(s);
 }
 
 public void createDatabase(){
@@ -64,7 +105,7 @@ public void createDatabase(){
 				+ "create table amministatore(codice bigint primary key,username varchar(255) REFERENCES credenziali(\"username\"));"
 				+ "create table squadra (nome varchar(255) primary key);"
 				+ "create table campionato (codice bigint primary key, nome varchar(255));"
-				+ "create table partita (codice bigint primary key,squadraCasa varchar(255) REFERENCES squadra(\"nome\"),squadraOspite varchar(255) REFERENCES squadra(\"nome\"),campionato bigint REFERENCES campionato(\"codice\"));";
+				+ "create table partita (codice bigint primary key,squadraCasa varchar(255) REFERENCES squadra(\"nome\"),squadraOspite varchar(255) REFERENCES squadra(\"nome\"),campionato bigint REFERENCES campionato(\"codice\"),data date,finita boolean,goalCasa smallint, goalOspite smallint);";
 		PreparedStatement statement = connection.prepareStatement(delete);
 		
 		statement.executeUpdate();

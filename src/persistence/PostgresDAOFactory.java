@@ -1,11 +1,13 @@
 package persistence;
 
 import persistence.dao.AmministratoreDao;
+import persistence.dao.CampionatoDao;
 import persistence.dao.CartaDiCreditoDao;
 import persistence.dao.ContoDao;
 import persistence.dao.CredenzialiDao;
 import persistence.dao.GiocatoreDao;
 import persistence.dao.MovimentoCartaDao;
+import persistence.dao.PartitaDao;
 import persistence.dao.SquadraDao;
 
 public class PostgresDAOFactory extends DAOFactory {
@@ -81,6 +83,18 @@ public class PostgresDAOFactory extends DAOFactory {
 	public SquadraDao getSquadraDAO() {
 		// TODO Auto-generated method stub
 		return new SquadraDaoJDBC(dataSource);
+	}
+
+
+	@Override
+	public CampionatoDao getCampionatoDao() {
+		return new CampionatoDaoJDBC(dataSource);
+	}
+
+
+	@Override
+	public PartitaDao getPartitaDao() {
+		return new PartitaDaoJDBC(dataSource);
 	}
 	
 	// --------------------------------------------

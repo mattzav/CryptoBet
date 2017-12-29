@@ -1,11 +1,13 @@
 package persistence;
 
 import persistence.dao.AmministratoreDao;
+import persistence.dao.CampionatoDao;
 import persistence.dao.CartaDiCreditoDao;
 import persistence.dao.ContoDao;
 import persistence.dao.CredenzialiDao;
 import persistence.dao.GiocatoreDao;
 import persistence.dao.MovimentoCartaDao;
+import persistence.dao.PartitaDao;
 import persistence.dao.SquadraDao;
 
 public abstract class DAOFactory {
@@ -65,6 +67,11 @@ public abstract class DAOFactory {
 	public abstract persistence.UtilDao getUtilDAO();
 
 	public abstract SquadraDao getSquadraDAO();
+	
+	public abstract CampionatoDao getCampionatoDao();
+	
+	public abstract PartitaDao getPartitaDao();
+	
 
 
 }
