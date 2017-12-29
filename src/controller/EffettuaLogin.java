@@ -12,6 +12,7 @@ import javax.websocket.Session;
 
 import model.Credenziali;
 import model.Giocatore;
+import model.TipoCredenziali;
 import persistence.DAOFactory;
 import persistence.PostgresDAOFactory;
 
@@ -24,20 +25,29 @@ public class EffettuaLogin extends HttpServlet {
 		String username=req.getParameter("user");
 		String pwd=req.getParameter("pwd");
 		Credenziali c=new Credenziali(username, pwd);
-		Giocatore g=PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getGiocatoreDAO().findByCerdenziali(c);
-		if(g!=null) {
-			String messaggio="Benvenuto "+username+"  ";
+		String admin=req.getParameter("admin");
+		if(admin == null) {
+			Giocatore g=PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getGiocatoreDAO().findByCredenziali(c);
+			if(g!=null) {
+				String messaggio="Benvenuto "+username+"  ";
+				session.setAttribute("username", username);
+				session.setAttribute("mex", messaggio);
+				session.setAttribute("loggato", true);
+				session.setAttribute("conto", g.getConto().getCodice());
+			}
+			RequestDispatcher disp;
+			String page=(String) session.getAttribute("page");
+			if(page!=null && page.equals("mioconto"))
+				disp= req.getRequestDispatcher("MioConto.jsp");
+			else disp= req.getRequestDispatcher("index.jsp");
+			disp.forward(req, resp);
+		}else {
+			boolean result =PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getAmministratoreDAO().findByCredenziali(c);
+			String messaggio="Benvenuto Amministratore "+username+"    ";
 			session.setAttribute("username", username);
 			session.setAttribute("mex", messaggio);
 			session.setAttribute("loggato", true);
-			session.setAttribute("conto", g.getConto().getCodice());
 		}
-		RequestDispatcher disp;
-		String page=(String) session.getAttribute("page");
-		if(page!=null && page.equals("mioconto"))
-			disp= req.getRequestDispatcher("MioConto.jsp");
-		else disp= req.getRequestDispatcher("index.jsp");
-		disp.forward(req, resp);
 	}
 	
 	@Override

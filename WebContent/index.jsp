@@ -1,4 +1,3 @@
-<%@page import="java.util.ArrayList"%>
 <%@ page contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -59,6 +58,7 @@
 
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<<<<<<< HEAD
 
 <script>
 	$(document).ready(function() {
@@ -99,18 +99,21 @@
 
 });
 </script>
+=======
+>>>>>>> 3fbb51d173024f397909ac8497bc42a661499997
 </head>
 <body style="background-image: url(images/newmessi.jpg);">
 	<div id="fh5co-wrapper">
 		<div id="fh5co-page">
 			<div id="fh5co-header">
-				<header id="fh5co-header-section"> <c:if test="${loggato}">
-					<div>
-						<span class="col-sm-9"></span> <span class="col-sm-3">
-							${mex} <a href="login" class="btn btn-primary"> LOG-OUT </a>
-						</span>
-					</div>
-				</c:if>
+				<header id="fh5co-header-section"> 
+					<c:if test="${loggato}">
+						<div>
+							<span class="col-sm-9"></span> <span class="col-sm-3">
+								${mex} <a href="login" class="btn btn-primary"> LOG-OUT </a>
+							</span>
+						</div>
+					</c:if>
 				<div class="container">
 					<div class="nav-header">
 						<a href="#" class="js-fh5co-nav-toggle fh5co-nav-toggle"><i></i></a>
@@ -120,13 +123,13 @@
 						<!-- START #fh5co-menu-wrap -->
 						<nav id="fh5co-menu-wrap" role="navigation">
 						<ul class="sf-menu" id="fh5co-primary-menu">
-							<li class="active"><a href="index.jsp">Home</a></li>
+							<li><a href="index.jsp">Home</a></li>
 							<li><a class="fh5co-sub-ddown">Scommesse</a>
 								<ul class="fh5co-sub-menu campionati">
 
 								</ul></li>
-							<li><a href="MioConto.jsp" class="fh5co-sub-ddown">Il
-									Mio Conto</a></li>
+							<li><a href="MioConto.jsp">Il Mio Conto</a></li>
+							<li><a href="gestisciPartite.jsp"> Gestisci Partite</a></li>
 							<li><a href="about.html">About</a></li>
 							<li><a href="contact.html">Contact</a></li>
 						</ul>
@@ -152,8 +155,8 @@
 									<c:if test="${not loggato}">
 										<form method="post" action="login">
 											<div class="form-group">
-												<label for="user"> Username: </label> <input type="text"
-													class="form-control" name="user">
+												<label for="user"> Username: </label> 
+												<input type="text" class="form-control" name="user">
 											</div>
 											<div class="form-group">
 												<label for="pwd"> Password: </label> <input type="password"
@@ -165,15 +168,8 @@
 													type="checkbox" name="admin"></span>
 											</div>
 											<div class="form-group">
-												<span class="col-sm-6"><input class="btn btn-primary"
-													type="submit" name="accesso" value="Accedi" /></span> <span
-													class="col-sm-6"><a class="btn btn-primary"
-													href="aggiornaDati">Registrati</a></span>
-											</div>
-											<div class="form-group">
-												<span class="col-sm-3"></span> <span class="col-sm-6"><input
-													class="btn btn-primary" type="submit" name="accesso"
-													value="Accedi Admin" /></span> <span class="col-sm-3"></span>
+												<span class="col-sm-6"><input class="btn btn-primary" type="submit" name="accesso" value="Accedi" onclick="<c:set var="page" value="index" scope="session"/>" /></span> 
+												<span class="col-sm-6"> <a class="btn btn-primary" href="Registrati.html"> Registrati</a></span>
 											</div>
 										</form>
 									</c:if>

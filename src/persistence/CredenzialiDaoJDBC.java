@@ -20,10 +20,11 @@ public class CredenzialiDaoJDBC implements CredenzialiDao {
 	public void save(Credenziali credenziali) {
 		Connection connection = this.dataSource.getConnection();
 		try {
-			String insert = "insert into credenziali(username, password) values (?,?)";
+			String insert = "insert into credenziali(username, password, tipo) values (?,?,?)";
 			PreparedStatement statement = connection.prepareStatement(insert);
 			statement.setString(1, credenziali.getUsername());
 			statement.setString(2, credenziali.getPassword());
+			statement.setString(3, credenziali.getTipo());
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());

@@ -10,7 +10,7 @@ public interface GiocatoreDao {
 
 	public void save(Giocatore giocatore);  // Create
 	public Giocatore findByPrimaryKey(String matricola);     // Retrieve
-	public Giocatore findByCerdenziali(Credenziali credenziali);
+	public Giocatore findByCredenziali(Credenziali credenziali);
 	public List<Giocatore> findAll();       
 	public void update(Giocatore giocatore); //Update
 	public void delete(Giocatore giocatore); //Delete

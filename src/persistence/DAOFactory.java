@@ -6,6 +6,7 @@ import persistence.dao.ContoDao;
 import persistence.dao.CredenzialiDao;
 import persistence.dao.GiocatoreDao;
 import persistence.dao.MovimentoCartaDao;
+import persistence.dao.SquadraDao;
 
 public abstract class DAOFactory {
 
@@ -62,6 +63,10 @@ public abstract class DAOFactory {
 	public abstract MovimentoCartaDao getMovimentoCartaDAO();
 
 	public abstract persistence.UtilDao getUtilDAO();
+
+
+
+	public abstract SquadraDao getSquadraDAO();
 
 
 }

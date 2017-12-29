@@ -6,6 +6,7 @@ import persistence.dao.ContoDao;
 import persistence.dao.CredenzialiDao;
 import persistence.dao.GiocatoreDao;
 import persistence.dao.MovimentoCartaDao;
+import persistence.dao.SquadraDao;
 
 public class PostgresDAOFactory extends DAOFactory {
 
@@ -73,6 +74,13 @@ public class PostgresDAOFactory extends DAOFactory {
 	@Override
 	public UtilDao getUtilDAO() {
 		return new UtilDao(dataSource);
+	}
+
+
+	@Override
+	public SquadraDao getSquadraDAO() {
+		// TODO Auto-generated method stub
+		return new SquadraDaoJDBC(dataSource);
 	}
 	
 	// --------------------------------------------
