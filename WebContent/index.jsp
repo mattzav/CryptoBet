@@ -58,46 +58,6 @@
 
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
-<script>
-	$(document).ready(function() {
-		var squadre;
-		$.ajax({
-			headers : {
-				'X-Auth-Token' : '9c8c10fb6ee545a5a46161e402d73dee'
-			},
-			url : 'http://api.football-data.org/v1/competitions/?season=2017',
-			dataType : 'json',
-			type : 'GET',
-			async : false,
-		}).done(function(response) {
-			$.each(response, function(index, item) {
-				var _url = item._links.teams.href;
-				$.ajax({
-					headers : {
-						'X-Auth-Token' : '9c8c10fb6ee545a5a46161e402d73dee'
-					},
-					url : _url,
-					dataType : 'json',
-					type : 'GET',
-					async : false,
-				}).done(function(_response) {
-					$.each(_response, function(i, _item) {
-						if (i == "teams") {
-							$.each(_item, function(_i, item2) {
-								squadre+=item2.name;
-							});
-						}
-					});
-				});
-			});
-
-		});
-		
-		<c:set var="squadre" value=squadre.toString() scope="session"/>'
-
-});
-</script>
 </head>
 <body style="background-image: url(images/newmessi.jpg);">
 	<div id="fh5co-wrapper">

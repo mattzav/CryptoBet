@@ -54,9 +54,9 @@ public class AmministratoreDaoJDBC implements AmministratoreDao {
 		Connection connection = this.dataSource.getConnection();
 		
 		try {
-			String insert = "select * from credenziali as c where c.username=? and c.password=? and c.tipo=\"ADMIN\"";
+			String insert = "select * from credenziali as c where c.username=? and c.password=? and c.tipo=ADMIN";
 			PreparedStatement statement = connection.prepareStatement(insert);
-				statement.setString(1, credenziali.getUsername());
+			statement.setString(1, credenziali.getUsername());
 			statement.setString(2, credenziali.getPassword());
 			ResultSet result = statement.executeQuery();
 			if (result.next()) {

@@ -32,22 +32,25 @@ public class EffettuaLogin extends HttpServlet {
 				String messaggio="Benvenuto "+username+"  ";
 				session.setAttribute("username", username);
 				session.setAttribute("mex", messaggio);
-				session.setAttribute("loggato", true);
+				session.setAttribute("loggato", TipoCredenziali.USER);
 				session.setAttribute("conto", g.getConto().getCodice());
 			}
-			RequestDispatcher disp;
-			String page=(String) session.getAttribute("page");
-			if(page!=null && page.equals("mioconto"))
-				disp= req.getRequestDispatcher("MioConto.jsp");
-			else disp= req.getRequestDispatcher("index.jsp");
-			disp.forward(req, resp);
 		}else {
+			
 			boolean result =PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getAmministratoreDAO().findByCredenziali(c);
-			String messaggio="Benvenuto Amministratore "+username+"    ";
-			session.setAttribute("username", username);
-			session.setAttribute("mex", messaggio);
-			session.setAttribute("loggato", true);
+			if(result) {
+				String messaggio="Benvenuto Amministratore "+username+"    ";
+				session.setAttribute("username", username);
+				session.setAttribute("mex", messaggio);
+				session.setAttribute("loggato", TipoCredenziali.ADMIN);
+			}
 		}
+		RequestDispatcher disp;
+		String page=(String) session.getAttribute("page");
+		if(page!=null && page.equals("mioconto"))
+			disp= req.getRequestDispatcher("MioConto.jsp");
+		else disp= req.getRequestDispatcher("index.jsp");
+		disp.forward(req, resp);
 	}
 	
 	@Override
