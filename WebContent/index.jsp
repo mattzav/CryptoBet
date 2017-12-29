@@ -58,7 +58,6 @@
 
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<<<<<<< HEAD
 
 <script>
 	$(document).ready(function() {
@@ -99,8 +98,6 @@
 
 });
 </script>
-=======
->>>>>>> 3fbb51d173024f397909ac8497bc42a661499997
 </head>
 <body style="background-image: url(images/newmessi.jpg);">
 	<div id="fh5co-wrapper">
