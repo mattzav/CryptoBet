@@ -64,8 +64,6 @@ public abstract class DAOFactory {
 
 	public abstract persistence.UtilDao getUtilDAO();
 
-
-
 	public abstract SquadraDao getSquadraDAO();
 
 

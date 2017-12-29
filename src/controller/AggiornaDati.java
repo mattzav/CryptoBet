@@ -23,9 +23,7 @@ public class AggiornaDati extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-<<<<<<< HEAD
 		System.out.println(req.getSession().getAttribute("squadre"));
-=======
 	}
 	
 	@Override
@@ -38,6 +36,5 @@ public class AggiornaDati extends HttpServlet {
 		}
 		RequestDispatcher disp=req.getRequestDispatcher("gestisciPartite.jsp");
 		disp.forward(req, resp);
->>>>>>> 3fbb51d173024f397909ac8497bc42a661499997
 	}
 }
