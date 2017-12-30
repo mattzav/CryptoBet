@@ -58,8 +58,8 @@ public void dropDatabase(){
 public static void main(String[] args) {
 	DataSource d=PostgresDAOFactory.dataSource;
 	UtilDao u=new UtilDao(d);
-	u.createDatabase();
-//	SquadraDao squadraDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getSquadraDAO();
+	//u.createDatabase();
+
 //	CampionatoDao campionatoDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCampionatoDao();
 //	PartitaDao partitaDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getPartitaDao();
 //
