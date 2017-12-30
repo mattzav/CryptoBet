@@ -36,8 +36,8 @@ public class EffettuaLogin extends HttpServlet {
 				session.setAttribute("conto", g.getConto().getCodice());
 			}
 		}else {
-			
 			boolean result =PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getAmministratoreDAO().findByCredenziali(c);
+			System.out.println("pippo");
 			if(result) {
 				String messaggio="Benvenuto Amministratore "+username+"    ";
 				session.setAttribute("username", username);
@@ -47,9 +47,7 @@ public class EffettuaLogin extends HttpServlet {
 		}
 		RequestDispatcher disp;
 		String page=(String) session.getAttribute("page");
-		if(page!=null && page.equals("mioconto"))
-			disp= req.getRequestDispatcher("MioConto.jsp");
-		else disp= req.getRequestDispatcher("index.jsp");
+		disp= req.getRequestDispatcher(page);
 		disp.forward(req, resp);
 	}
 	
@@ -57,12 +55,10 @@ public class EffettuaLogin extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session=req.getSession();
 		session.removeAttribute("username");
-		session.setAttribute("loggato", false);
+		session.removeAttribute("loggato");
 		RequestDispatcher disp;
 		String page=(String) session.getAttribute("page");
-		if(page!=null && page.equals("mioconto"))
-			disp= req.getRequestDispatcher("MioConto.jsp");
-		else disp= req.getRequestDispatcher("index.jsp");
+		disp= req.getRequestDispatcher(page);
 		disp.forward(req, resp);
 	}
 }

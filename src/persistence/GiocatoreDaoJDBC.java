@@ -9,6 +9,7 @@ import java.util.List;
 import model.Conto;
 import model.Credenziali;
 import model.Giocatore;
+import model.TipoCredenziali;
 import persistence.dao.GiocatoreDao;
 
 public class GiocatoreDaoJDBC implements GiocatoreDao {
@@ -79,10 +80,11 @@ public class GiocatoreDaoJDBC implements GiocatoreDao {
 	public Giocatore findByCredenziali(Credenziali credenziali) {
 		Connection connection = this.dataSource.getConnection();
 		try {
-			String insert = "select g.nome,g.cognome, g.conto from giocatore as g, credenziali as c where g.username=? and g.username=c.username and c.password=? and c.tipo=\"USER\"";
+			String insert = "select g.nome,g.cognome, g.conto from giocatore as g, credenziali as c where g.username=? and g.username=c.username and c.password=? and c.tipo=?";
 			PreparedStatement statement = connection.prepareStatement(insert);
 			statement.setString(1, credenziali.getUsername());
 			statement.setString(2, credenziali.getPassword());
+			statement.setString(3, TipoCredenziali.USER);
 			ResultSet result = statement.executeQuery();
 			if (result.next()) {
 				Giocatore g=new Giocatore("", "", credenziali, null);

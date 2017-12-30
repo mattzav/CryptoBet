@@ -64,10 +64,11 @@
 		<div id="fh5co-page">
 			<div id="fh5co-header">
 				<header id="fh5co-header-section"> 
-					<c:if test="${loggato}">
+					<c:if test="${loggato!=null}">
 						<div>
-							<span class="col-sm-9"></span> <span class="col-sm-3">
-								${mex} <a href="login" class="btn btn-primary"> LOG-OUT </a>
+							<span class="col-sm-8"></span> 
+							<span class="col-sm-4">
+								${mex} <a href="login"><input type="button" class="btn btn-primary" value=LOG-OUT onclick="<c:set var="page" value="index.jsp" scope="session"  />"></a>
 							</span>
 						</div>
 					</c:if>
@@ -109,7 +110,7 @@
 									</h2>
 								</div>
 								<div class="col-sm-4">
-									<c:if test="${not loggato}">
+									<c:if test="${loggato==null}">
 										<form method="post" action="login">
 											<div class="form-group">
 												<label for="user"> Username: </label> 
@@ -125,7 +126,7 @@
 													type="checkbox" name="admin"></span>
 											</div>
 											<div class="form-group">
-												<span class="col-sm-6"><input class="btn btn-primary" type="submit" name="accesso" value="Accedi" onclick="<c:set var="page" value="index" scope="session"/>" /></span> 
+												<span class="col-sm-6"><input class="btn btn-primary" type="submit" name="accesso" value="Accedi" onclick="<c:set var="page" value="index.jsp" scope="session"/>" /></span> 
 												<span class="col-sm-6"> <a class="btn btn-primary" href="Registrati.html"> Registrati</a></span>
 											</div>
 										</form>
