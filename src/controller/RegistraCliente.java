@@ -13,6 +13,7 @@ import model.CartaDiCredito;
 import model.Conto;
 import model.Credenziali;
 import model.Giocatore;
+import model.TipoCredenziali;
 import persistence.DAOFactory;
 import persistence.PostgresDAOFactory;
 
@@ -28,6 +29,7 @@ public class RegistraCliente extends HttpServlet {
 		String username = req.getParameter("usr");
 		//creo le credenziali del nuovo giocatore
 		Credenziali nuovaCredenziale=new Credenziali(username,password);
+		nuovaCredenziale.setTipo(TipoCredenziali.USER);
 		//creo la carta di credito del nuovo giocatore
 		CartaDiCredito carta=new CartaDiCredito(codCarta);
 		PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCartaDiCreditoDAO().save(carta);

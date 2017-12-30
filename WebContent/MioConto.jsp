@@ -69,12 +69,12 @@
 		<div id="fh5co-page">
 		<div id="fh5co-header">
 			<header id="fh5co-header-section">
-				<c:if test="${loggato}">
+				<c:if test="${loggato!=null}">
 					<div>
-						<span class="col-sm-9"></span>
-						<span class="col-sm-3"> 
+						<span class="col-sm-8"></span>
+						<span class="col-sm-4"> 
 							${mex}
-							<a href="login"><input type="button" class="btn btn-primary"value=LOG-OUT onclick="<c:set var="page" value="mioconto" scope="session"  />"></a>
+							<a href="login"><input type="button" class="btn btn-primary"value=LOG-OUT onclick="<c:set var="page" value="MioConto.jsp" scope="session"  />"></a>
 						</span>
 					</div>
 				</c:if>
@@ -84,22 +84,17 @@
 						<h1 id="fh5co-logo"><a href="index.html">Crypto<span>Bet</span></a></h1>
 						<!-- START #fh5co-menu-wrap -->
 						<nav id="fh5co-menu-wrap" role="navigation">
-							<ul class="sf-menu" id="fh5co-primary-menu">
-								<li class="active">
-									<a href="index.jsp">Home</a>
-								</li>
-								<li >
-									<a id="scom" class="fh5co-sub-ddown">Scommesse</a>
-									<ul  class="fh5co-sub-menu" id="campionati">
-									
-									</ul>
-								</li>
-								<li>
-									<a href="schedule.html" class="fh5co-sub-ddown">Il Mio Conto</a>
-								</li>
-								<li><a href="about.html">About</a></li>
-								<li><a href="contact.html">Contact</a></li>
-							</ul>
+						<ul class="sf-menu" id="fh5co-primary-menu">
+							<li><a href="index.jsp">Home</a></li>
+							<li><a class="fh5co-sub-ddown">Scommesse</a>
+								<ul class="fh5co-sub-menu campionati">
+
+								</ul></li>
+							<li><a href="MioConto.jsp">Il Mio Conto</a></li>
+							<li><a href="gestisciPartite.jsp"> Gestisci Partite</a></li>
+							<li><a href="about.html">About</a></li>
+							<li><a href="contact.html">Contact</a></li>
+						</ul>
 						</nav>
 					</div>
 				</div>
@@ -112,12 +107,16 @@
 					<div class="row">
 						<div class="col-md-8 col-md-offset-2 col-sm-12 col-sm-offset-0 col-xs-12 col-xs-offset-0 text-center fh5co-table">
 							<div class="fh5co-intro fh5co-table-cell animate-box">
-								<c:if test="${loggato}">
+								<c:if test="${loggato==\"USER\"}">
 									<h1 class="text-center"> Benvenuto</h1>
 									<p class="label">Qui potrai gestire il tuo conto</p>
 								</c:if>
-								<c:if test="${not loggato}">
+								<c:if test="${loggato==null}">
 								<div>
+									<br>
+									<br>
+									<br>
+									<br>
 									<div class="col-sm-6">
 										<h1>Accedi al tuo conto</h1>
 									</div>
@@ -131,16 +130,18 @@
 												<label for="pwd"> Password: </label>
 												<input type="password" class="form-control" name="pwd">
 											</div>
-											<div>
-												<span class="label"></span>
-											</div>
 											<div class="form-group">
-												<input class="btn btn-primary" type="submit" name="accesso" value="Accedi" onclick="<c:set var="page" value="mioconto" scope="session"/>"/>
+												<input class="btn btn-primary" type="submit" name="accesso" value="Accedi" onclick="<c:set var="page" value="MioConto.jsp" scope="session"/>"/>
 												<a class="btn btn-primary" href="Registrati.html">Registrati</a>
 											</div>
 										</form>
 									</div>
 								</div>
+								</c:if>
+								<c:if test="${loggato!=null && loggato!=\"USER\"}">
+									<div>
+										<span class="btn btn-danger"> Errore: Effuttua il login come cliente</span>
+									</div>
 								</c:if>
 							</div>
 						</div>
@@ -150,7 +151,7 @@
 		</div><!-- end: fh5co-parallax -->
 		<!-- end:fh5co-hero -->
 		<div id="fh5co-schedule-section" class="fh5co-lightgray-section">
-			<c:if test="${loggato}">
+			<c:if test="${loggato==\"USER\"}">
 			<div class="container">
 				<div class="row">
 					<div class="col-md-8 col-md-offset-2">

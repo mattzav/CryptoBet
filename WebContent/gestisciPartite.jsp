@@ -65,7 +65,7 @@
 	<![endif]-->
 
 	<script type="text/javascript">
-function getSquadre() {
+	function getSquadre() {
 		if(!($(".squadre").length)){
 			var squadre = [];
 			$.ajax({
@@ -106,8 +106,8 @@ function getSquadre() {
 			});
 			$(".updateSquadre").append("<input type=\"text\" style=\" display:none\"class=\"squadre\" name=\"squadre\" value=\""+result+"\">");
 		}
-}
-</script>
+	}
+	</script>
 
 	</head>
 	<body>
@@ -115,6 +115,14 @@ function getSquadre() {
 		<div id="fh5co-page">
 		<div id="fh5co-header">
 			<header id="fh5co-header-section">
+				<c:if test="${loggato!=null}">
+						<div>
+							<span class="col-sm-8"></span> 
+							<span class="col-sm-4">
+								${mex} <a href="login"><input type="button" class="btn btn-primary"value=LOG-OUT onclick="<c:set var="page" value="gestisciPartite.jsp" scope="session"  />"></a>
+							</span>
+						</div>
+				</c:if>
 				<div class="container">
 					<div class="nav-header">
 						<a href="#" class="js-fh5co-nav-toggle fh5co-nav-toggle"><i></i></a>
@@ -127,9 +135,10 @@ function getSquadre() {
 							<li><a href="index.jsp">Home</a></li>
 							<li><a class="fh5co-sub-ddown">Scommesse</a>
 								<ul class="fh5co-sub-menu campionati">
+
 								</ul></li>
 							<li><a href="MioConto.jsp">Il Mio Conto</a></li>
-							<li><a href="gestisciPartite.jsp">Gestisci Partite</a></li>
+							<li><a href="gestisciPartite.jsp"> Gestisci Partite</a></li>
 							<li><a href="about.html">About</a></li>
 							<li><a href="contact.html">Contact</a></li>
 						</ul>
@@ -145,71 +154,109 @@ function getSquadre() {
 				<div class="row">
 					<div class="col-md-8 col-md-offset-2 col-sm-12 col-sm-offset-0 col-xs-12 col-xs-offset-0 text-center fh5co-table">
 						<div class="fh5co-intro fh5co-table-cell animate-box">
-							<h1 class="text-center">Aggiorna il tuo sito</h1>
-							<div>
+							<c:if test="${loggato==\"ADMIN\"}">
+								<h1 class="text-center">Aggiorna il tuo sito</h1>
+								<br/>
+								<p>Qui potrai modificare le quote relative alle partite disponibili o richiedere un aggiornamento completo dei tuoi dati</p>
+							</c:if>
+							<c:if test="${loggato==null}">
+								<div>
+									<br>
+									<br>
+									<br>
+									<br>
+									<div class="col-sm-6">
+										<h1>Aggiorna Il Tuo Sito</h1>
+									</div>
+									<div class="col-sm-6">
+										<form method="post" action="login">
+											<div class="form-group">
+												<label class="label" for="user"> Username: </label>
+												<input type="text" class="form-control" name="user">
+											</div>
+											<div class="form-group">
+												<label class="label" for="pwd"> Password: </label>
+												<input type="password" class="form-control" name="pwd">
+											</div>
+											<div>
+												<input name="admin" type="checkbox" checked="checked" style="display:none">
+											</div>
+											<div class="form-group">
+												<input class="btn btn-primary" type="submit" name="accesso" value="Accedi" onclick="<c:set var="page" value="gestisciPartite.jsp" scope="session"/>"/>
+												<a class="btn btn-primary" href="Registrati.html">Registrati</a>
+											</div>
+										</form>
+									</div>
+								</div>
+							</c:if>
+							<c:if test="${loggato==\"USER\"}">
+								<div>
+									<span class="btn btn-danger"> Errore: Effuttua il login come amministratore</span>
+								</div>
+							</c:if>
 							</div>
-							<p>Qui potrai modificare le quote relative alle partite disponibili o richiedere un aggiornamento completo dei tuoi dati</p>
-						</div>
 					</div>
 				</div>
 			</div>
 		</div><!-- end: fh5co-parallax -->
 		<!-- end:fh5co-hero -->
 		<div id="fh5co-team-section">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-8 col-md-offset-2">
-						<div class="heading-section text-center animate-box">
-							<h2>Ecco le operazioni che il sito ti offre :</h2>
-							<p> Scorri sui rettangoli che seguono per scoprirle</p>
+			<c:if test="${loggato==\"ADMIN\"}">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-8 col-md-offset-2">
+							<div class="heading-section text-center animate-box">
+								<h2>Ecco le operazioni che il sito ti offre :</h2>
+								<p> Scorri sui rettangoli che seguono per scoprirle</p>
+							</div>
+						</div>
+					</div>
+					<div class="row text-center">
+						<div class="col-md-4 col-sm-6">
+							<div class="team-section-grid animate-box" style="background-image: url(images/trainer-1.jpg);">
+								<div class="overlay-section">
+									<div class="desc">
+										<h3>Aggiornamento dati</h3>
+										<p>Ti permette di ricevere gli ultimi aggiornamenti sulle partite attualmente disponibili</p>
+										</br>
+										</br>
+										</br>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-6">
+							<div class="team-section-grid animate-box" style="background-image: url(images/trainer-2.jpg);">
+								<div class="overlay-section">
+									<div class="desc">
+										<h3> Modifica le tue quote </h3>
+										<p>Ti permette di abilitare, disabilitare o modificare le tue quote</p>
+										</br>
+										</br>
+										</br>
+										</br>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-6">
+							<div class="team-section-grid animate-box" style="background-image: url(images/trainer-3.jpg);">
+								<div class="overlay-section">
+									<div class="desc">
+										<h3>Aggiorna Campionati e Squadre</h3>
+										<p>Ti permette di ricevere gli ultimi aggiornamenti sulle squadre e i campionati attualmente disponibili</p>
+										<form class="updateSquadre" action="aggiornaDati" method="post">
+											<input type="submit" class="btn btn-primary" name="aggiorna" onmouseover="getSquadre();" value="Aggiorna">
+										</form>
+										</br>
+										</br>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
-				<div class="row text-center">
-					<div class="col-md-4 col-sm-6">
-						<div class="team-section-grid animate-box" style="background-image: url(images/trainer-1.jpg);">
-							<div class="overlay-section">
-								<div class="desc">
-									<h3>Aggiornamento dati</h3>
-									<p>Ti permette di ricevere gli ultimi aggiornamenti sulle partite attualmente disponibili</p>
-									</br>
-									</br>
-									</br>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-4 col-sm-6">
-						<div class="team-section-grid animate-box" style="background-image: url(images/trainer-2.jpg);">
-							<div class="overlay-section">
-								<div class="desc">
-									<h3> Modifica le tue quote </h3>
-									<p>Ti permette di abilitare, disabilitare o modificare le tue quote</p>
-									</br>
-									</br>
-									</br>
-									</br>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-4 col-sm-6">
-						<div class="team-section-grid animate-box" style="background-image: url(images/trainer-3.jpg);">
-							<div class="overlay-section">
-								<div class="desc">
-									<h3>Aggiorna Campionati e Squadre</h3>
-									<p>Ti permette di ricevere gli ultimi aggiornamenti sulle squadre e i campionati attualmente disponibili</p>
-									<form class="updateSquadre" action="aggiornaDati" method="post">
-										<input type="submit" class="btn btn-primary" name="aggiorna" onmouseover="getSquadre();" value="Aggiorna">
-									</form>
-									</br>
-									</br>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+			</c:if>
 		</div>
 		<footer>
 			<div id="footer">
