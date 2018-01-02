@@ -1,11 +1,16 @@
 package model;
 
+import persistence.DataSource;
+import persistence.IdBroker;
+
 public class Campionato {
 
 	private Long codice;
 	private String nome;
 	
-	public Campionato() {
+	public Campionato(String nome) {
+		this.codice = IdBroker.getIstance("campionato").getId();
+		this.nome=nome;
 	}
 	
 	public Campionato(Long codice, String nome) {

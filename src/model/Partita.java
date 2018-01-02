@@ -106,6 +106,6 @@ public class Partita {
 	@Override
 	public String toString() {
 		return "Partita tra " + squadra_casa.getNome() + " vs " + squadra_ospite.getNome() + " prevista alle "
-				+ data_ora.toString() + " risultato" + goal_casa + " - " + goal_ospite + " finita: " + finita;
+				+ data_ora + " risultato" + goal_casa + " - " + goal_ospite + " finita: " + finita;
 	}
 }
