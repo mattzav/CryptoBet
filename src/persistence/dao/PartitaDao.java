@@ -2,12 +2,14 @@ package persistence.dao;
 
 import java.util.List;
 
+import model.Campionato;
 import model.Partita;
 
 public interface PartitaDao {
 
 	public void save(Partita partita);  // Create
-	public Partita findByPrimaryKey(Long codice);     // Retrieve
-	public List<Partita> findAll();       
+	public boolean findExistingMatch(Partita p);     // Retrieve
+	public List<Partita> findAll(Campionato campionato);   
+	public void update(Partita partita);
 
 }

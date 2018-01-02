@@ -50,31 +50,54 @@ public class UtilDao {
 		}
 	}
 
+	public void addTable(String name,String[] attributes) {
+		Connection connection = PostgresDAOFactory.dataSource.getConnection();
+		try {
+
+			String delete = "create table "+name+" (";
+			for(String s:attributes) {
+				delete+=s;
+			}
+			delete+=");";
+			PreparedStatement statement = connection.prepareStatement(delete);
+			statement.executeUpdate();
+			System.out.println(delete);
+		} catch (SQLException e) {
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+
+				throw new PersistenceException(e.getMessage());
+			}
+		}
+	}
 	public static void main(String[] args) {
 		UtilDao u = new UtilDao();
-		u.createDatabase();
-
+		u.addTable("esito", new String[]{"descrizione varchar(255) primary key"});
+////		u.createDatabase();
+//		
 //		CampionatoDao campionatoDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCampionatoDao();
 //		PartitaDao partitaDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getPartitaDao();
 //		SquadraDao squadraDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getSquadraDAO();
-//
+////
 //		Squadra squadra = new Squadra("milan");
 //		Squadra squadra2 = new Squadra("juventus");
-//		Squadra squadra3 = new Squadra("roma");
-//		Squadra squadra4 = new Squadra("napoli");
+////		Squadra squadra3 = new Squadra("roma");
+////		Squadra squadra4 = new Squadra("napoli");
 //		squadraDao.save(squadra);
 //		squadraDao.save(squadra2);
-//		squadraDao.save(squadra3);
-//		squadraDao.save(squadra4);
-//
-//		Campionato campionato = new Campionato("serie A");
+////		squadraDao.save(squadra3);
+////		squadraDao.save(squadra4);
+////
+//		Campionato campionato = new Campionato(Long.valueOf(465),"serie A");
 //		campionatoDao.save(campionato);
-//		Campionato campionato2 = new Campionato("serie B");
-//		campionatoDao.save(campionato2);
-//
-//		
-//		String data = "2018-01-02 22:59:20";
-//		java.sql.Date d = null;
+////		Campionato campionato2 = new Campionato("serie B");
+////		campionatoDao.save(campionato2);
+////
+//		java.sql.Date d=null;
+//		String data = "2018-01-02 20:59:20";
 //		SimpleDateFormat localDateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
 //		try {
 //			d = new java.sql.Date(localDateFormat.parse(data).getTime());
@@ -84,25 +107,24 @@ public class UtilDao {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}		
-//		
-//
-//		Partita partita = new Partita(squadra, squadra2, 2, 1, campionato,new java.util.Date(d.getTime()),
-//				false);
+////		
+////
+//		Partita partita=new Partita(squadra, squadra2, 2, 1, campionato, new java.util.Date(d.getTime()), true);
 //		partitaDao.save(partita);
-//		Partita partita1 = new Partita(squadra3, squadra4, 2, 2, campionato, new java.util.Date(d.getTime()),
-//				true);
-//		partitaDao.save(partita1);
-//
-//		System.out.println(partita.getCodice() + " " + partita1.getCodice());
-//
-//		for (Partita p : partitaDao.findAll())
-//			System.out.println(p);
-//
-//		for (Campionato c : campionatoDao.findAll())
-//			System.out.println(c);
-//
-//		for (Squadra s : squadraDao.findAll())
-//			System.out.println(s);
+////		Partita partita1 = new Partita(squadra3, squadra4, 2, 2, campionato, new java.util.Date(d.getTime()),
+////				true);
+////		partitaDao.save(partita1);
+////
+////		System.out.println(partita.getCodice() + " " + partita1.getCodice());
+////
+////		for (Partita p : partitaDao.findAll())
+////			System.out.println(p);
+////
+////		for (Campionato c : campionatoDao.findAll())
+////			System.out.println(c);
+////
+////		for (Squadra s : squadraDao.findAll())
+////			System.out.println(s);
 	}
 
 	public void createDatabase() {

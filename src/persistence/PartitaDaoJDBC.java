@@ -25,12 +25,17 @@ public class PartitaDaoJDBC implements PartitaDao {
 	
 	@Override
 	public void save(Partita partita) {
+	
 		Connection connection = PostgresDAOFactory.dataSource.getConnection();
 		try {
+			
 			System.out.println(partita.getCodice());
-			Partita esistente = findByPrimaryKey(partita.getCodice());
-			if(esistente != null)
+			if(findExistingMatch(partita)) {
+				update(partita); 
+				System.out.println("update");
 				return;
+			}
+		
 			String insert = "insert into partita(codice,squadraCasa,squadraOspite,campionato,data,ora,finita,goalCasa,goalOspite) values (?,?,?,?,?,?,?,?,?)";
 			PreparedStatement statement = connection.prepareStatement(insert);
 			statement.setLong(1, partita.getCodice());
@@ -40,7 +45,6 @@ public class PartitaDaoJDBC implements PartitaDao {
 			statement.setDate(5, new java.sql.Date(partita.getData_ora().getTime()));
 			SimpleDateFormat localDateFormat = new SimpleDateFormat("hh:mm:ss aa");
 			String time = localDateFormat.format(partita.getData_ora());
-			System.out.println(time);
 			try {
 				statement.setTime(6, new java.sql.Time(localDateFormat.parse(time).getTime()));
 			} catch (ParseException e) {
@@ -61,17 +65,55 @@ public class PartitaDaoJDBC implements PartitaDao {
 	}
 
 	@Override
-	public Partita findByPrimaryKey(Long codice) {
+	public void update(Partita partita) {
+
 		Connection connection = PostgresDAOFactory.dataSource.getConnection();
-		Partita partita = null;
+		try {
+			String update = "update partita SET squadracasa = ?, squadraospite = ?, data = ?,ora = ?, campionato = ?, goalcasa=?, goalospite=?, finita=? where squadracasa=? and squadraospite=? and campionato=? ";
+			PreparedStatement statement = connection.prepareStatement(update);
+			statement.setString(1, partita.getSquadra_casa().getNome());
+			statement.setString(2, partita.getSquadra_ospite().getNome());
+			long secs = partita.getData_ora().getTime();
+			statement.setDate(3, new java.sql.Date(secs));
+			SimpleDateFormat localDateFormat = new SimpleDateFormat("hh:mm:ss aa");
+			String time = localDateFormat.format(partita.getData_ora());
+			try {
+				statement.setTime(4, new java.sql.Time(localDateFormat.parse(time).getTime()));
+			} catch (ParseException e) {
+			}
+			statement.setLong(5, partita.getCampionato().getCodice());
+			statement.setInt(6, partita.getGoal_casa());
+			statement.setInt(7, partita.getGoal_ospite());
+			statement.setBoolean(8, partita.isFinita());
+			statement.setString(9, partita.getSquadra_casa().getNome());
+			statement.setString(10, partita.getSquadra_ospite().getNome());
+			statement.setLong(11, partita.getCampionato().getCodice());
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}
+	}
+
+
+	@Override
+	public boolean findExistingMatch(Partita p) {
+		Connection connection = PostgresDAOFactory.dataSource.getConnection();
 		try {
 			PreparedStatement statement;
-			String query = "select p.codice,p.squadraCasa,p.squadraOspite,p.data,p.ora,p.finita,p.goalCasa,p.goalOspite,c.codice,c.nome from partita as p, campionato as c where p.codice=? and p.campionato=c.codice "; 
+			String query = "select * from partita as p where p.squadracasa=? and p.squadraospite=? and p.campionato=? "; 
 			statement = connection.prepareStatement(query);
-			statement.setLong(1, codice);
+			statement.setString(1, p.getSquadra_casa().getNome());
+			statement.setString(2, p.getSquadra_ospite().getNome());
+			java.sql.Date date=new java.sql.Date(p.getData_ora().getTime());
+			statement.setLong(3, p.getCampionato().getCodice());
 			ResultSet result = statement.executeQuery();
-			if (result.next()) 
-				partita=new Partita(result.getLong(1), new Squadra(result.getString(2)), new Squadra(result.getString(3)), result.getInt(6), result.getInt(7), new Campionato(result.getLong(8),result.getString(9)),result.getDate(4).getTime()+result.getTime(5).getTime()+1000*3600,result.getBoolean(5));
+			return result.next(); 
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
 		} finally {
@@ -81,23 +123,23 @@ public class PartitaDaoJDBC implements PartitaDao {
 				throw new PersistenceException(e.getMessage());
 			}
 		}	
-		return partita;
 	}
 
 	@Override
-	public List<Partita> findAll() {
+	public List<Partita> findAll(Campionato campionato) {
 		Connection connection = PostgresDAOFactory.dataSource.getConnection();
 		List<Partita> partite = new LinkedList<>();
 		try {
 			
 			PreparedStatement statement;
-			String query = "select p.codice,p.squadraCasa,p.squadraOspite,p.data,p.ora,p.finita,p.goalCasa,p.goalOspite,c.codice,c.nome from partita as p,campionato as c where p.campionato=c.codice";
+			String query = "select p.codice,p.squadraCasa,p.squadraOspite,p.data,p.ora,p.finita,p.goalCasa,p.goalOspite, from partita as p where p.campionato=?";
 			statement = connection.prepareStatement(query);
+			statement.setLong(1, campionato.getCodice());
 			ResultSet result = statement.executeQuery();
 
 			while (result.next()) {
 				
-				Partita partita=new Partita(result.getLong(1), new Squadra(result.getString(2)), new Squadra(result.getString(3)), result.getInt(7), result.getInt(8), new Campionato(result.getLong(9),result.getString(10)),result.getDate(4).getTime()+result.getTime(5).getTime()+1000*3600,result.getBoolean(6));
+				Partita partita=new Partita(result.getLong(1), new Squadra(result.getString(2)), new Squadra(result.getString(3)), result.getInt(7), result.getInt(8), campionato,result.getDate(4).getTime()+result.getTime(5).getTime()+1000*3600,result.getBoolean(6));
 				partite.add(partita);
 			}
 

@@ -17,7 +17,7 @@ public class Campionato {
 		this.codice=codice;
 		this.nome=nome;
 	}
-	
+
 	public Long getCodice() {
 		return codice;
 	}
