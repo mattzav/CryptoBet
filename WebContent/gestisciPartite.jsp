@@ -326,6 +326,7 @@
 											<h3>Modifica le tue quote</h3>
 											<p>Ti permette di abilitare, disabilitare o modificare le
 												tue quote</p>
+												<a class="btn btn-primary" href="aggiornaQuote.jsp"> Aggiorna Quote </a>
 											<br> <br> <br> <br>
 										</div>
 									</div>
