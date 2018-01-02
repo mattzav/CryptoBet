@@ -14,15 +14,13 @@ import persistence.dao.GiocatoreDao;
 
 public class GiocatoreDaoJDBC implements GiocatoreDao {
 	
-	private DataSource dataSource;
 
-	public GiocatoreDaoJDBC(DataSource dataSource) {
-		this.dataSource = dataSource;
+	public GiocatoreDaoJDBC() {
 	}
 
 	@Override
 	public void save(Giocatore giocatore) {
-		Connection connection = this.dataSource.getConnection();
+		Connection connection = PostgresDAOFactory.dataSource.getConnection();
 		try {
 			String insert = "insert into giocatore(codice, nome, cognome, data_nascita, username, conto) values (?,?,?,?,?,?)";
 			PreparedStatement statement = connection.prepareStatement(insert);
@@ -78,7 +76,7 @@ public class GiocatoreDaoJDBC implements GiocatoreDao {
 
 	@Override
 	public Giocatore findByCredenziali(Credenziali credenziali) {
-		Connection connection = this.dataSource.getConnection();
+		Connection connection = PostgresDAOFactory.dataSource.getConnection();
 		try {
 			String insert = "select g.nome,g.cognome, g.conto from giocatore as g, credenziali as c where g.username=? and g.username=c.username and c.password=? and c.tipo=?";
 			PreparedStatement statement = connection.prepareStatement(insert);

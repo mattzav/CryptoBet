@@ -12,15 +12,13 @@ import model.Conto;
 import persistence.dao.ContoDao;
 
 public class ContoDaoJDBC implements ContoDao {
-	private DataSource dataSource;
 
-	public ContoDaoJDBC(DataSource dataSource) {
-		this.dataSource = dataSource;
+	public ContoDaoJDBC() {
 	}
 
 	@Override
 	public void save(Conto conto) {
-		Connection connection = this.dataSource.getConnection();
+		Connection connection = PostgresDAOFactory.dataSource.getConnection();
 		try {
 			String insert = "insert into conto(codice, saldo, data_apertura, codice_carta) values (?,?,?,?)";
 			PreparedStatement statement = connection.prepareStatement(insert);

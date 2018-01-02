@@ -14,7 +14,7 @@ public class Conto {
 	private CartaDiCredito carta;
 
 	public Conto(CartaDiCredito carta) {
-		codice=IdBroker.getIstance("conto").getId(PostgresDAOFactory.dataSource.getConnection());
+		codice=IdBroker.getIstance("conto").getId();
 		this.carta=carta;
 	}
 

@@ -15,16 +15,14 @@ import persistence.dao.PartitaDao;
 
 public class PartitaDaoJDBC implements PartitaDao {
 
-	private DataSource dataSource;
 
-	public PartitaDaoJDBC(DataSource dataSource) {
-		this.dataSource = dataSource;
+	public PartitaDaoJDBC() {
 	}
 
 	
 	@Override
 	public void save(Partita partita) {
-		Connection connection = this.dataSource.getConnection();
+		Connection connection = PostgresDAOFactory.dataSource.getConnection();
 		try {
 			
 			Partita esistente = findByPrimaryKey(partita.getCodice());
@@ -54,7 +52,7 @@ public class PartitaDaoJDBC implements PartitaDao {
 
 	@Override
 	public Partita findByPrimaryKey(Long codice) {
-		Connection connection = this.dataSource.getConnection();
+		Connection connection = PostgresDAOFactory.dataSource.getConnection();
 		Partita partita = null;
 		try {
 			PreparedStatement statement;
@@ -63,7 +61,7 @@ public class PartitaDaoJDBC implements PartitaDao {
 			statement.setLong(1, codice);
 			ResultSet result = statement.executeQuery();
 			if (result.next()) 
-				partita=new Partita(result.getLong(1), new Squadra(result.getString(2)), new Squadra(result.getString(3)), result.getInt(6), result.getInt(7), new Campionato(result.getLong(8),result.getString(9)),result.getDate(4),result.getBoolean(5));
+				partita=new Partita(result.getLong(1), new Squadra(result.getString(2)), new Squadra(result.getString(3)), result.getInt(6), result.getInt(7), new Campionato(result.getLong(8),result.getString(9)),new Long(0),result.getBoolean(5));
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
 		} finally {
@@ -78,7 +76,7 @@ public class PartitaDaoJDBC implements PartitaDao {
 
 	@Override
 	public List<Partita> findAll() {
-		Connection connection = this.dataSource.getConnection();
+		Connection connection = PostgresDAOFactory.dataSource.getConnection();
 		List<Partita> partite = new LinkedList<>();
 		try {
 			
@@ -89,7 +87,7 @@ public class PartitaDaoJDBC implements PartitaDao {
 
 			while (result.next()) {
 				
-				Partita partita=new Partita(result.getLong(1), new Squadra(result.getString(2)), new Squadra(result.getString(3)), result.getInt(6), result.getInt(7), new Campionato(result.getLong(8),result.getString(9)),result.getDate(4),result.getBoolean(5));
+				Partita partita=new Partita(result.getLong(1), new Squadra(result.getString(2)), new Squadra(result.getString(3)), result.getInt(6), result.getInt(7), new Campionato(result.getLong(8),result.getString(9)),result.getDate(4).getTime(),result.getBoolean(5));
 				partite.add(partita);
 			}
 

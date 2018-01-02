@@ -6,10 +6,8 @@ import model.MovimentoCarta;
 import persistence.dao.MovimentoCartaDao;
 
 public class MovimentoCartaDaoJDBC implements MovimentoCartaDao{
-	private DataSource dataSource;
 
-	public MovimentoCartaDaoJDBC(DataSource dataSource) {
-		this.dataSource = dataSource;
+	public MovimentoCartaDaoJDBC() {
 	}
 
 	@Override

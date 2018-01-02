@@ -12,16 +12,14 @@ import persistence.dao.SquadraDao;
 
 public class SquadraDaoJDBC implements SquadraDao{
 
-	private DataSource dataSource;
 
-	public SquadraDaoJDBC(DataSource dataSource) {
-		this.dataSource = dataSource;
+	public SquadraDaoJDBC() {
 	}
 
 	
 	@Override
 	public void save(Squadra squadra) {
-		Connection connection = this.dataSource.getConnection();
+		Connection connection = PostgresDAOFactory.dataSource.getConnection();
 		try {
 			
 			Squadra esistente = findByPrimaryKey(squadra.getNome());
@@ -45,7 +43,7 @@ public class SquadraDaoJDBC implements SquadraDao{
 
 	@Override
 	public Squadra findByPrimaryKey(String nome) {
-		Connection connection = this.dataSource.getConnection();
+		Connection connection = PostgresDAOFactory.dataSource.getConnection();
 		Squadra squadra= null;
 		try {
 			PreparedStatement statement;
@@ -70,7 +68,7 @@ public class SquadraDaoJDBC implements SquadraDao{
 
 	@Override
 	public List<Squadra> findAll() {
-		Connection connection = this.dataSource.getConnection();
+		Connection connection = PostgresDAOFactory.dataSource.getConnection();
 		List<Squadra> squadre = new LinkedList<>();
 		try {
 			

@@ -12,15 +12,13 @@ import persistence.dao.CartaDiCreditoDao;
 
 
 public class CartaDiCreditoDaoJDBC implements CartaDiCreditoDao {
-	private DataSource dataSource;
 
-	public CartaDiCreditoDaoJDBC(DataSource dataSource) {
-		this.dataSource = dataSource;
+	public CartaDiCreditoDaoJDBC() {
 	}
 
 	@Override
 	public void save(CartaDiCredito carta) {
-		Connection connection = this.dataSource.getConnection();
+		Connection connection = PostgresDAOFactory.dataSource.getConnection();
 		try {
 			String insert = "insert into cartaDiCredito(codice, data_scadenza, saldo) values (?,?,?)";
 			PreparedStatement statement = connection.prepareStatement(insert);

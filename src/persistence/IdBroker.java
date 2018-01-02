@@ -12,7 +12,7 @@ public class IdBroker {
 	// private static final String query = "SELECT NEXT VALUE FOR SEQ_ID AS id";
 	// postgresql
 
-	private String tableName;
+	private static String tableName;
 	private static IdBroker istance;
 	
 	private IdBroker(String classIdGenerator) {
@@ -23,14 +23,15 @@ public class IdBroker {
 		if(istance == null) {
 			istance=new IdBroker(_tableName);
 		}
+		tableName=_tableName;
 		return istance;
 	}
 
-	public Long getId(Connection connection) {
+	public Long getId() {
 		Long id = null;
 		String query = "SELECT max(T.codice) from "+tableName+" as T";
 		try {
-			PreparedStatement statement = connection.prepareStatement(query);
+			PreparedStatement statement = PostgresDAOFactory.dataSource.getConnection().prepareStatement(query);
 			ResultSet result = statement.executeQuery();
 			if(result==null) {
 				id=new Long(0);

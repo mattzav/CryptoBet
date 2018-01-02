@@ -13,16 +13,14 @@ import persistence.dao.CampionatoDao;
 
 public class CampionatoDaoJDBC implements CampionatoDao {
 
-	private DataSource dataSource;
 
-	public CampionatoDaoJDBC(DataSource dataSource) {
-		this.dataSource = dataSource;
+	public CampionatoDaoJDBC() {
 	}
 
 	
 	@Override
 	public void save(Campionato campionato) {
-		Connection connection = this.dataSource.getConnection();
+		Connection connection = PostgresDAOFactory.dataSource.getConnection();
 		try {
 			
 			Campionato esistente = findByPrimaryKey(campionato.getCodice());
@@ -47,7 +45,7 @@ public class CampionatoDaoJDBC implements CampionatoDao {
 
 	@Override
 	public Campionato findByPrimaryKey(Long codice) {
-		Connection connection = this.dataSource.getConnection();
+		Connection connection = PostgresDAOFactory.dataSource.getConnection();
 		Campionato campionato = null;
 		try {
 			PreparedStatement statement;
@@ -71,7 +69,7 @@ public class CampionatoDaoJDBC implements CampionatoDao {
 
 	@Override
 	public List<Campionato> findAll() {
-		Connection connection = this.dataSource.getConnection();
+		Connection connection = PostgresDAOFactory.dataSource.getConnection();
 		List<Campionato> campionati = new LinkedList<>();
 		try {
 			

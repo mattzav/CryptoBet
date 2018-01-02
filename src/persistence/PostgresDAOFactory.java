@@ -34,67 +34,67 @@ public class PostgresDAOFactory extends DAOFactory {
 	@Override
 	public AmministratoreDao getAmministratoreDAO() {
 		// TODO Auto-generated method stub
-		return new AmministratoreDaoJDBC(dataSource);
+		return new AmministratoreDaoJDBC();
 	}
 
 
 	@Override
 	public GiocatoreDao getGiocatoreDAO() {
 		// TODO Auto-generated method stub
-		return new GiocatoreDaoJDBC(dataSource);
+		return new GiocatoreDaoJDBC();
 	}
 
 
 	@Override
 	public CredenzialiDao getCredenzialiDAO() {
 		// TODO Auto-generated method stub
-		return new CredenzialiDaoJDBC(dataSource);
+		return new CredenzialiDaoJDBC();
 	}
 
 
 	@Override
 	public ContoDao getContoDAO() {
 		// TODO Auto-generated method stub
-		return new ContoDaoJDBC(dataSource);
+		return new ContoDaoJDBC();
 	}
 
 
 	@Override
 	public CartaDiCreditoDao getCartaDiCreditoDAO() {
 		// TODO Auto-generated method stub
-		return new CartaDiCreditoDaoJDBC(dataSource);
+		return new CartaDiCreditoDaoJDBC();
 	}
 
 
 	@Override
 	public MovimentoCartaDao getMovimentoCartaDAO() {
 		// TODO Auto-generated method stub
-		return new MovimentoCartaDaoJDBC(dataSource);
+		return new MovimentoCartaDaoJDBC();
 	}
 
 
 	@Override
 	public UtilDao getUtilDAO() {
-		return new UtilDao(dataSource);
+		return new UtilDao();
 	}
 
 
 	@Override
 	public SquadraDao getSquadraDAO() {
 		// TODO Auto-generated method stub
-		return new SquadraDaoJDBC(dataSource);
+		return new SquadraDaoJDBC();
 	}
 
 
 	@Override
 	public CampionatoDao getCampionatoDao() {
-		return new CampionatoDaoJDBC(dataSource);
+		return new CampionatoDaoJDBC();
 	}
 
 
 	@Override
 	public PartitaDao getPartitaDao() {
-		return new PartitaDaoJDBC(dataSource);
+		return new PartitaDaoJDBC();
 	}
 	
 	// --------------------------------------------

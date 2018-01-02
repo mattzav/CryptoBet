@@ -14,10 +14,8 @@ import model.TipoCredenziali;
 import persistence.dao.AmministratoreDao;
 
 public class AmministratoreDaoJDBC implements AmministratoreDao {
-	private DataSource dataSource;
 
-	public AmministratoreDaoJDBC(DataSource dataSource) {
-		this.dataSource = dataSource;
+	public AmministratoreDaoJDBC() {
 	}
 
 	@Override
@@ -52,7 +50,7 @@ public class AmministratoreDaoJDBC implements AmministratoreDao {
 
 	@Override
 	public boolean findByCredenziali(Credenziali credenziali) {
-		Connection connection = this.dataSource.getConnection();
+		Connection connection = PostgresDAOFactory.dataSource.getConnection();
 		
 		try {
 			String insert = "select * from credenziali as c where c.username=? and c.password=? and c.tipo=?";

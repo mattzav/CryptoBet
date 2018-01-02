@@ -16,15 +16,13 @@ import persistence.dao.SquadraDao;
 public class UtilDao {
 
 	
-private DataSource dataSource;
 
-public UtilDao(DataSource dataSource) {
-		this.dataSource=dataSource;
+public UtilDao() {
 }
 
 public void dropDatabase(){
 	
-	Connection connection = dataSource.getConnection();
+	Connection connection = PostgresDAOFactory.dataSource.getConnection();
 	try {
 		String delete = "drop SEQUENCE if EXISTS sequenza_id;"
 				+ "drop table if exists iscritto;"
@@ -56,44 +54,45 @@ public void dropDatabase(){
 }
 
 public static void main(String[] args) {
-	DataSource d=PostgresDAOFactory.dataSource;
-	UtilDao u=new UtilDao(d);
-	//u.createDatabase();
+	UtilDao u=new UtilDao();
+	u.createDatabase();
 
-//	CampionatoDao campionatoDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCampionatoDao();
-//	PartitaDao partitaDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getPartitaDao();
-//
-//	Squadra squadra = new Squadra("milan");
-//	Squadra squadra2 = new Squadra("juventus");
-//	Squadra squadra3 = new Squadra("roma");
-//	Squadra squadra4 = new Squadra("napoli");
-//	Campionato campionato = new Campionato(new Long(1), "serie A");
-//	Campionato campionato2 = new Campionato(new Long(2), "serie B");
-//
-//	Partita partita = new Partita(new Long(1), squadra, squadra2, 2, 1, campionato, new java.util.Date(117,11,29,12,25), false);
-//	Partita partita1 = new Partita(new Long(2), squadra3, squadra4, 2, 2, campionato, new java.util.Date(29,12,20,45,0), true);
-//	
-//	squadraDao.save(squadra);
-//	squadraDao.save(squadra2);
-//	squadraDao.save(squadra3);
-//	squadraDao.save(squadra4);
-//	campionatoDao.save(campionato);
-//	partitaDao.save(partita);
-//	partitaDao.save(partita1);
-//	
-//	for(Partita p:partitaDao.findAll()) 
-//		System.out.println(p);
-//	
-//	for(Campionato c:campionatoDao.findAll())
-//		System.out.println(c);
-//
-//	for(Squadra s:squadraDao.findAll())
-//		System.out.println(s);
+	CampionatoDao campionatoDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCampionatoDao();
+	PartitaDao partitaDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getPartitaDao();
+	SquadraDao squadraDao =  PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getSquadraDAO();
+	
+	Squadra squadra = new Squadra("milan");
+	Squadra squadra2 = new Squadra("juventus");
+	Squadra squadra3 = new Squadra("roma");
+	Squadra squadra4 = new Squadra("napoli");
+	Campionato campionato = new Campionato(new Long(1), "serie A");
+	Campionato campionato2 = new Campionato(new Long(2), "serie B");
+
+	Partita partita = new Partita( squadra, squadra2, 2, 1, campionato, new java.util.Date(117,11,29,12,25), false);
+	Partita partita1 = new Partita(squadra3, squadra4, 2, 2, campionato, new java.util.Date(29,12,20,45,0), true);
+	
+	
+	squadraDao.save(squadra);
+	squadraDao.save(squadra2);
+	squadraDao.save(squadra3);
+	squadraDao.save(squadra4);
+	campionatoDao.save(campionato);
+	partitaDao.save(partita);
+	partitaDao.save(partita1);
+	
+	for(Partita p:partitaDao.findAll()) 
+		System.out.println(p);
+	
+	for(Campionato c:campionatoDao.findAll())
+		System.out.println(c);
+
+	for(Squadra s:squadraDao.findAll())
+		System.out.println(s);
 }
 
 public void createDatabase(){
 	
-	Connection connection = dataSource.getConnection();
+	Connection connection = PostgresDAOFactory.dataSource.getConnection();
 	try {
 		
 		String delete = 
@@ -105,7 +104,7 @@ public void createDatabase(){
 				+ "create table amministatore(codice bigint primary key,username varchar(255) REFERENCES credenziali(\"username\"));"
 				+ "create table squadra (nome varchar(255) primary key);"
 				+ "create table campionato (codice bigint primary key, nome varchar(255));"
-				+ "create table partita (codice bigint primary key,squadraCasa varchar(255) REFERENCES squadra(\"nome\"),squadraOspite varchar(255) REFERENCES squadra(\"nome\"),campionato bigint REFERENCES campionato(\"codice\"),data date,finita boolean,goalCasa smallint, goalOspite smallint);";
+				+ "create table partita (codice bigint primary key,squadraCasa varchar(255) REFERENCES squadra(\"nome\"),squadraOspite varchar(255) REFERENCES squadra(\"nome\"),campionato bigint REFERENCES campionato(\"codice\"),data smalldatetime,finita boolean,goalCasa smallint, goalOspite smallint);";
 		PreparedStatement statement = connection.prepareStatement(delete);
 		
 		statement.executeUpdate();
@@ -126,7 +125,7 @@ public void createDatabase(){
 
 public  void resetDatabase() {
 		
-		Connection connection = dataSource.getConnection();
+		Connection connection = PostgresDAOFactory.dataSource.getConnection();
 		try {
 			String delete = "delete FROM studente";
 			PreparedStatement statement = connection.prepareStatement(delete);

@@ -2,6 +2,8 @@ package model;
 
 import java.util.Date;
 
+import persistence.IdBroker;
+
 public class Partita {
 
 	private Long codice;
@@ -13,21 +15,34 @@ public class Partita {
 	private int goal_casa;
 	private int goal_ospite;
 
-	public Partita(Long codice, Squadra squadra_casa, Squadra squadra_ospite,int goal_casa, int goal_ospite, Campionato campionato, Date data_ora,boolean finita) {
-		this.codice=codice;
-		this.finita=finita;
+	public Partita(Squadra squadra_casa, Squadra squadra_ospite, int goal_casa, int goal_ospite, Campionato campionato,
+			Date data_ora, boolean finita) {
+		this.codice = IdBroker.getIstance("partita").getId();
+		this.finita = finita;
 		this.campionato = campionato;
 		this.squadra_casa = squadra_casa;
 		this.data_ora = data_ora;
 		this.squadra_ospite = squadra_ospite;
-		this.goal_casa=goal_casa;
-		this.goal_ospite=goal_ospite;
+		this.goal_casa = goal_casa;
+		this.goal_ospite = goal_ospite;
+	}
+
+	public Partita(Long codice, Squadra squadra_casa, Squadra squadra_ospite, int goal_casa, int goal_ospite,
+			Campionato campionato, long data_ora, boolean finita) {
+		this.codice = codice;
+		this.finita = finita;
+		this.campionato = campionato;
+		this.squadra_casa = squadra_casa;
+		this.data_ora = new Date(data_ora);
+		this.squadra_ospite = squadra_ospite;
+		this.goal_casa = goal_casa;
+		this.goal_ospite = goal_ospite;
 	}
 
 	public int getGoal_casa() {
 		return goal_casa;
 	}
-	
+
 	public int getGoal_ospite() {
 		return goal_ospite;
 	}
@@ -35,27 +50,27 @@ public class Partita {
 	public boolean isFinita() {
 		return finita;
 	}
-	
+
 	public void setFinita(boolean finita) {
 		this.finita = finita;
 	}
-	
+
 	public void setGoal_casa(int goal_casa) {
 		this.goal_casa = goal_casa;
 	}
-	
+
 	public void setGoal_ospite(int goal_ospite) {
 		this.goal_ospite = goal_ospite;
 	}
-	
+
 	public Date getData_ora() {
 		return data_ora;
 	}
-	
+
 	public void setData_ora(Date data_ora) {
 		this.data_ora = data_ora;
 	}
-	
+
 	public Long getCodice() {
 		return codice;
 	}
@@ -88,10 +103,9 @@ public class Partita {
 		this.squadra_ospite = squadra_ospite;
 	}
 
-	
 	@Override
 	public String toString() {
-		return "Partita tra "+squadra_casa.getNome()+" vs "+squadra_ospite.getNome()+ " prevista alle "+data_ora.toString()+" risultato"+
-				goal_casa+" - "+goal_ospite+ " finita: "+finita;
+		return "Partita tra " + squadra_casa.getNome() + " vs " + squadra_ospite.getNome() + " prevista alle "
+				+ data_ora.toString() + " risultato" + goal_casa + " - " + goal_ospite + " finita: " + finita;
 	}
 }
