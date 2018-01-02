@@ -30,8 +30,9 @@ public class IdBroker {
 	public Long getId() {
 		Long id = null;
 		String query = "SELECT max(T.codice) from "+tableName+" as T";
+		Connection connection=PostgresDAOFactory.dataSource.getConnection();
 		try {
-			PreparedStatement statement = PostgresDAOFactory.dataSource.getConnection().prepareStatement(query);
+			PreparedStatement statement = connection.prepareStatement(query);
 			ResultSet result = statement.executeQuery();
 			if(result==null) {
 				id=new Long(0);
@@ -41,6 +42,13 @@ public class IdBroker {
 			}
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
+		}finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return id+1;
 	}

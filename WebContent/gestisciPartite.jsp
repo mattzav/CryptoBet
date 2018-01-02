@@ -245,7 +245,10 @@
 								</c:if>
 								<c:if test="${loggato==null}">
 									<div>
-										<br> <br> <br> <br>
+										<br> 
+										<br>
+										<br> 
+										<br>
 										<div class="col-sm-6">
 											<h1>Aggiorna Il Tuo Sito</h1>
 										</div>

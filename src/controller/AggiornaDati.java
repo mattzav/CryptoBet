@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -32,6 +34,7 @@ public class AggiornaDati extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		System.out.println("debug");
 		if (req.getParameter("aggiorna").equals("Aggiorna")) {
 			String squadre = req.getParameter("squadre");
 			System.out.println(squadre);
@@ -46,23 +49,44 @@ public class AggiornaDati extends HttpServlet {
 
 			for (String s : campionati.split(";")) {
 				int index = s.indexOf(":");
-
 				String id = s.substring(0, index);
+				if(id.equals("466"))
+					continue;
 				String caption = s.substring(index + 1, s.length());
-
 				campionatoDao.save(new Campionato(Long.valueOf(id), caption));
 			}
 		}
 		else if (req.getParameter("aggiorna").equals("Aggiorna Partite")) {
+			System.out.println("servlet iniziata");
 			PartitaDao partitaDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getPartitaDao();
 			String partite = req.getParameter("partite");
 			for(String p: partite.split(";")){
 				String partita[] = p.split("£");
-				boolean finish = partita[5] == "FINISHED";	
-				java.util.Date date = new java.util.Date(Integer.valueOf(partita[6].substring(0, 4))-1900, Integer.valueOf(partita[6].substring(5, 7)), Integer.valueOf(partita[6].substring(8, 10)), Integer.valueOf(partita[6].substring(11, 13)), Integer.valueOf(partita[6].substring(14, 16)), Integer.valueOf(partita[6].substring(17, 19)));
-				java.sql.Date date2 = new Date(date.getTime());
-				System.out.println(date);
-				System.out.println(date2);
+				if(partita[5].equals("CANCELED") || partita[0].equals("466"))
+					continue;
+				boolean finish = partita[5].equals("FINISHED");
+				String data=partita[6].substring(0, 10)+" "+partita[6].substring(11,19);
+				System.out.println(data);
+				java.sql.Date d = null;
+				SimpleDateFormat localDateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+				try {
+					d = new java.sql.Date(localDateFormat.parse(data).getTime());
+			
+					
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				for(String s: partita) {
+					System.out.println(s+" ");
+				}
+				Partita a = null;
+				Partita match=new Partita(new Squadra(partita[1]),new Squadra(partita[2]), -1, -1, new Campionato(Long.valueOf(partita[0]),null), new java.util.Date(d.getTime()), finish);
+				if(!partita[3].equals("null") && !partita[4].equals("null")) {
+					match.setGoal_casa(Integer.valueOf(partita[3]));
+					match.setGoal_ospite(Integer.valueOf(partita[4]));
+				}
+				partitaDao.save(match);
 			}
 		}
 		RequestDispatcher disp = req.getRequestDispatcher("gestisciPartite.jsp");
