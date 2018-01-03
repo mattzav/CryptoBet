@@ -189,6 +189,7 @@
 
 </head>
 <body>
+	<jsp:useBean id = "esito" class = "model.Esito" /> 
 	<div id="fh5co-wrapper">
 		<div id="fh5co-page">
 			<div id="fh5co-header">
@@ -326,8 +327,11 @@
 											<h3>Modifica le tue quote</h3>
 											<p>Ti permette di abilitare, disabilitare o modificare le
 												tue quote</p>
-												<a class="btn btn-primary" href="aggiornaQuote.jsp"> Aggiorna Quote </a>
+												<a class="btn btn-primary" href="aggiornaDati"> Aggiorna Quote </a>
 											<br> <br> <br> <br>
+											<c:forEach items="${lista}" var="item">
+												<p> ${item.descrizione} </p>
+											</c:forEach>
 										</div>
 									</div>
 								</div>

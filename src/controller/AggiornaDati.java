@@ -7,6 +7,7 @@ import java.net.URL;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.HttpJspPage;
 
 import model.Campionato;
+import model.Esito;
 import model.Partita;
 import model.Squadra;
 import persistence.DAOFactory;
@@ -28,7 +30,12 @@ public class AggiornaDati extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		System.out.println(req.getSession().getAttribute("squadre"));
+		ArrayList<Esito> lista=new ArrayList<>();
+		lista.add(new Esito("1X"));
+		lista.add(new Esito("X2"));
+		req.getSession().setAttribute("lista", lista);
+		RequestDispatcher disp = req.getRequestDispatcher("gestisciPartite.jsp");
+		disp.forward(req, resp);
 	}
 
 	@Override

@@ -1,7 +1,9 @@
 package model;
 
-public class Esito {
-	String descrizione;
+import java.io.Serializable;
+
+public class Esito implements Serializable {
+	private String descrizione;
 
 	public Esito(String descrizione) {
 		this.descrizione = descrizione;
