@@ -5,6 +5,8 @@ import persistence.dao.CampionatoDao;
 import persistence.dao.CartaDiCreditoDao;
 import persistence.dao.ContoDao;
 import persistence.dao.CredenzialiDao;
+import persistence.dao.EsitoDao;
+import persistence.dao.EsitoPartitaDao;
 import persistence.dao.GiocatoreDao;
 import persistence.dao.MovimentoCartaDao;
 import persistence.dao.PartitaDao;
@@ -95,6 +97,18 @@ public class PostgresDAOFactory extends DAOFactory {
 	@Override
 	public PartitaDao getPartitaDao() {
 		return new PartitaDaoJDBC();
+	}
+
+
+	@Override
+	public EsitoPartitaDao getEsitoPartitaDao() {
+		return new EsitoPartitaDaoJDBC();
+	}
+
+
+	@Override
+	public EsitoDao getEsitoDao() {
+		return new EsitoDaoJDBC();
 	}
 	
 	// --------------------------------------------

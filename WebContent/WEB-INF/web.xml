@@ -31,4 +31,14 @@
     <url-pattern>/aggiornaDati</url-pattern>
   </servlet-mapping>  
   
+   <servlet>
+    <servlet-name>AggiornaQuote</servlet-name>
+    <servlet-class>controller.AggiornaQuote</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AggiornaQuote</servlet-name>
+    <url-pattern>/aggiornaQuote</url-pattern>
+  </servlet-mapping>  
+  
+  
 </web-app>

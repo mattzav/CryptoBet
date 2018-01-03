@@ -59,6 +59,7 @@ public class UtilDao {
 				delete+=s;
 			}
 			delete+=");";
+			System.out.println(delete);
 			PreparedStatement statement = connection.prepareStatement(delete);
 			statement.executeUpdate();
 			System.out.println(delete);
@@ -75,7 +76,7 @@ public class UtilDao {
 	}
 	public static void main(String[] args) {
 		UtilDao u = new UtilDao();
-		u.addTable("esito", new String[]{"descrizione varchar(255) primary key"});
+		u.addTable("esitopartita", new String[]{"esito varchar(255) not NULL, partita bigint not NULL, quota float, PRIMARY KEY  (esito,partita) "});
 ////		u.createDatabase();
 //		
 //		CampionatoDao campionatoDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCampionatoDao();

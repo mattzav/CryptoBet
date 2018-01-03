@@ -5,6 +5,8 @@ import persistence.dao.CampionatoDao;
 import persistence.dao.CartaDiCreditoDao;
 import persistence.dao.ContoDao;
 import persistence.dao.CredenzialiDao;
+import persistence.dao.EsitoDao;
+import persistence.dao.EsitoPartitaDao;
 import persistence.dao.GiocatoreDao;
 import persistence.dao.MovimentoCartaDao;
 import persistence.dao.PartitaDao;
@@ -71,7 +73,9 @@ public abstract class DAOFactory {
 	public abstract CampionatoDao getCampionatoDao();
 	
 	public abstract PartitaDao getPartitaDao();
-	
 
+	public abstract EsitoPartitaDao getEsitoPartitaDao() ;
+
+	public abstract EsitoDao getEsitoDao() ;
 
 }

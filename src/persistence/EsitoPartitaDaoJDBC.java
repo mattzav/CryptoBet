@@ -10,7 +10,6 @@ import java.util.List;
 import model.Esito;
 import model.EsitoPartita;
 import model.Partita;
-import model.Squadra;
 import persistence.dao.EsitoPartitaDao;
 
 public class EsitoPartitaDaoJDBC implements EsitoPartitaDao {

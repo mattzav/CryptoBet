@@ -108,4 +108,10 @@ public class Partita {
 		return "Partita tra " + squadra_casa.getNome() + " vs " + squadra_ospite.getNome() + " prevista alle "
 				+ data_ora + " risultato" + goal_casa + " - " + goal_ospite + " finita: " + finita;
 	}
+	
+	@Override
+	public boolean equals(Object arg0) {
+		Partita partita=(Partita)(arg0);
+		return partita.codice == codice;
+	}
 }

@@ -9,7 +9,7 @@ public interface PartitaDao {
 
 	public void save(Partita partita);  // Create
 	public boolean findExistingMatch(Partita p);     // Retrieve
-	public List<Partita> findAll(Campionato campionato);   
+	public List<Partita> findAll(String nome_campionato);   
 	public void update(Partita partita);
 
 }

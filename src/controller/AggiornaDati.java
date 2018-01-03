@@ -30,10 +30,6 @@ public class AggiornaDati extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		ArrayList<Esito> lista=new ArrayList<>();
-		lista.add(new Esito("1X"));
-		lista.add(new Esito("X2"));
-		req.getSession().setAttribute("lista", lista);
 		RequestDispatcher disp = req.getRequestDispatcher("gestisciPartite.jsp");
 		disp.forward(req, resp);
 	}
