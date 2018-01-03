@@ -3,6 +3,7 @@ package persistence.dao;
 import java.util.List;
 
 import model.Conto;
+import model.Esito;
 import model.EsitoPartita;
 import model.Partita;
 

@@ -7,10 +7,10 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
+import model.Esito;
 import model.EsitoPartita;
 import model.Partita;
 import model.Squadra;
-import persistence.dao.Esito;
 import persistence.dao.EsitoPartitaDao;
 
 public class EsitoPartitaDaoJDBC implements EsitoPartitaDao {
@@ -21,7 +21,7 @@ public class EsitoPartitaDaoJDBC implements EsitoPartitaDao {
 		try {
 			String insert = "insert into esitopartita(esito, partita, quota) values (?,?,?)";
 			PreparedStatement statement = connection.prepareStatement(insert);
-			statement.setString(1, esitoPartita.getEsito());
+			statement.setString(1, esitoPartita.getEsito().getDescrizione());
 			statement.setLong(2, esitoPartita.getPartita().getCodice());
 			statement.setFloat(3, esitoPartita.getQuota());
 			statement.executeUpdate();
@@ -67,10 +67,10 @@ public class EsitoPartitaDaoJDBC implements EsitoPartitaDao {
 		try {
 			String insert = "update esitopartita SET esito = ?, quota = ?, partita = ? where esito = ? and partita = ?";
 			PreparedStatement statement = connection.prepareStatement(insert);
-			statement.setString(1, esitoPartita.getEsito());
+			statement.setString(1, esitoPartita.getEsito().getDescrizione());
 			statement.setFloat(2, esitoPartita.getQuota());
 			statement.setLong(3, esitoPartita.getPartita().getCodice());
-			statement.setString(1, esitoPartita.getEsito());
+			statement.setString(4, esitoPartita.getEsito().getDescrizione());
 			statement.setLong(5, esitoPartita.getPartita().getCodice());
 			statement.executeUpdate();
 		} catch (SQLException e) {
@@ -103,7 +103,7 @@ public class EsitoPartitaDaoJDBC implements EsitoPartitaDao {
 			ResultSet result = statement.executeQuery();
 
 			while (result.next()) {
-				EsitoPartita corrente = new EsitoPartita(result.getString(1), result.getFloat(2), partita);
+				EsitoPartita corrente = new EsitoPartita(new model.Esito(result.getString(1)), result.getFloat(2), partita);
 				esiti_partita.add(corrente);
 			}
 
