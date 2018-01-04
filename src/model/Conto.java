@@ -13,14 +13,29 @@ public class Conto {
 	private Date dataApertura;
 	private CartaDiCredito carta;
 
-	public Conto(CartaDiCredito carta) {
+
+	public Conto(float saldo, Date dataApertura, CartaDiCredito carta) {
 		codice=IdBroker.getIstance("conto").getId();
-		this.carta=carta;
+		this.codice = codice;
+		this.saldo = saldo;
+		this.dataApertura = dataApertura;
+		this.carta = carta;
 	}
 
+	public Conto(Long codice, float saldo, Date dataApertura, CartaDiCredito carta) {
+		super();
+		this.codice = codice;
+		this.saldo = saldo;
+		this.dataApertura = dataApertura;
+		this.carta = carta;
+	}
+
+<<<<<<< HEAD
 	public Conto(Long long1) {
 		codice=long1;
 	}
+=======
+>>>>>>> 4eb4f142dfa1b28313abac15e0b703029c12fa8a
 
 	public long getCodice() {
 		// TODO Auto-generated method stub
