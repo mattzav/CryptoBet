@@ -9,9 +9,13 @@ import java.util.List;
 
 import model.Conto;
 import model.EsitoPartita;
+import model.MovimentoScommessa;
 import model.Partita;
 import model.SchemaDiScommessa;
 import model.Scommessa;
+import model.Squadra;
+import model.TipoMovimento;
+import persistence.dao.MovimentoScommessaDao;
 import persistence.dao.ScommessaDao;
 
 public class ScommessaDaoJDBC implements ScommessaDao {
@@ -40,6 +44,10 @@ public class ScommessaDaoJDBC implements ScommessaDao {
 				statement.setLong(3, esito_giocato.getPartita().getCodice());
 				statement.executeUpdate();
 			}
+			MovimentoScommessa movimento = new MovimentoScommessa(scommessa.getSchema_scommessa().getImporto_giocato(), TipoMovimento.VERSAMENTO);
+			MovimentoScommessaDao movimentoDao = PostgresDAOFactory.getDAOFactory(PostgresDAOFactory.POSTGRESQL).getMovimentoScommessaDAO();
+			movimentoDao.save(movimento);
+			
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
 		} finally {
@@ -58,23 +66,23 @@ public class ScommessaDaoJDBC implements ScommessaDao {
 		try {
 			PreparedStatement statement;
 			String query = "select s.dataemissione, s.contoassociato, s.importo_giocato,s.quota_totale,s.bonus,s.numero_esiti,"
-					+ "s.vincita_potenziale,c.saldo,c.data_apertura from scommessa as s,conto as c where s.codice=? and s.contoassociato=c.codice"; 
+					+ "s.vincita_potenziale from scommessa as s where s.codice=? "; 
 			statement = connection.prepareStatement(query);
 			statement.setLong(1, codice);
 			ResultSet result = statement.executeQuery();
 			if (result.next()){
 				ArrayList<EsitoPartita> esiti_giocati = new ArrayList<EsitoPartita>();
 				//controllare se va bene discutere ( aggiungere il join con la partita
-				query = "select s.*,es.quota scommessa_esitopartita as s,esitopartita as es where s.scommessa=?,s.esito=es.esito,s.partita=es.partita";
+				query = "select e.esito,e.quota,p.codice,p.squadraCasa,p.squadraOspite,p.data from scommessa_esitopartita as se, esitopartita as e, partita as p where se.partita=e.partita and se.esito = e.esito and e.partita=p.codice and se.scommessa=?";
 				statement=connection.prepareStatement(query);
 				statement.setLong(1, codice);
 				ResultSet result2 = statement.executeQuery();
-				while (result.next()) {
-					EsitoPartita corrente = new EsitoPartita(new model.Esito(result.getString(2)), result.getFloat(4), new Partita(result.getLong(3), null,null,null,null,null,null,null));
+				while (result2.next()) {
+					EsitoPartita corrente = new EsitoPartita(new model.Esito(result.getString(1)), result.getFloat(2), new Partita(result.getLong(3),new Squadra(result.getString(4)),new Squadra(result.getString(5)),-1,-1,null,result.getDate(6).getTime(),false));
 					esiti_giocati.add(corrente);
 				}
 				SchemaDiScommessa schema_scommessa  = new SchemaDiScommessa(result.getFloat(3), result.getFloat(4), result.getFloat(5), result.getInt(6), result.getFloat(7), esiti_giocati);
-				scommessa=new Scommessa(codice, result.getDate(1), new Conto(result.getLong(2), result.getFloat(8), result.getDate(9), null),schema_scommessa);
+				scommessa=new Scommessa(codice, result.getDate(1), new Conto(result.getLong(2), 0.0f , null, null),schema_scommessa);
 			}
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
@@ -85,7 +93,7 @@ public class ScommessaDaoJDBC implements ScommessaDao {
 				throw new PersistenceException(e.getMessage());
 			}
 		}	
-		return esitoPartita;
+		return scommessa;
 	}
 
 	@Override

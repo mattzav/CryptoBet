@@ -1,5 +1,7 @@
 package model;
 
+import persistence.IdBroker;
+
 public class MovimentoScommessa {
 
 	private Long codice_transazione;
@@ -12,6 +14,12 @@ public class MovimentoScommessa {
 		this.tipo_transazione = tipo_transazione;
 	}
 	
+	public MovimentoScommessa(float importo_giocato, String versamento) {
+		this.codice_transazione=IdBroker.getIstance("movimentoscommessa").getId();
+		this.importo = importo_giocato;
+		this.tipo_transazione = versamento;
+	}
+
 	public Long getCodice_transazione() {
 		return codice_transazione;
 	}
