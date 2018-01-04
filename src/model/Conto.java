@@ -16,7 +16,6 @@ public class Conto {
 
 	public Conto(float saldo, Date dataApertura, CartaDiCredito carta) {
 		codice=IdBroker.getIstance("conto").getId();
-		this.codice = codice;
 		this.saldo = saldo;
 		this.dataApertura = dataApertura;
 		this.carta = carta;
@@ -30,12 +29,9 @@ public class Conto {
 		this.carta = carta;
 	}
 
-<<<<<<< HEAD
 	public Conto(Long long1) {
 		codice=long1;
 	}
-=======
->>>>>>> 4eb4f142dfa1b28313abac15e0b703029c12fa8a
 
 	public long getCodice() {
 		// TODO Auto-generated method stub

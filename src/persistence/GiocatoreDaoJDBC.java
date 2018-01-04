@@ -80,7 +80,7 @@ public class GiocatoreDaoJDBC implements GiocatoreDao {
 	public Giocatore findByCredenziali(Credenziali credenziali) {
 		Connection connection = PostgresDAOFactory.dataSource.getConnection();
 		try {
-			String insert = "select g.nome,g.cognome,g.conto, c1.codiceCarta"
+			String insert = "select g.nome,g.cognome,g.conto, c1.codiceCarta, c1.data, c1.saldo"
 							+ "from giocatore as g, credenziali as c, conto as c1 "
 							+ "where g.username=? and g.username=c.username and c.password=? and c.tipo=? and g.conto=c1.codice";
 			PreparedStatement statement = connection.prepareStatement(insert);
@@ -92,8 +92,7 @@ public class GiocatoreDaoJDBC implements GiocatoreDao {
 				Giocatore g=new Giocatore("", "", credenziali, null);
 				g.setNome(result.getString(1));
 				g.setCognome(result.getString(2));
-				Conto c=new Conto(new CartaDiCredito(result.getString(4)));
-				c.setCodice(result.getLong(3));
+				Conto c=new Conto(result.getLong(3),result.getFloat(6),result.getDate(5),new CartaDiCredito(result.getString(4)));
 				g.setConto(c);
 				return g;
 			}

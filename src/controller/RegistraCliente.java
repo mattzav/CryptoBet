@@ -34,7 +34,7 @@ public class RegistraCliente extends HttpServlet {
 		CartaDiCredito carta=new CartaDiCredito(codCarta);
 		PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCartaDiCreditoDAO().save(carta);
 		//creo il conto del nuovo giocatore con la carta di credito appena creata
-		Conto conto=new Conto(carta);
+		Conto conto=new Conto(5.0f,new java.util.Date(),carta);
 		PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getContoDAO().save(conto);
 		PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCredenzialiDAO().save(nuovaCredenziale);
 		//creo il nuovo giocatore con nome cognome credenziali e conto 
