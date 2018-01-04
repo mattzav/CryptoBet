@@ -9,6 +9,7 @@ import java.util.List;
 
 import model.Conto;
 import model.EsitoPartita;
+import model.Partita;
 import model.SchemaDiScommessa;
 import model.Scommessa;
 import persistence.dao.ScommessaDao;
@@ -63,7 +64,15 @@ public class ScommessaDaoJDBC implements ScommessaDao {
 			ResultSet result = statement.executeQuery();
 			if (result.next()){
 				ArrayList<EsitoPartita> esiti_giocati = new ArrayList<EsitoPartita>();
-				//devo aggiungere tutti gli esiti partita della scommessa.
+				//controllare se va bene discutere ( aggiungere il join con la partita
+				query = "select s.*,es.quota scommessa_esitopartita as s,esitopartita as es where s.scommessa=?,s.esito=es.esito,s.partita=es.partita";
+				statement=connection.prepareStatement(query);
+				statement.setLong(1, codice);
+				ResultSet result2 = statement.executeQuery();
+				while (result.next()) {
+					EsitoPartita corrente = new EsitoPartita(new model.Esito(result.getString(2)), result.getFloat(4), new Partita(result.getLong(3), null,null,null,null,null,null,null));
+					esiti_giocati.add(corrente);
+				}
 				SchemaDiScommessa schema_scommessa  = new SchemaDiScommessa(result.getFloat(3), result.getFloat(4), result.getFloat(5), result.getInt(6), result.getFloat(7), esiti_giocati);
 				scommessa=new Scommessa(codice, result.getDate(1), new Conto(result.getLong(2), result.getFloat(8), result.getDate(9), null),schema_scommessa);
 			}
