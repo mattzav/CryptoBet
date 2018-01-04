@@ -24,10 +24,8 @@ public class ContoDaoJDBC implements ContoDao {
 			PreparedStatement statement = connection.prepareStatement(insert);
 			statement.setLong(1,conto.getCodice());
 			statement.setFloat(2,conto.getSaldo());
-			//long secs = conto.getDataApertura().getTime();
-			//Date date= new java.sql.Date(secs);
 			statement.setDate(3, null);
-			statement.setString(4, conto.getCarta().getCodice());
+			statement.setString(4, conto.getCarta().getCodiceCarta());
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());

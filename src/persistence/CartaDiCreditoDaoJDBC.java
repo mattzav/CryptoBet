@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +24,7 @@ public class CartaDiCreditoDaoJDBC implements CartaDiCreditoDao {
 		try {
 			String insert = "insert into cartaDiCredito(codice, data_scadenza, saldo) values (?,?,?)";
 			PreparedStatement statement = connection.prepareStatement(insert);
-			statement.setString(1, carta.getCodice());
+			statement.setString(1, carta.getCodiceCarta());
 			statement.setDate(2, null);
 			statement.setFloat(3, carta.getSaldo());
 			statement.executeUpdate();
@@ -44,21 +46,44 @@ public class CartaDiCreditoDaoJDBC implements CartaDiCreditoDao {
 	}
 
 	@Override
-	public List<CartaDiCredito> findAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void update(CartaDiCredito carta) {
-		// TODO Auto-generated method stub
-		
+		Connection connection = PostgresDAOFactory.dataSource.getConnection();
+		try {
+			String update = "update cartaDiCredito SET dataScadenza = ?, saldo= ? where codice=? ";
+			PreparedStatement statement = connection.prepareStatement(update);
+			statement.setDate(1, new java.sql.Date(carta.getScadenza().getTime()));
+			statement.setFloat(2, carta.getSaldo());
+			statement.setString(3, carta.getCodiceCarta());
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}
 	}
 
 	@Override
 	public void delete(CartaDiCredito carta) {
-		// TODO Auto-generated method stub
 		
+		Connection connection = PostgresDAOFactory.dataSource.getConnection();
+		try {
+			String delete = "delete FROM cartaDiCredito WHERE codice = ? ";
+			PreparedStatement statement = connection.prepareStatement(delete);
+			statement.setString(1, carta.getCodiceCarta());
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}
 	}
 
 }

@@ -1,5 +1,6 @@
 package model;
 
-public enum TipoMovimento {
-	VERSAMENTO,PRELIEVO;
+public class TipoMovimento {
+	public static final String VERSAMENTO="VERSAMENTO";
+	public static final String PRELIEVO="PRELIEVO";
 }

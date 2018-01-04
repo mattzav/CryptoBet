@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import model.CartaDiCredito;
 import model.Conto;
 import model.Credenziali;
 import model.Giocatore;
@@ -16,6 +17,7 @@ public class GiocatoreDaoJDBC implements GiocatoreDao {
 	
 
 	public GiocatoreDaoJDBC() {
+		
 	}
 
 	@Override
@@ -78,7 +80,9 @@ public class GiocatoreDaoJDBC implements GiocatoreDao {
 	public Giocatore findByCredenziali(Credenziali credenziali) {
 		Connection connection = PostgresDAOFactory.dataSource.getConnection();
 		try {
-			String insert = "select g.nome,g.cognome, g.conto from giocatore as g, credenziali as c where g.username=? and g.username=c.username and c.password=? and c.tipo=?";
+			String insert = "select g.nome,g.cognome,g.conto, c1.codiceCarta"
+							+ "from giocatore as g, credenziali as c, conto as c1 "
+							+ "where g.username=? and g.username=c.username and c.password=? and c.tipo=? and g.conto=c1.codice";
 			PreparedStatement statement = connection.prepareStatement(insert);
 			statement.setString(1, credenziali.getUsername());
 			statement.setString(2, credenziali.getPassword());
@@ -86,10 +90,10 @@ public class GiocatoreDaoJDBC implements GiocatoreDao {
 			ResultSet result = statement.executeQuery();
 			if (result.next()) {
 				Giocatore g=new Giocatore("", "", credenziali, null);
-				g.setNome(result.getString("nome"));
-				g.setCognome(result.getString("cognome"));
-				Conto c=new Conto(null);
-				c.setCodice(result.getLong("conto"));
+				g.setNome(result.getString(1));
+				g.setCognome(result.getString(2));
+				Conto c=new Conto(new CartaDiCredito(result.getString(4)));
+				c.setCodice(result.getLong(3));
 				g.setConto(c);
 				return g;
 			}

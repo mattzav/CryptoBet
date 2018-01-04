@@ -18,6 +18,10 @@ public class Conto {
 		this.carta=carta;
 	}
 
+	public Conto(Long long1) {
+		codice=long1;
+	}
+
 	public long getCodice() {
 		// TODO Auto-generated method stub
 		return codice;

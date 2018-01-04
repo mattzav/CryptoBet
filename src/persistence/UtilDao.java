@@ -10,9 +10,13 @@ import java.util.Date;
 
 import javafx.geometry.Pos;
 import model.Campionato;
+import model.Conto;
+import model.MovimentoCarta;
 import model.Partita;
 import model.Squadra;
+import model.TipoMovimento;
 import persistence.dao.CampionatoDao;
+import persistence.dao.MovimentoCartaDao;
 import persistence.dao.PartitaDao;
 import persistence.dao.SquadraDao;
 import sun.java2d.pipe.SpanShapeRenderer.Simple;
@@ -76,7 +80,9 @@ public class UtilDao {
 	}
 	public static void main(String[] args) {
 		UtilDao u = new UtilDao();
-		u.addTable("esitopartita", new String[]{"esito varchar(255) not NULL, partita bigint not NULL, quota float, PRIMARY KEY  (esito,partita) "});
+		u.addTable("movimentoCarta", new String[]{"codice bigint primary key,data date,ora time,tipo varchar(255),importo float,conto bigint REFERENCES conto(\"codice\")"});
+		MovimentoCartaDao mDao=PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getMovimentoCartaDAO();
+		mDao.save(new MovimentoCarta(new Long(1),new Date(),TipoMovimento.VERSAMENTO,1.0f,new Conto(new Long(1))));
 ////		u.createDatabase();
 //		
 //		CampionatoDao campionatoDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCampionatoDao();
@@ -135,7 +141,7 @@ public class UtilDao {
 
 			String delete = "create table cartaDiCredito (codice varchar(255) primary key,data_scadenza date, saldo float);"
 					+ "create table conto (codice bigint primary key, saldo float,data_apertura date, codice_carta varchar(255) REFERENCES cartaDiCredito(\"codice\"));"
-					+ "create table movimentoCarta (codice bigint primary key, tipo varchar(255),importo float);"
+					+ "create table movimentoCarta (codice bigint primary key,data date,ora time,tipo varchar(255),importo float,conto bigint REFERENCES conto(\"codice\"));"
 					+ "create table credenziali(username varchar(255) primary key,password varchar(255),tipo varchar(255));"
 					+ "create table giocatore (codice bigint primary key,nome varchar(255),cognome varchar(255),data_nascita date,username varchar(255) REFERENCES credenziali(\"username\"),conto bigint REFERENCES conto(\"codice\"));"
 					+ "create table amministatore(codice bigint primary key,username varchar(255) REFERENCES credenziali(\"username\"));"
