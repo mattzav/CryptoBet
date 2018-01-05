@@ -71,7 +71,19 @@ public class SchemaDiScommessa {
 	}
 
 	public void addEsito(EsitoPartita esitoSelezionato) {
+		quota_totale*=esitoSelezionato.getQuota();
+		numero_esiti++;
+		//calcolo del bonus
+		vincita_potenziale=(quota_totale*importo_giocato)+bonus;
 		esiti_giocati.add(esitoSelezionato);
+	}
+
+	public void removeEsito(EsitoPartita esito) {
+		quota_totale/=esito.getQuota();
+		numero_esiti--;
+		//calcolo del bonus
+		vincita_potenziale=(quota_totale*importo_giocato)+bonus;
+		esiti_giocati.remove(esito);
 	}
 	
 }

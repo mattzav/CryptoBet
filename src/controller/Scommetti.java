@@ -34,6 +34,9 @@ public class Scommetti extends HttpServlet{
 		req.getSession().removeAttribute("campionatiAttivi");
 		req.getSession().removeAttribute("esitiAttivi");
 		req.getSession().removeAttribute("campionato");
+		req.getSession().removeAttribute("importo");
+		ArrayList<Esito> esiti=(ArrayList<Esito>) PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getEsitoDao().findAll();
+		req.getSession().setAttribute("esiti", esiti);
 		RequestDispatcher dispatcher = req.getRequestDispatcher("Scommetti.jsp");
 		dispatcher.forward(req, resp);
 	}
@@ -43,7 +46,6 @@ public class Scommetti extends HttpServlet{
 		// TODO Auto-generated method stub
 		EsitoPartitaDao esitoPartitaDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getEsitoPartitaDao();
 		PartitaDao partitaDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getPartitaDao();
-		
 		HttpSession session = req.getSession();
 		
 		ArrayList<Partita> partiteAttive = (ArrayList<Partita>) session.getAttribute("partiteAttive");
@@ -90,17 +92,34 @@ public class Scommetti extends HttpServlet{
 			}
 		}
 		else {
-			String btn=req.getParameterNames().nextElement();
-			if(btn.contains(";")) {
-				SchemaDiScommessa schemaDiScommessa=(SchemaDiScommessa) session.getAttribute("schema");
-				if(schemaDiScommessa==null) {
-					schemaDiScommessa=new SchemaDiScommessa(1.0f, 1.0f, 0.0f, 0, 1.0f, new ArrayList<EsitoPartita>());
-					session.setAttribute("schema", schemaDiScommessa);
+			SchemaDiScommessa schemaDiScommessa=(SchemaDiScommessa) session.getAttribute("schema");
+			if(schemaDiScommessa==null) {
+				schemaDiScommessa=new SchemaDiScommessa(1.0f, 1.0f, 0.0f, 0, 1.0f, new ArrayList<EsitoPartita>());
+				session.setAttribute("schema", schemaDiScommessa);
+			}
+			String importo=req.getParameter("importo");
+			if(importo!=null) {
+				session.setAttribute("importo", Float.valueOf(importo));
+				schemaDiScommessa.setImporto_giocato(Float.valueOf(importo));
+			}
+			else {
+				String btn=req.getParameterNames().nextElement();
+				if(btn.contains(";")) {
+					String[] datiEsitoSelezionato=btn.split(";");
+					for(EsitoPartita esito:esitiAttivi) {
+						if(esito.getPartita().getCodice().equals(Long.valueOf(datiEsitoSelezionato[0])) &&
+								esito.getEsito().getDescrizione().equals(datiEsitoSelezionato[1])) {
+							if(esito.isDisponibile()) {
+								schemaDiScommessa.addEsito(esito);
+								esito.setDisponibile(false);
+							}
+							else {
+								schemaDiScommessa.removeEsito(esito);
+								esito.setDisponibile(true);
+							}
+						}
+					}
 				}
-				int index=btn.indexOf(";");
-				Partita partita =getPartitaSelezionata(partiteAttive,btn.substring(0,index));
-				EsitoPartita esitoSelezionato=new EsitoPartita(new Esito(btn.substring(index+1)), Float.valueOf(req.getParameter(btn)), partita);
-				schemaDiScommessa.addEsito(esitoSelezionato);
 			}
 		}
 		RequestDispatcher dispatcher = req.getRequestDispatcher("Scommetti.jsp");

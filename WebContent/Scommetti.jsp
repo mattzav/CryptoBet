@@ -52,6 +52,29 @@
 	<script src="js/respond.min.js"></script>
 	<![endif]-->
 
+<script type="text/javascript">
+	function checkValue(){
+		var value=$(".importo").val();
+		$(".importo").addClass("btn-default");
+		$(".importo").removeClass("btn-danger");
+		if(!($.isNumeric( value ))){
+			$(".importo").removeClass("btn-default");
+			$(".importo").addClass("btn-danger");
+		}
+		else{
+			$.ajax(
+	   			{
+		            url:'scommetti',
+		            data:'importo='+value,
+		            type:'POST',
+		            cache:false,
+		            error:function(){alert('error');}
+	        	}
+	    	);
+		}
+	}
+</script>
+
 </head>
 <body>
 	<div id="fh5co-wrapper">
@@ -138,7 +161,7 @@
 					<div>
 						<table class="table table-responsive">
 							<tr class="danger">
-								<th>
+								<th colspan="2">
 									Le tue Partite
 								</th>
 								<th>
@@ -147,11 +170,14 @@
 								<th>
 									Esito
 								</th>
+								<th>
+									<a class="glyphicon glyphicon-trash" href="scommetti"></a>
+								</th>
 							</tr>
 							<tbody>
 								<c:forEach items="${schema.esiti_giocati}" var="esito">
 									<tr class="info">
-										<td>
+										<td colspan="2">
 											${esito.partita.squadra_casa.nome} vs ${esito.partita.squadra_ospite.nome}
 										</td>
 										<td>
@@ -163,6 +189,30 @@
 									</tr>
 								</c:forEach>
 							</tbody>
+							<tfoot>
+								<tr>
+									<td>
+										Quota totale : ${schema.quota_totale}
+									</td>
+									<td>
+										Bonus : ${schema.bonus}
+									</td>
+									<td>
+										Importo:
+									</td>
+									<td>
+										<form>
+											<div>
+												<input class="col-sm-4 btn btn-default btn-xs importo" type="text" name="importo" onkeyup="checkValue()" onmouseleave="getImporto()" value="${importo}">
+												<span class="col-sm-4">
+													Vincita potenziale : ${schema.vincita_potenziale}
+												</span>
+												<input class="col-sm-4 btn btn-primary btn-xs" type="button" name="gioca" value="Scommetti">
+											</div>
+										</form>
+									</td>
+								</tr>
+							</tfoot>
 						</table>
 					</div>
 				</div>
@@ -195,16 +245,9 @@
 								<table class="table">
 									<tr>
 										<th>${campionato}</th>
-										<th>1</th>
-										<th>2</th>
-										<th>X</th>
-										<th>1X</th>
-										<th>X2</th>
-										<th>12</th>
-										<th>OV 2,5</th>
-										<th>UN 2,5</th>
-										<th>GG</th>
-										<th>NG</th>
+										<c:forEach items="${esiti}" var="esitoPossibile">
+											<th>${esitoPossibile.descrizione}</th>
+										</c:forEach>
 									</tr>
 									<c:forEach items="${partiteAttive}" var="partita">
 										<c:if test="${partita.campionato.nome==campionato}">
@@ -212,14 +255,21 @@
 												<td>
 													${partita.squadra_casa.nome} vs ${partita.squadra_ospite.nome} 
 												</td>
-												<c:forEach items="${esitiAttivi}" var="esito">
-													<c:if test="${partita.codice==esito.partita.codice}">
-														<td>
-															<form method="post" action="scommetti" >
-																<input class="btn btn-info btn-xs" type="submit" name="${partita.codice};${esito.esito.descrizione}" value="${esito.quota}">
-															</form>
-														</td>
-													</c:if>		
+												<c:forEach items="${esiti}" var="esitoPossibile">
+													<c:forEach items="${esitiAttivi}" var="esito">
+														<c:if test="${esito.esito.descrizione==esitoPossibile.descrizione && partita.codice==esito.partita.codice}">
+															<td>
+																<form method="post" action="scommetti" >
+																	<c:if test="${esito.disponibile}">
+																		<input class="btn btn-info btn-xs" type="submit" name="${partita.codice};${esito.esito.descrizione}" value="${esito.quota}">
+																	</c:if>
+																	<c:if test="${not esito.disponibile}">
+																		<input class="btn btn-danger btn-xs" type="submit" name="${partita.codice};${esito.esito.descrizione}" value="${esito.quota}">
+																	</c:if>
+																</form>
+															</td>
+														</c:if>		
+													</c:forEach>
 												</c:forEach>
 											</tr>
 										</c:if>

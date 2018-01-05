@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class EsitoDaoJDBC implements EsitoDao {
 	@Override
 	public List<Esito> findAll() {
 		Connection connection = PostgresDAOFactory.dataSource.getConnection();
-		List<Esito> esiti = new LinkedList<>();
+		List<Esito> esiti = new ArrayList<>();
 		try {
 			
 			PreparedStatement statement;

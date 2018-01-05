@@ -80,10 +80,10 @@ public class UtilDao {
 	}
 	public static void main(String[] args) {
 		UtilDao u = new UtilDao();
-//		u.addTable("esito", new String[] {"descrizione varchar(255) primary key"});
+		u.createDatabase();
+		u.addTable("esito", new String[] {"descrizione varchar(255) primary key"});
 //		u.addTable("movimentoCarta", new String[]{"codice bigint primary key,data date,ora time,tipo varchar(255),importo float,conto bigint REFERENCES conto(\"codice\")"});
-		u.addTable("esitopartita", new String[] {"esito varchar(255) not null REFERENCES esito(\"descrizione\"),partita bigint not null REFERENCES partita(\"codice\"), quota float,primary key(esito,partita)"});
-////		u.createDatabase();
+		u.addTable("esitopartita", new String[] {"esito varchar(255) not null REFERENCES esito(\"descrizione\"),partita bigint not null REFERENCES partita(\"codice\"), quota float,disponibile boolean, primary key(esito,partita)"});
 //		
 //		CampionatoDao campionatoDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCampionatoDao();
 //		PartitaDao partitaDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getPartitaDao();
@@ -139,7 +139,8 @@ public class UtilDao {
 		Connection connection = PostgresDAOFactory.dataSource.getConnection();
 		try {
 
-			String delete = "create table cartaDiCredito (codice varchar(255) primary key,data_scadenza date, saldo float);"
+			String delete = 
+					"create table cartaDiCredito (codice varchar(255) primary key,data_scadenza date, saldo float);"
 					+ "create table conto (codice bigint primary key, saldo float,data_apertura date, codice_carta varchar(255) REFERENCES cartaDiCredito(\"codice\"));"
 					+ "create table movimentoCarta (codice bigint primary key,data date,ora time,tipo varchar(255),importo float,conto bigint REFERENCES conto(\"codice\"));"
 					+ "create table credenziali(username varchar(255) primary key,password varchar(255),tipo varchar(255));"
