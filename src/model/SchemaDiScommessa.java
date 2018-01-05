@@ -69,5 +69,9 @@ public class SchemaDiScommessa {
 	public void setEsiti_giocati(ArrayList<EsitoPartita> esiti_giocati) {
 		this.esiti_giocati = esiti_giocati;
 	}
+
+	public void addEsito(EsitoPartita esitoSelezionato) {
+		esiti_giocati.add(esitoSelezionato);
+	}
 	
 }

@@ -82,7 +82,7 @@
 						<nav id="fh5co-menu-wrap" role="navigation">
 						<ul class="sf-menu" id="fh5co-primary-menu">
 							<li><a href="index.jsp">Home</a></li>
-							<li><a class="fh5co-sub-ddown">Scommesse</a>
+							<li><a class="fh5co-sub-ddown" href="scommetti">Scommesse</a>
 								<ul class="fh5co-sub-menu campionati">
 
 								</ul></li>

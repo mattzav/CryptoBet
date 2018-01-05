@@ -40,6 +40,7 @@
     <url-pattern>/aggiornaQuote</url-pattern>
   </servlet-mapping>  
   
+<<<<<<< HEAD
    <servlet>
     <servlet-name>ModificaQuota</servlet-name>
     <servlet-class>controller.ModificaQuota</servlet-class>
@@ -49,5 +50,15 @@
     <url-pattern>/modificaQuota</url-pattern>
   </servlet-mapping> 
   
+=======
+    <servlet>
+    <servlet-name>Scommetti</servlet-name>
+    <servlet-class>controller.Scommetti</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Scommetti</servlet-name>
+    <url-pattern>/scommetti</url-pattern>
+  </servlet-mapping> 
+>>>>>>> 2b57bc2cd6603a7098eec8af6b66680761ffa8ac
   
 </web-app>
