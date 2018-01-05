@@ -40,5 +40,14 @@
     <url-pattern>/aggiornaQuote</url-pattern>
   </servlet-mapping>  
   
+   <servlet>
+    <servlet-name>ModificaQuota</servlet-name>
+    <servlet-class>controller.ModificaQuota</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ModificaQuota</servlet-name>
+    <url-pattern>/modificaQuota</url-pattern>
+  </servlet-mapping> 
+  
   
 </web-app>

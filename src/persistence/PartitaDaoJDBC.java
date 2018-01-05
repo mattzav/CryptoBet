@@ -169,6 +169,68 @@ public class PartitaDaoJDBC implements PartitaDao {
 		}
 		return partite;
 	}
+
+	@Override
+	public int[] getPuntiSquadre(long codice) {
+		Connection connection = PostgresDAOFactory.dataSource.getConnection();
+		int punti_squadre[]= new int[2];
+		
+		try {
+			PreparedStatement statement;
+
+			int punti_casa=0;
+			
+			//query vittorie squadra casa
+			String query = "select count(*) from partita as p1,partita as p2 where p1.codice=? and (p2.finita=true and ((p1.squadracasa=p2.squadracasa and p2.goalcasa>p2.goalospite) or (p1.squadracasa=p2.squadraospite and p2.goalcasa<p2.goalospite)))";
+			statement = connection.prepareStatement(query);
+			statement.setLong(1, codice);
+			ResultSet result = statement.executeQuery();
+			result.next();
+			punti_casa=result.getInt(1)*3;
+	
+			//query pareggi squadra casa
+			query = "select count(*) from partita as p1,partita as p2 where p1.codice=? and (p2.finita=true and ((p1.squadracasa=p2.squadracasa and p2.goalcasa=p2.goalospite) or (p1.squadracasa=p2.squadraospite and p2.goalcasa=p2.goalospite)))";
+			statement = connection.prepareStatement(query);
+			statement.setLong(1, codice);
+			result = statement.executeQuery();
+			result.next();
+			punti_casa+=result.getInt(1);
+			
+
+			int punti_ospite=0;
+			
+			//query vittorie squadra ospite
+			query = "select count(*) from partita as p1,partita as p2 where p1.codice=? and (p2.finita = true and ((p1.squadraospite=p2.squadracasa and p2.goalcasa>p2.goalospite) or (p1.squadraospite=p2.squadraospite and p2.goalcasa<p2.goalospite)))";
+			statement = connection.prepareStatement(query);
+			statement.setLong(1, codice);
+			result = statement.executeQuery();
+			result.next();
+			punti_ospite=result.getInt(1)*3;
+			
+			//query pareggi squadra ospite
+			query = "select count(*) from partita as p1,partita as p2 where p1.codice=? and (p2.finita=true and ((p1.squadraospite=p2.squadracasa and p2.goalcasa=p2.goalospite) or (p1.squadraospite=p2.squadraospite and p2.goalcasa=p2.goalospite)))";
+			statement = connection.prepareStatement(query);
+			statement.setLong(1, codice);
+			result = statement.executeQuery();
+			result.next();
+			punti_ospite+=result.getInt(1);
+		
+			
+			punti_squadre[0]=punti_casa;
+			punti_squadre[1]=punti_ospite;
+	
+			System.out.println(punti_squadre[0]+ " " + punti_squadre[1]);
+		} catch (SQLException e) {
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}
+		return punti_squadre;
+	}
 	
 	
 }

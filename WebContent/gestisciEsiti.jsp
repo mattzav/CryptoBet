@@ -210,7 +210,7 @@
 										<td>
 											<form method="post" action="aggiornaQuote">
 												<input class="btn btn-primary btn-xs" type="submit"
-													value="${campionato.nome}" name="campionato" >
+													value="${campionato.nome}" name="campionato">
 											</form>
 										</td>
 									</tr>
@@ -225,33 +225,65 @@
 								<tr class="danger">
 									<th>${campionato}</th>
 									<c:forEach items="${esiti}" var="esitoOrdinato">
-										<th> ${esitoOrdinato} </th>
+										<th>${esitoOrdinato}</th>
 									</c:forEach>
 									<th></th>
 								</tr>
 								<c:forEach items="${partiteAttive}" var="partita">
 									<c:if test="${partita.campionato.nome==campionato}">
 										<tr class="info">
-											<td>
-												${partita.squadra_casa.nome} vs ${partita.squadra_ospite.nome} 
-											</td>
+											<td>${partita.squadra_casa.nome}vs
+												${partita.squadra_ospite.nome}</td>
 											<c:forEach items="${esiti}" var="esitoOrdinato">
 												<c:forEach items="${esitiAttivi}" var="esito">
-													<c:if test="${partita.codice==esito.partita.codice && esitoOrdinato==esito.esito.descrizione}">
+													<c:if
+														test="${partita.codice==esito.partita.codice && esitoOrdinato==esito.esito.descrizione}">
 														<td>
 															<form method="post" action="aggiornaQuote">
 																<c:if test="${esito.disponibile}">
-																	<input class="btn btn-info btn-xs" type="submit" name="${partita.codice};${esito.esito.descrizione}" value="${esito.quota}">
+																	<input class="btn btn-info btn-xs" type="submit"
+																		name="${partita.codice};${esito.esito.descrizione}"
+																		value="${esito.quota}">
 																</c:if>
 																<c:if test="${!esito.disponibile}">
-																	<input class="btn btn-danger btn-xs" type="submit" name="${partita.codice};${esito.esito.descrizione}" value="${esito.quota}">
+																	<input class="btn btn-danger btn-xs" type="submit"
+																		name="${partita.codice};${esito.esito.descrizione}"
+																		value="${esito.quota}">
 																</c:if>
 															</form>
 														</td>
-													</c:if>		
+													</c:if>
 												</c:forEach>
 											</c:forEach>
-											<td class="glyphicon glyphicon-pencil"></td>
+											<td>
+												<form method="post" action="modificaQuota">
+													<button name="${partita.codice};" type="submit"
+														class="btn btn-default btn-xs">
+														<span class="glyphicon glyphicon-pencil"></span>
+													</button>
+												</form> 
+												<c:if test="${modificaQuota && partita.codice == quotaSelezionata}">
+													<form method="post" action="modificaQuota">
+														<div class="modal-body">
+															<div class="form-group">
+																<label for="recipient-name" class="form-control-label">Esito da modificare:</label>
+																<input type="text" class="form-control"
+																	name="esitoScelto">
+															</div>
+															<div class="form-group">
+																<label for="message-text" class="form-control-label">Nuova Quota:</label>
+																<textarea class="form-control" name="nuovaQuota"></textarea>
+															</div>
+														</div>
+														<div class="modal-footer">
+															<button name="annulla" type="submit" class="btn btn-secondary btn-sm"
+																data-dismiss="modal"></button>
+															<button name="aggiorna" type="submit" class="btn btn-primary btn-sm">Aggiorna Esito</button>
+															<button name="suggerimento" type="submit" class="btn btn-info btn-sm"> Richiedi Suggerimento</button>
+														</div>
+													</form>	
+												</c:if>
+											</td>
 										</tr>
 									</c:if>
 								</c:forEach>

@@ -37,6 +37,7 @@ public class AggiornaQuote extends HttpServlet {
 		req.getSession().removeAttribute("campionatiAttivi");
 		req.getSession().removeAttribute("esiti");
 		req.getSession().setAttribute("esiti", new String[]{"1","X","2","1X","12","X2","U","O","GG","NG"});
+		req.getSession().removeAttribute("modificaQuota");
 		RequestDispatcher dispatcher = req.getRequestDispatcher("gestisciEsiti.jsp");
 		dispatcher.forward(req, resp);
 	}
@@ -56,7 +57,6 @@ public class AggiornaQuote extends HttpServlet {
 				System.out.println("attivo: " + es.getQuota() + " " + es.getEsito().getDescrizione() + " "
 						+ es.getPartita().getCodice() + " " + es.isDisponibile());
 		}
-		System.out.println(richiesta);
 		if (!richiesta.contains(";")) {
 			ArrayList<Partita> partiteAttive = (ArrayList<Partita>) session.getAttribute("partiteAttive");
 			ArrayList<String> campionatiAttivi = (ArrayList<String>) session.getAttribute("campionatiAttivi");
