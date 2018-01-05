@@ -197,8 +197,8 @@
 			 -->
 			<div class="container">
 				<div class="row">
-					<div class="col-sm-5">
-						<table class="table">
+					<div class="col-sm-2">
+						<table class="table table-responsive">
 							<thead>
 								<tr>
 									<th>Campionati Disponibili</th>
@@ -206,11 +206,11 @@
 							</thead>
 							<tbody>
 								<c:forEach items="${campionati}" var="campionato">
-									<tr>
+									<tr class="success">
 										<td>
 											<form method="post" action="aggiornaQuote">
-												<input class="btn btn-primary" type="submit"
-													value="${campionato.nome}" name="campionato">
+												<input class="btn btn-primary btn-xs" type="submit"
+													value="${campionato.nome}" name="campionato" >
 											</form>
 										</td>
 									</tr>
@@ -218,35 +218,40 @@
 							</tbody>
 						</table>
 					</div>
-					<div class="col-sm-7">
+					<div class="col-sm-2"></div>
+					<div class="col-sm-8">
 						<c:forEach items="${campionatiAttivi}" var="campionato">
-							<table class="table">
-								<tr>
+							<table class="table table-responsive">
+								<tr class="danger">
 									<th>${campionato}</th>
-									<th>1</th>
-									<th>X</th>
-									<th>2</th>
-									<th>1X</th>
-									<th>X2</th>
-									<th>12</th>
-									<th>OV 2,5</th>
-									<th>UN 2,5</th>
-									<th>GG</th>
-									<th>NG</th>
+									<c:forEach items="${esiti}" var="esitoOrdinato">
+										<th> ${esitoOrdinato} </th>
+									</c:forEach>
+									<th></th>
 								</tr>
 								<c:forEach items="${partiteAttive}" var="partita">
 									<c:if test="${partita.campionato.nome==campionato}">
-										<tr>
+										<tr class="info">
 											<td>
 												${partita.squadra_casa.nome} vs ${partita.squadra_ospite.nome} 
 											</td>
-											<c:forEach items="${esitiAttivi}" var="esito">
-												<c:if test="${partita.codice==esito.partita.codice}">
-													<td>
-														${esito.quota}
-													</td>
-												</c:if>		
+											<c:forEach items="${esiti}" var="esitoOrdinato">
+												<c:forEach items="${esitiAttivi}" var="esito">
+													<c:if test="${partita.codice==esito.partita.codice && esitoOrdinato==esito.esito.descrizione}">
+														<td>
+															<form method="post" action="aggiornaQuote">
+																<c:if test="${esito.disponibile}">
+																	<input class="btn btn-info btn-xs" type="submit" name="${partita.codice};${esito.esito.descrizione}" value="${esito.quota}">
+																</c:if>
+																<c:if test="${!esito.disponibile}">
+																	<input class="btn btn-danger btn-xs" type="submit" name="${partita.codice};${esito.esito.descrizione}" value="${esito.quota}">
+																</c:if>
+															</form>
+														</td>
+													</c:if>		
+												</c:forEach>
 											</c:forEach>
+											<td class="glyphicon glyphicon-pencil"></td>
 										</tr>
 									</c:if>
 								</c:forEach>

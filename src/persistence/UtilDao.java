@@ -80,9 +80,9 @@ public class UtilDao {
 	}
 	public static void main(String[] args) {
 		UtilDao u = new UtilDao();
-		u.addTable("movimentoCarta", new String[]{"codice bigint primary key,data date,ora time,tipo varchar(255),importo float,conto bigint REFERENCES conto(\"codice\")"});
-		MovimentoCartaDao mDao=PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getMovimentoCartaDAO();
-		mDao.save(new MovimentoCarta(new Long(1),new Date(),TipoMovimento.VERSAMENTO,1.0f,new Conto(new Long(1))));
+//		u.addTable("esito", new String[] {"descrizione varchar(255) primary key"});
+//		u.addTable("movimentoCarta", new String[]{"codice bigint primary key,data date,ora time,tipo varchar(255),importo float,conto bigint REFERENCES conto(\"codice\")"});
+		u.addTable("esitopartita", new String[] {"esito varchar(255) not null REFERENCES esito(\"descrizione\"),partita bigint not null REFERENCES partita(\"codice\"), quota float,primary key(esito,partita)"});
 ////		u.createDatabase();
 //		
 //		CampionatoDao campionatoDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCampionatoDao();

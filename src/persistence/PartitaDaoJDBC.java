@@ -12,6 +12,7 @@ import java.util.List;
 
 import model.Campionato;
 import model.Esito;
+import model.EsitoPartita;
 import model.Partita;
 import model.Squadra;
 import persistence.dao.EsitoDao;
@@ -56,11 +57,12 @@ public class PartitaDaoJDBC implements PartitaDao {
 
 			EsitoDao esitoDao = PostgresDAOFactory.getDAOFactory(PostgresDAOFactory.POSTGRESQL).getEsitoDao();
 			for (Esito e : esitoDao.findAll()) {
-				insert = "insert into esitopartita(esito,partita,quota) values (?,?,?)";
+				insert = "insert into esitopartita(esito,partita,quota,disponibile) values (?,?,?,?)";
 				statement = connection.prepareStatement(insert);
 				statement.setString(1, e.getDescrizione());
 				statement.setLong(2, partita.getCodice());
 				statement.setFloat(3, 1.0f);
+				statement.setBoolean(4, true);
 				statement.executeUpdate();
 			}
 		} catch (SQLException e) {
@@ -167,5 +169,6 @@ public class PartitaDaoJDBC implements PartitaDao {
 		}
 		return partite;
 	}
-
+	
+	
 }
