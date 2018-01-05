@@ -27,6 +27,7 @@ public class SchemaDiScommessa {
 	}
 	
 	public void setImporto_giocato(float importo_giocato) {
+		vincita_potenziale=(quota_totale*importo_giocato)+bonus;
 		this.importo_giocato = importo_giocato;
 	}
 	

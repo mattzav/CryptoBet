@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
@@ -28,7 +29,6 @@ public class Scommetti extends HttpServlet{
 		
 		CampionatoDao campionatoDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCampionatoDao();
 		req.getSession().setAttribute("campionati", campionatoDao.findAll());
-		System.out.println("ciao");
 		req.getSession().removeAttribute("schema");
 		req.getSession().removeAttribute("partiteAttive");
 		req.getSession().removeAttribute("campionatiAttivi");
@@ -99,8 +99,12 @@ public class Scommetti extends HttpServlet{
 			}
 			String importo=req.getParameter("importo");
 			if(importo!=null) {
+				System.out.println(importo);
 				session.setAttribute("importo", Float.valueOf(importo));
 				schemaDiScommessa.setImporto_giocato(Float.valueOf(importo));
+				PrintWriter pw =resp.getWriter();
+				pw.print(schemaDiScommessa.getVincita_potenziale());
+				return;
 			}
 			else {
 				String btn=req.getParameterNames().nextElement();
