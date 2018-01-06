@@ -51,7 +51,43 @@
 <!--[if lt IE 9]>
 	<script src="js/respond.min.js"></script>
 	<![endif]-->
+<script type="text/javascript">
+	function abilitaEsito(esito){
+		$.ajax({
+		  type: 'POST',
+		  url: 'aggiornaQuote',
+		  data: esito,
+		  success: function(){
+			  var selezionato = $('[name="'+esito+'"]');
+			  if(selezionato.hasClass("btn-danger")){
+				  selezionato.removeClass("btn-danger");
+				  selezionato.addClass("btn-info");
+			  }
+			  else{
 
+				  selezionato.removeClass("btn-info");
+				  selezionato.addClass("btn-danger");
+			  }
+		  },
+		});
+	}
+	
+	function aggiornaEsito(){
+		alert($('[name="'+"esitoScelto"+'"]').val());
+		alert($('[name="'+"nuovaQuota"+'"]').val());
+	}
+	
+	function selezionaPartitaDaModificare(partita){
+		$.ajax({
+			  type: 'POST',
+			  url: 'modificaQuota',
+			  data: partita+";",
+			  success: function(){
+			  },
+			});
+		}
+	
+</script>
 </head>
 <body>
 	<div id="fh5co-wrapper">
@@ -232,56 +268,50 @@
 								<c:forEach items="${partiteAttive}" var="partita">
 									<c:if test="${partita.campionato.nome==campionato}">
 										<tr class="info">
-											<td>${partita.squadra_casa.nome}vs
+											<td>${partita.squadra_casa.nome} vs
 												${partita.squadra_ospite.nome}</td>
 											<c:forEach items="${esiti}" var="esitoOrdinato">
 												<c:forEach items="${esitiAttivi}" var="esito">
 													<c:if
 														test="${partita.codice==esito.partita.codice && esitoOrdinato==esito.esito.descrizione}">
 														<td>
-															<form method="post" action="aggiornaQuote">
-																<c:if test="${esito.disponibile}">
-																	<input class="btn btn-info btn-xs" type="submit"
-																		name="${partita.codice};${esito.esito.descrizione}"
-																		value="${esito.quota}">
-																</c:if>
-																<c:if test="${!esito.disponibile}">
-																	<input class="btn btn-danger btn-xs" type="submit"
-																		name="${partita.codice};${esito.esito.descrizione}"
-																		value="${esito.quota}">
-																</c:if>
-															</form>
+															<c:if test="${esito.disponibile}">
+																<input class="btn btn-info btn-xs" type="submit"
+																	name="${partita.codice};${esito.esito.descrizione}"
+																	value="${esito.quota}" onclick="abilitaEsito('${partita.codice};${esito.esito.descrizione}')">
+															</c:if>
+															<c:if test="${!esito.disponibile}">
+																<input class="btn btn-danger btn-xs" type="submit"
+																	name="${partita.codice};${esito.esito.descrizione}"
+																	value="${esito.quota}" onclick="abilitaEsito('${partita.codice};${esito.esito.descrizione}')">
+															</c:if>
 														</td>
 													</c:if>
 												</c:forEach>
 											</c:forEach>
 											<td>
-												<form method="post" action="modificaQuota">
-													<button name="${partita.codice};" type="submit"
-														class="btn btn-default btn-xs">
-														<span class="glyphicon glyphicon-pencil"></span>
-													</button>
-												</form> 
+												<button onclick="selezionaPartitaDaModificare(${partita.codice});" type="submit"
+													class="btn btn-default btn-xs">
+													<span class="glyphicon glyphicon-pencil"></span>
+												</button>
 												<c:if test="${modificaQuota && partita.codice == quotaSelezionata}">
-													<form method="post" action="modificaQuota">
 														<div class="modal-body">
 															<div class="form-group">
-																<label for="recipient-name" class="form-control-label">Esito da modificare:</label>
+																<label for="esitoScelto" class="form-control-label">Esito da modificare:</label>
 																<input type="text" class="form-control"
 																	name="esitoScelto">
 															</div>
 															<div class="form-group">
-																<label for="message-text" class="form-control-label">Nuova Quota:</label>
+																<label for="nuovaQuota" class="form-control-label">Nuova Quota:</label>
 																<textarea class="form-control" name="nuovaQuota"></textarea>
 															</div>
 														</div>
 														<div class="modal-footer">
 															<button name="annulla" type="submit" class="btn btn-secondary btn-sm"
 																data-dismiss="modal"></button>
-															<button name="aggiorna" type="submit" class="btn btn-primary btn-sm">Aggiorna Esito</button>
+															<button name="aggiorna" onclick="aggiornaEsito()" class="btn btn-primary btn-sm">Aggiorna Esito</button>
 															<button name="suggerimento" type="submit" class="btn btn-info btn-sm"> Richiedi Suggerimento</button>
 														</div>
-													</form>	
 												</c:if>
 											</td>
 										</tr>

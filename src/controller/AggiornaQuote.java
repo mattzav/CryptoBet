@@ -48,15 +48,11 @@ public class AggiornaQuote extends HttpServlet {
 		EsitoPartitaDao esitoPartitaDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getEsitoPartitaDao();
 		PartitaDao partitaDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getPartitaDao();
 		EsitoDao esitoDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getEsitoDao();
-
+		
 		String richiesta = req.getParameterNames().nextElement();
+		System.out.println(richiesta);
 		HttpSession session = req.getSession();
 		ArrayList<EsitoPartita> esitiAttivi = (ArrayList<EsitoPartita>) session.getAttribute("esitiAttivi");
-		if (esitiAttivi != null) {
-			for (EsitoPartita es : esitiAttivi)
-				System.out.println("attivo: " + es.getQuota() + " " + es.getEsito().getDescrizione() + " "
-						+ es.getPartita().getCodice() + " " + es.isDisponibile());
-		}
 		if (!richiesta.contains(";")) {
 			ArrayList<Partita> partiteAttive = (ArrayList<Partita>) session.getAttribute("partiteAttive");
 			ArrayList<String> campionatiAttivi = (ArrayList<String>) session.getAttribute("campionatiAttivi");

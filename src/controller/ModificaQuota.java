@@ -27,7 +27,9 @@ public class ModificaQuota extends HttpServlet {
 		// premo sull'icona di modifica
 
 		if (req.getParameterNames().nextElement().contains(";")) {
+			
 			String partitaSelezionata = req.getParameterNames().nextElement();
+			System.out.println(partitaSelezionata);
 			session.setAttribute("quotaSelezionata",
 					Long.valueOf(partitaSelezionata.substring(0, partitaSelezionata.length() - 1)));
 			session.setAttribute("modificaQuota", true);
