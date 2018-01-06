@@ -99,7 +99,6 @@ public class Scommetti extends HttpServlet{
 			}
 			String importo=req.getParameter("importo");
 			if(importo!=null) {
-				System.out.println(importo);
 				session.setAttribute("importo", Float.valueOf(importo));
 				schemaDiScommessa.setImporto_giocato(Float.valueOf(importo));
 				PrintWriter pw =resp.getWriter();
@@ -108,12 +107,15 @@ public class Scommetti extends HttpServlet{
 			}
 			else {
 				String btn=req.getParameterNames().nextElement();
+				System.out.println(btn);
 				if(btn.contains(";")) {
 					String[] datiEsitoSelezionato=btn.split(";");
+					Long codicePartita=Long.valueOf(datiEsitoSelezionato[0]);
+					String esitoSelezionato=datiEsitoSelezionato[1];
 					for(EsitoPartita esito:esitiAttivi) {
-						if(esito.getPartita().getCodice().equals(Long.valueOf(datiEsitoSelezionato[0])) &&
-								esito.getEsito().getDescrizione().equals(datiEsitoSelezionato[1])) {
-							if(esito.isDisponibile()) {
+						String desc=esito.getEsito().getDescrizione()+" ";
+						if(esito.getPartita().getCodice().equals(codicePartita) && desc.equals(esitoSelezionato)) {
+							if(esito.isDisponibile()) {	
 								schemaDiScommessa.addEsito(esito);
 								esito.setDisponibile(false);
 							}
@@ -121,6 +123,12 @@ public class Scommetti extends HttpServlet{
 								schemaDiScommessa.removeEsito(esito);
 								esito.setDisponibile(true);
 							}
+							System.out.println(schemaDiScommessa.getQuota_totale());
+							resp.getWriter().print(esito.getPartita().getSquadra_casa().getNome()+";"
+													+esito.getPartita().getSquadra_ospite().getNome()+";"
+													+ esito.getQuota()+";"+schemaDiScommessa.getQuota_totale()+";"+
+													+schemaDiScommessa.getBonus()+";"+schemaDiScommessa.getVincita_potenziale());
+							return;
 						}
 					}
 				}

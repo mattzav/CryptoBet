@@ -80,7 +80,9 @@ public class SchemaDiScommessa {
 	}
 
 	public void removeEsito(EsitoPartita esito) {
+		System.out.println(quota_totale);
 		quota_totale/=esito.getQuota();
+		System.out.println(quota_totale);
 		numero_esiti--;
 		//calcolo del bonus
 		vincita_potenziale=(quota_totale*importo_giocato)+bonus;
