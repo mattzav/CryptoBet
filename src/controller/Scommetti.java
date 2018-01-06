@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
@@ -28,7 +29,6 @@ public class Scommetti extends HttpServlet{
 		
 		CampionatoDao campionatoDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCampionatoDao();
 		req.getSession().setAttribute("campionati", campionatoDao.findAll());
-		System.out.println("ciao");
 		req.getSession().removeAttribute("schema");
 		req.getSession().removeAttribute("partiteAttive");
 		req.getSession().removeAttribute("campionatiAttivi");
@@ -101,15 +101,21 @@ public class Scommetti extends HttpServlet{
 			if(importo!=null) {
 				session.setAttribute("importo", Float.valueOf(importo));
 				schemaDiScommessa.setImporto_giocato(Float.valueOf(importo));
+				PrintWriter pw =resp.getWriter();
+				pw.print(schemaDiScommessa.getVincita_potenziale());
+				return;
 			}
 			else {
 				String btn=req.getParameterNames().nextElement();
+				System.out.println(btn);
 				if(btn.contains(";")) {
 					String[] datiEsitoSelezionato=btn.split(";");
+					Long codicePartita=Long.valueOf(datiEsitoSelezionato[0]);
+					String esitoSelezionato=datiEsitoSelezionato[1];
 					for(EsitoPartita esito:esitiAttivi) {
-						if(esito.getPartita().getCodice().equals(Long.valueOf(datiEsitoSelezionato[0])) &&
-								esito.getEsito().getDescrizione().equals(datiEsitoSelezionato[1])) {
-							if(esito.isDisponibile()) {
+						String desc=esito.getEsito().getDescrizione()+" ";
+						if(esito.getPartita().getCodice().equals(codicePartita) && desc.equals(esitoSelezionato)) {
+							if(esito.isDisponibile()) {	
 								schemaDiScommessa.addEsito(esito);
 								esito.setDisponibile(false);
 							}
@@ -117,6 +123,12 @@ public class Scommetti extends HttpServlet{
 								schemaDiScommessa.removeEsito(esito);
 								esito.setDisponibile(true);
 							}
+							System.out.println(schemaDiScommessa.getQuota_totale());
+							resp.getWriter().print(esito.getPartita().getSquadra_casa().getNome()+";"
+													+esito.getPartita().getSquadra_ospite().getNome()+";"
+													+ esito.getQuota()+";"+schemaDiScommessa.getQuota_totale()+";"+
+													+schemaDiScommessa.getBonus()+";"+schemaDiScommessa.getVincita_potenziale());
+							return;
 						}
 					}
 				}

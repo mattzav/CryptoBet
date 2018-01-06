@@ -52,28 +52,7 @@
 	<script src="js/respond.min.js"></script>
 	<![endif]-->
 
-<script type="text/javascript">
-	function checkValue(){
-		var value=$(".importo").val();
-		$(".importo").addClass("btn-default");
-		$(".importo").removeClass("btn-danger");
-		if(!($.isNumeric( value ))){
-			$(".importo").removeClass("btn-default");
-			$(".importo").addClass("btn-danger");
-		}
-		else{
-			$.ajax(
-	   			{
-		            url:'scommetti',
-		            data:'importo='+value,
-		            type:'POST',
-		            cache:false,
-		            error:function(){alert('error');}
-	        	}
-	    	);
-		}
-	}
-</script>
+<script src="js/scommetti.js"></script>
 
 </head>
 <body>
@@ -174,7 +153,7 @@
 									<a class="glyphicon glyphicon-trash" href="scommetti"></a>
 								</th>
 							</tr>
-							<tbody>
+							<tbody class="scommessa">
 								<c:forEach items="${schema.esiti_giocati}" var="esito">
 									<tr class="info">
 										<td colspan="2">
@@ -190,11 +169,11 @@
 								</c:forEach>
 							</tbody>
 							<tfoot>
-								<tr>
-									<td>
+								<tr class="danger">
+									<td class="quotaTotale">
 										Quota totale : ${schema.quota_totale}
 									</td>
-									<td>
+									<td class="bonus">
 										Bonus : ${schema.bonus}
 									</td>
 									<td>
@@ -204,10 +183,10 @@
 										<form>
 											<div>
 												<input class="col-sm-4 btn btn-default btn-xs importo" type="text" name="importo" onkeyup="checkValue()" onmouseleave="getImporto()" value="${importo}">
-												<span class="col-sm-4">
+												<span class="col-sm-4 vincita">
 													Vincita potenziale : ${schema.vincita_potenziale}
 												</span>
-												<input class="col-sm-4 btn btn-primary btn-xs" type="button" name="gioca" value="Scommetti">
+												<input class="col-sm-4 btn btn-primary btn-xs" type="button" name="gioca" value="Scommetti" onclick="giocaScommessa()">
 											</div>
 										</form>
 									</td>
@@ -259,14 +238,14 @@
 													<c:forEach items="${esitiAttivi}" var="esito">
 														<c:if test="${esito.esito.descrizione==esitoPossibile.descrizione && partita.codice==esito.partita.codice}">
 															<td>
-																<form method="post" action="scommetti" >
-																	<c:if test="${esito.disponibile}">
-																		<input class="btn btn-info btn-xs" type="submit" name="${partita.codice};${esito.esito.descrizione}" value="${esito.quota}">
-																	</c:if>
-																	<c:if test="${not esito.disponibile}">
-																		<input class="btn btn-danger btn-xs" type="submit" name="${partita.codice};${esito.esito.descrizione}" value="${esito.quota}">
-																	</c:if>
-																</form>
+																<c:if test="${esito.disponibile}">
+																	<input class="btn btn-info btn-xs" id="${partita.codice};${esito.esito.descrizione}" type="button" name="${partita.codice};${esito.esito.descrizione}" value="${esito.quota}" 
+																	onclick="esitoSelezionato('${partita.codice};${esito.esito.descrizione}')">
+																</c:if>
+																<c:if test="${not esito.disponibile}">
+																	<input class="btn btn-danger btn-xs" id="${partita.codice};${esito.esito.descrizione}" type="button" name="${partita.codice};${esito.esito.descrizione}" value="${esito.quota}" 
+																	onclick="esitoSelezionato('${partita.codice};${esito.esito.descrizione}')">
+																</c:if>
 															</td>
 														</c:if>		
 													</c:forEach>

@@ -27,6 +27,7 @@ public class SchemaDiScommessa {
 	}
 	
 	public void setImporto_giocato(float importo_giocato) {
+		vincita_potenziale=(quota_totale*importo_giocato)+bonus;
 		this.importo_giocato = importo_giocato;
 	}
 	
@@ -79,7 +80,9 @@ public class SchemaDiScommessa {
 	}
 
 	public void removeEsito(EsitoPartita esito) {
+		System.out.println(quota_totale);
 		quota_totale/=esito.getQuota();
+		System.out.println(quota_totale);
 		numero_esiti--;
 		//calcolo del bonus
 		vincita_potenziale=(quota_totale*importo_giocato)+bonus;
