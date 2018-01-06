@@ -11,6 +11,7 @@ import persistence.dao.GiocatoreDao;
 import persistence.dao.MovimentoCartaDao;
 import persistence.dao.MovimentoScommessaDao;
 import persistence.dao.PartitaDao;
+import persistence.dao.ScommessaDao;
 import persistence.dao.SquadraDao;
 
 public abstract class DAOFactory {
@@ -78,6 +79,8 @@ public abstract class DAOFactory {
 	public abstract EsitoPartitaDao getEsitoPartitaDao() ;
 
 	public abstract EsitoDao getEsitoDao() ;
+	
+	public abstract ScommessaDao getScommessaDao();
 
 	public abstract MovimentoScommessaDao getMovimentoScommessaDAO();
 }

@@ -34,25 +34,24 @@ function checkValue(){
 	        	}
 	    	).done(function(response){
 	    		
+	    		var dati=response.split(";");
 	    		var elemento=$('[name="'+ esito +'"]');
-				var dati=response.split(";");
-	    		if(elemento.hasClass("btn-danger")){
-	    			elemento.removeClass("btn-danger");
-	    			elemento.addClass("btn-info");
-	    		}
-	    		else{
-	    			elemento.removeClass("btn-info");
-	    			elemento.addClass("btn-danger");
-	    		}
 	    		var res = esito.split(";");
 	    		var e1=$("."+res[0]);
 				if(e1.length){
-					e1.remove();
+					if($('.'+res[0]+' > .'+res[1]).length){
+						e1.remove();
+						elemento.removeClass("btn-danger");
+		    			elemento.addClass("btn-info");
+					}
+					else alert("Hai già selezionato un esito per questa partita");
 				}
 				else{
 					if($(".scommessa").length){
-						$(".scommessa").append('<tr class="'+res[0]+' info"><td colspan="2">'+dati[0]+' vs '+dati[1]+'</td><td>'+dati[2]+'</td><td>'+res[1]+'</td></tr>');
+						$(".scommessa").append('<tr class="'+res[0]+' info"><td colspan="2">'+dati[0]+' vs '+dati[1]+'</td><td>'+dati[2]+'</td><td class="'+res[1]+'">'+res[1]+'</td></tr>');
 					}
+					elemento.removeClass("btn-info");
+	    			elemento.addClass("btn-danger");
 				}
 				$(".quotaTotale").text("Quota totale : "+dati[3]);
 				$(".bonus").text("Bonus : "+dati[4]);
@@ -67,13 +66,22 @@ function checkValue(){
 		else{
 			$.ajax({
 				url:'scommetti',
-				data: 'giocaScommessa = null',
+				data: 'giocaScommessa=null',
 				type:'POST',
 	            cache:false,
 	            error:function(){alert('error');}
 			}).done(function(response){
-				svuotaScommessa();
-				alert("Scommessa creata correttamente");
+				if(response=="utente non loggato"){
+					$("#welcomeMessage").css({'display' : 'none'});
+					$("#login").css({'display' : 'block'});
+					alert("errore login");
+				}else if(response=="credito non sufficente"){
+					alert(response);
+				}else{
+					svuotaScommessa();
+					alert("scommessa registrata con successo");
+				}
+				
 			});
 		}
 	}
@@ -82,13 +90,22 @@ function checkValue(){
 		$.each($(".scommessa > tr"),function(i,item){
 			item.remove();
 		});
-		
-		$.each($('.btn-danger'),function(i,item){
-			alert(item.length);
+		$(".quotaTotale").text("Quota totale :");
+		$(".bonus").text("Bonus :");
+		$(".vincita").text("Vincita potenziale :");
+		$('.btn-danger').addClass("btn-info");
+		$('.btn-danger').removeClass("btn-danger");
+	}
+	
+	function pulisciScommessa(){
+		$.ajax({
+			url:'scommetti',
+			data: 'svuota = null',
+			type:'POST',
+            cache:false,
+            error:function(){alert('error');}
+		}).done(function(response){
+
+			svuotaScommessa();
 		});
-		
-		var elements=$('.btn-danger');
-		for(var i=0;i<elements.length;i++){
-			alert(elements[i].lenght);
-		}
 	}

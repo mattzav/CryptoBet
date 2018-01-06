@@ -55,4 +55,14 @@ public class Conto {
 	public void setCodice(long long1) {
 		codice=long1;
 	}
+
+	public boolean preleva(Float importo) {
+		if(importo==null)
+			return false;
+		if(saldo-importo>=0) {
+			saldo-=importo;
+			return true;
+		}
+		return false;
+	}
 }

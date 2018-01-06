@@ -107,7 +107,7 @@
 					<div class="row">
 						<div class="col-md-8 col-md-offset-2 col-sm-12 col-sm-offset-0 col-xs-12 col-xs-offset-0 text-center fh5co-table">
 							<div class="fh5co-intro fh5co-table-cell animate-box">
-								<c:if test="${loggato==\"USER\"}">
+								<c:if test="${loggato.tipoUtente==\"USER\"}">
 									<h1 class="text-center"> Benvenuto</h1>
 									<p class="label">Qui potrai gestire il tuo conto</p>
 								</c:if>
@@ -138,7 +138,7 @@
 									</div>
 								</div>
 								</c:if>
-								<c:if test="${loggato!=null && loggato!=\"USER\"}">
+								<c:if test="${loggato!=null && loggato.tipoUtente!=\"USER\"}">
 									<div>
 										<span class="btn btn-danger"> Errore: Effuttua il login come cliente</span>
 									</div>
@@ -151,7 +151,7 @@
 		</div><!-- end: fh5co-parallax -->
 		<!-- end:fh5co-hero -->
 		<div id="fh5co-schedule-section" class="fh5co-lightgray-section">
-			<c:if test="${loggato==\"USER\"}">
+			<c:if test="${loggato.tipoUtente==\"USER\"}">
 			<div class="container">
 				<div class="row">
 					<div class="col-md-8 col-md-offset-2">
