@@ -52,6 +52,7 @@
 	<script src="js/respond.min.js"></script>
 	<![endif]-->
 <script type="text/javascript">
+
 	function abilitaEsito(esito){
 		$.ajax({
 		  type: 'POST',
@@ -72,20 +73,50 @@
 		});
 	}
 	
-	function aggiornaEsito(){
-		alert($('[name="'+"esitoScelto"+'"]').val());
-		alert($('[name="'+"nuovaQuota"+'"]').val());
-	}
-	
-	function selezionaPartitaDaModificare(partita){
+	function aggiornaEsito(partita){
+		var esito=$("#inputModificaQuota"+partita+" "+'[name="'+"esitoScelto"+'"]').val();
+		var quota=$("#inputModificaQuota"+partita+" "+'[name="'+"nuovaQuota"+'"]').val();
+		
 		$.ajax({
 			  type: 'POST',
 			  url: 'modificaQuota',
-			  data: partita+";",
-			  success: function(){
+			  data: {
+				  esitoScelto:esito,
+				  nuovaQuota:quota,
+				  partita:partita
 			  },
+			  success: function(){
+				  $('[name="'+partita+";"+esito+'"]').val(quota);
+				}
 			});
+	}
+	
+	function selezionaPartitaDaModificare(partita,disabilita){
+		alert(partita);
+		if(!disabilita){
+			$(".partitaInModifica"+partita).parent().children().first().append("<div id=\"inputModificaQuota"+partita+"\"> <div class=\"modal-body\"><div class=\"form-group\"><label for=\"esitoScelto\" class=\"form-control-label\">Esito da modificare:</label><input type=\"text\" class=\"form-control\"name=\"esitoScelto\"></div><div class=\"form-group\"><label for=\"nuovaQuota\" class=\"form-control-label\">Nuova Quota:</label><textarea class=\"form-control\" name=\"nuovaQuota\"></textarea></div></div><div class=\"modal-footer\"><button name=\"annulla\" onclick=\"selezionaPartitaDaModificare("+partita+",true)\" class=\"btn btn-secondary btn-sm\"data-dismiss=\"modal\">Annulla</button><button name=\"aggiorna\" onclick=\"aggiornaEsito("+partita+")\" class=\"btn btn-primary btn-sm\">Aggiorna Esito</button><button name=\"suggerimento\" onclick=\"richiediSuggerimento("+partita+")\" class=\"btn btn-info btn-sm\"> Richiedi Suggerimento</button></div></div>");
 		}
+		else{
+		    $("#inputModificaQuota"+partita).remove();	
+		}
+	}
+	
+	function richiediSuggerimento(partita){
+		var esito=$("#inputModificaQuota"+partita+" "+'[name="'+"esitoScelto"+'"]').val();
+		$.ajax({
+			  type: 'POST',
+			  url: 'modificaQuota',
+			  data: {
+				  suggerimento:partita,
+				  esitoScelto:esito
+			  },
+			  success: function(quota){
+					$("#inputModificaQuota"+partita+" "+'[name="'+"nuovaQuota"+'"]').val(quota);
+
+			  }
+			});
+	}
+
 	
 </script>
 </head>
@@ -268,51 +299,32 @@
 								<c:forEach items="${partiteAttive}" var="partita">
 									<c:if test="${partita.campionato.nome==campionato}">
 										<tr class="info">
-											<td>${partita.squadra_casa.nome} vs
+											<td>${partita.squadra_casa.nome}vs
 												${partita.squadra_ospite.nome}</td>
 											<c:forEach items="${esiti}" var="esitoOrdinato">
 												<c:forEach items="${esitiAttivi}" var="esito">
 													<c:if
 														test="${partita.codice==esito.partita.codice && esitoOrdinato==esito.esito.descrizione}">
-														<td>
-															<c:if test="${esito.disponibile}">
+														<td><c:if test="${esito.disponibile}">
 																<input class="btn btn-info btn-xs" type="submit"
 																	name="${partita.codice};${esito.esito.descrizione}"
-																	value="${esito.quota}" onclick="abilitaEsito('${partita.codice};${esito.esito.descrizione}')">
-															</c:if>
-															<c:if test="${!esito.disponibile}">
+																	value="${esito.quota}"
+																	onclick="abilitaEsito('${partita.codice};${esito.esito.descrizione}')">
+															</c:if> <c:if test="${!esito.disponibile}">
 																<input class="btn btn-danger btn-xs" type="submit"
 																	name="${partita.codice};${esito.esito.descrizione}"
-																	value="${esito.quota}" onclick="abilitaEsito('${partita.codice};${esito.esito.descrizione}')">
-															</c:if>
-														</td>
+																	value="${esito.quota}"
+																	onclick="abilitaEsito('${partita.codice};${esito.esito.descrizione}')">
+															</c:if></td>
 													</c:if>
 												</c:forEach>
 											</c:forEach>
-											<td>
-												<button onclick="selezionaPartitaDaModificare(${partita.codice});" type="submit"
+											<td class="partitaInModifica${partita.codice}">
+												<button
+													onclick="selezionaPartitaDaModificare(${partita.codice},false);"
 													class="btn btn-default btn-xs">
 													<span class="glyphicon glyphicon-pencil"></span>
 												</button>
-												<c:if test="${modificaQuota && partita.codice == quotaSelezionata}">
-														<div class="modal-body">
-															<div class="form-group">
-																<label for="esitoScelto" class="form-control-label">Esito da modificare:</label>
-																<input type="text" class="form-control"
-																	name="esitoScelto">
-															</div>
-															<div class="form-group">
-																<label for="nuovaQuota" class="form-control-label">Nuova Quota:</label>
-																<textarea class="form-control" name="nuovaQuota"></textarea>
-															</div>
-														</div>
-														<div class="modal-footer">
-															<button name="annulla" type="submit" class="btn btn-secondary btn-sm"
-																data-dismiss="modal"></button>
-															<button name="aggiorna" onclick="aggiornaEsito()" class="btn btn-primary btn-sm">Aggiorna Esito</button>
-															<button name="suggerimento" type="submit" class="btn btn-info btn-sm"> Richiedi Suggerimento</button>
-														</div>
-												</c:if>
 											</td>
 										</tr>
 									</c:if>

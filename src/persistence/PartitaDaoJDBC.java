@@ -150,7 +150,7 @@ public class PartitaDaoJDBC implements PartitaDao {
 			ResultSet result = statement.executeQuery();
 
 			while (result.next()) {
-				
+
 				Partita partita = new Partita(result.getLong(1), new Squadra(result.getString(2)),
 						new Squadra(result.getString(3)), result.getInt(7), result.getInt(8),
 						new Campionato(result.getLong(9), nomeCampionato),
@@ -171,55 +171,71 @@ public class PartitaDaoJDBC implements PartitaDao {
 	}
 
 	@Override
-	public int[] getPuntiSquadre(long codice) {
+	public float[] getPuntiSquadre(long codice) {
+		System.out.println(codice);
 		Connection connection = PostgresDAOFactory.dataSource.getConnection();
-		int punti_squadre[]= new int[2];
-		
+		float media_punti_squadre[] = new float[2];
+
 		try {
 			PreparedStatement statement;
 
-			int punti_casa=0;
-			
-			//query vittorie squadra casa
+			float punti_casa = 0;
+
+			// query vittorie squadra casa
 			String query = "select count(*) from partita as p1,partita as p2 where p1.codice=? and (p2.finita=true and ((p1.squadracasa=p2.squadracasa and p2.goalcasa>p2.goalospite) or (p1.squadracasa=p2.squadraospite and p2.goalcasa<p2.goalospite)))";
 			statement = connection.prepareStatement(query);
 			statement.setLong(1, codice);
 			ResultSet result = statement.executeQuery();
 			result.next();
-			punti_casa=result.getInt(1)*3;
-	
-			//query pareggi squadra casa
+			punti_casa = result.getInt(1) * 3;
+
+			// query pareggi squadra casa
 			query = "select count(*) from partita as p1,partita as p2 where p1.codice=? and (p2.finita=true and ((p1.squadracasa=p2.squadracasa and p2.goalcasa=p2.goalospite) or (p1.squadracasa=p2.squadraospite and p2.goalcasa=p2.goalospite)))";
 			statement = connection.prepareStatement(query);
 			statement.setLong(1, codice);
 			result = statement.executeQuery();
 			result.next();
-			punti_casa+=result.getInt(1);
-			
+			punti_casa += result.getInt(1);
 
-			int punti_ospite=0;
-			
-			//query vittorie squadra ospite
+			// query pareggi squadra casa
+			query = "select count(*) from partita as p, partita as p1 where p.codice=? and (p1.squadracasa=p.squadracasa or p1.squadraospite=p.squadracasa) and p1.finita=true";
+			statement = connection.prepareStatement(query);
+			statement.setLong(1, codice);
+			result = statement.executeQuery();
+			result.next();
+			if (result.getInt(1) != 0)
+				punti_casa /= result.getInt(1);
+
+			float punti_ospite = 0;
+
+			// query vittorie squadra ospite
 			query = "select count(*) from partita as p1,partita as p2 where p1.codice=? and (p2.finita = true and ((p1.squadraospite=p2.squadracasa and p2.goalcasa>p2.goalospite) or (p1.squadraospite=p2.squadraospite and p2.goalcasa<p2.goalospite)))";
 			statement = connection.prepareStatement(query);
 			statement.setLong(1, codice);
 			result = statement.executeQuery();
 			result.next();
-			punti_ospite=result.getInt(1)*3;
-			
-			//query pareggi squadra ospite
+			punti_ospite = result.getInt(1) * 3;
+
+			// query pareggi squadra ospite
 			query = "select count(*) from partita as p1,partita as p2 where p1.codice=? and (p2.finita=true and ((p1.squadraospite=p2.squadracasa and p2.goalcasa=p2.goalospite) or (p1.squadraospite=p2.squadraospite and p2.goalcasa=p2.goalospite)))";
 			statement = connection.prepareStatement(query);
 			statement.setLong(1, codice);
 			result = statement.executeQuery();
 			result.next();
-			punti_ospite+=result.getInt(1);
-		
-			
-			punti_squadre[0]=punti_casa;
-			punti_squadre[1]=punti_ospite;
-	
-			System.out.println(punti_squadre[0]+ " " + punti_squadre[1]);
+			punti_ospite += result.getInt(1);
+
+			// query pareggi squadra casa
+			query = "select count(*) from partita as p, partita as p1 where p.codice=? and (p1.squadracasa=p.squadraospite or p1.squadraospite=p.squadraospite) and p1.finita=true";
+			statement = connection.prepareStatement(query);
+			statement.setLong(1, codice);
+			result = statement.executeQuery();
+			result.next();
+			if (result.getInt(1) != 0)
+				punti_ospite /= result.getInt(1);
+
+			media_punti_squadre[0] = punti_casa;
+			media_punti_squadre[1] = punti_ospite;
+
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
 		} finally {
@@ -229,8 +245,146 @@ public class PartitaDaoJDBC implements PartitaDao {
 				throw new PersistenceException(e.getMessage());
 			}
 		}
-		return punti_squadre;
+		return media_punti_squadre;
 	}
-	
-	
+
+	@Override
+	public float[] getMediaPartiteASegno(long codicePartita) {
+		Connection connection = PostgresDAOFactory.dataSource.getConnection();
+		float media_partite_a_segno_casa;
+		float media_partite_a_segno_ospite;
+		try {
+			PreparedStatement statement;
+
+			String query = "select count(*) from partita as p, partita as p1 where p.codice=? and ((p.squadracasa=p1.squadracasa and p1.goalCasa>0) or (p.squadracasa=p1.squadraospite and p1.goalOspite>0)) ";
+			statement = connection.prepareStatement(query);
+			statement.setLong(1, codicePartita);
+			ResultSet result = statement.executeQuery();
+			result.next();
+			float num_partite_a_segno_casa = result.getInt(1);
+
+			query = "select count(*) from partita as p, partita as p1 where p.codice=? and ((p.squadracasa=p1.squadracasa) or (p.squadracasa=p1.squadraospite)) and p1.finita=true ";
+			statement = connection.prepareStatement(query);
+			statement.setLong(1, codicePartita);
+			result = statement.executeQuery();
+			result.next();
+			
+			if(result.getInt(1) != 0)
+				media_partite_a_segno_casa = num_partite_a_segno_casa / result.getInt(1);
+			else
+				media_partite_a_segno_casa = 0.5f;
+			
+			query = "select count(*) from partita as p, partita as p1 where p.codice=? and ((p.squadraospite=p1.squadracasa and p1.goalCasa>0) or (p.squadraospite=p1.squadraospite and p1.goalOspite>0)) ";
+			statement = connection.prepareStatement(query);
+			statement.setLong(1, codicePartita);
+			result = statement.executeQuery();
+			result.next();
+			float num_partite_a_segno_ospite = result.getInt(1);
+
+			query = "select count(*) from partita as p, partita as p1 where p.codice=? and ((p.squadraospite=p1.squadracasa) or (p.squadraospite=p1.squadraospite)) and p1.finita=true ";
+			statement = connection.prepareStatement(query);
+			statement.setLong(1, codicePartita);
+			result = statement.executeQuery();
+			result.next();
+			if(result.getInt(1) != 0)
+				media_partite_a_segno_ospite = num_partite_a_segno_ospite / result.getInt(1);
+			else
+				media_partite_a_segno_ospite = 0.5f;
+		} catch (SQLException e) {
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}
+
+		float media_partite_a_segno[] = new float[2];
+		media_partite_a_segno[0] = media_partite_a_segno_casa;
+		media_partite_a_segno[1] = media_partite_a_segno_ospite;
+		return media_partite_a_segno;
+	}
+
+	@Override
+	public float[] getMediaGoal(long codicePartita) {
+		Connection connection = PostgresDAOFactory.dataSource.getConnection();
+		float media_goal_casa;
+		float media_goal_ospite;
+		try {
+			PreparedStatement statement;
+
+			// numero di goal che la squadra che gioca in casa ha fatto in casa
+			String query = "select sum(p1.goalCasa) from partita as p, partita as p1 where p.codice=? and p.squadracasa=p1.squadracasa and p1.goalCasa>0";
+			statement = connection.prepareStatement(query);
+			statement.setLong(1, codicePartita);
+			ResultSet result = statement.executeQuery();
+			result.next();
+			float num_goal_casa = result.getInt(1);
+
+			// numero di goal che la squadra che gioca in casa ha fatto fuori casa
+			query = "select sum(p1.goalOspite) from partita as p, partita as p1 where p.codice=? and p.squadracasa=p1.squadraospite and p1.goalOspite>0";
+			statement = connection.prepareStatement(query);
+			statement.setLong(1, codicePartita);
+			result = statement.executeQuery();
+			result.next();
+			num_goal_casa += result.getInt(1);
+
+			// numero di partite disputate dalla squadra che gioca in casa
+			query = "select count(*) from partita as p, partita as p1 where p.codice=? and ((p.squadracasa=p1.squadracasa) or (p.squadracasa=p1.squadraospite)) and p1.finita=true ";
+			statement = connection.prepareStatement(query);
+			statement.setLong(1, codicePartita);
+			result = statement.executeQuery();
+			result.next();
+
+			// media ottenuta dai goal divisi per le partite disputate
+			if(result.getInt(1) != 0)
+				media_goal_casa = num_goal_casa / result.getInt(1);
+			else
+				media_goal_casa = 1.5f;
+
+			// numero di goal che la squadra che gioca fuori casa ha fatto in casa
+			query = "select sum(p1.goalCasa) from partita as p, partita as p1 where p.codice=? and p.squadraospite=p1.squadracasa and p1.goalCasa>0";
+			statement = connection.prepareStatement(query);
+			statement.setLong(1, codicePartita);
+			result = statement.executeQuery();
+			result.next();
+			float num_goal_ospite = result.getInt(1);
+
+			// numero di goal che la squadra che gioca fuori casa ha fatto fuori casa
+			query = "select sum(p1.goalOspite) from partita as p, partita as p1 where p.codice=? and p.squadraospite=p1.squadraospite and p1.goalOspite>0";
+			statement = connection.prepareStatement(query);
+			statement.setLong(1, codicePartita);
+			result = statement.executeQuery();
+			result.next();
+			num_goal_ospite += result.getInt(1);
+
+			// numero di partite disputate dalla squadra che gioca fuori casa
+			query = "select count(*) from partita as p, partita as p1 where p.codice=? and ((p.squadraospite=p1.squadracasa) or (p.squadraospite=p1.squadraospite)) and p1.finita=true ";
+			statement = connection.prepareStatement(query);
+			statement.setLong(1, codicePartita);
+			result = statement.executeQuery();
+			result.next();
+
+			// media ottenuta dai goal divisi per le partite disputate
+			if(result.getInt(1) != 0)
+				media_goal_ospite = num_goal_ospite / result.getInt(1);
+			else
+				media_goal_ospite = 1.5f;
+		} catch (SQLException e) {
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}
+
+		float media_gol[] = new float[2];
+		media_gol[0] = media_goal_casa;
+		media_gol[1] = media_goal_ospite;
+		return media_gol;
+	}
+
 }
