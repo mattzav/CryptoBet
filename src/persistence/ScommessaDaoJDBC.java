@@ -24,7 +24,7 @@ public class ScommessaDaoJDBC implements ScommessaDao {
 	public void save(Scommessa scommessa) {
 		Connection connection = PostgresDAOFactory.dataSource.getConnection();
 		try {
-			String insert = "insert into scommessa(codice, dataemissione, contoassociato, importo_giocato,quota_totale,bonus,numero_esiti,vincita_potenziale) values (?,?,?,?,?,?,?,?)";
+			String insert = "insert into scommessa(codice, data_emissione, conto_associato, importo_giocato,quota_totale,bonus,numero_esiti,vincita_potenziale) values (?,?,?,?,?,?,?,?)";
 			PreparedStatement statement = connection.prepareStatement(insert);
 			statement.setLong(1, scommessa.getCodice());
 			statement.setDate(2, new java.sql.Date(scommessa.getData_emissione().getTime()));
@@ -44,7 +44,7 @@ public class ScommessaDaoJDBC implements ScommessaDao {
 				statement.setLong(3, esito_giocato.getPartita().getCodice());
 				statement.executeUpdate();
 			}
-			MovimentoScommessa movimento = new MovimentoScommessa(scommessa.getSchema_scommessa().getImporto_giocato(), TipoMovimento.VERSAMENTO);
+			MovimentoScommessa movimento = new MovimentoScommessa(scommessa.getSchema_scommessa().getImporto_giocato(), TipoMovimento.PRELIEVO,scommessa);
 			MovimentoScommessaDao movimentoDao = PostgresDAOFactory.getDAOFactory(PostgresDAOFactory.POSTGRESQL).getMovimentoScommessaDAO();
 			movimentoDao.save(movimento);
 			
@@ -78,7 +78,7 @@ public class ScommessaDaoJDBC implements ScommessaDao {
 				statement.setLong(1, codice);
 				ResultSet result2 = statement.executeQuery();
 				while (result2.next()) {
-					EsitoPartita corrente = new EsitoPartita(new model.Esito(result.getString(1)), result.getFloat(2), new Partita(result.getLong(3),new Squadra(result.getString(4)),new Squadra(result.getString(5)),-1,-1,null,result.getDate(6).getTime(),false));
+					EsitoPartita corrente = new EsitoPartita(true,new model.Esito(result.getString(1)), result.getFloat(2), new Partita(result.getLong(3),new Squadra(result.getString(4)),new Squadra(result.getString(5)),-1,-1,null,result.getDate(6).getTime(),false));
 					esiti_giocati.add(corrente);
 				}
 				SchemaDiScommessa schema_scommessa  = new SchemaDiScommessa(result.getFloat(3), result.getFloat(4), result.getFloat(5), result.getInt(6), result.getFloat(7), esiti_giocati);

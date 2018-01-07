@@ -1,17 +1,15 @@
 package model;
 
-import java.util.Date;
-
-import persistence.DataSource;
 import persistence.IdBroker;
 
-public class Giocatore {
+public class Giocatore{
 
 	private Long codice;
 	private String nome;
 	private String cognome;
 	private Conto conto;
 	private Credenziali credenziali;
+	private String tipoUtente;
 	
 	public Giocatore(String nome2, String cognome2, Credenziali nuovaCredenziale,Conto conto) {
 		codice=IdBroker.getIstance("giocatore").getId();
@@ -19,6 +17,7 @@ public class Giocatore {
 		cognome=cognome2;
 		credenziali=nuovaCredenziale;
 		this.conto=conto;
+		tipoUtente=TipoCredenziali.USER;
 	}
 	public Long getCodice() {
 		// TODO Auto-generated method stub
@@ -49,5 +48,18 @@ public class Giocatore {
 	public void setConto(Conto c) {
 		conto=c;
 	}
+	public String getTipoUtente() {
+		return tipoUtente;
+	}
+	public void setTipoUtente(String tipoUtente) {
+		this.tipoUtente = tipoUtente;
+	}
+	public void setCodice(Long codice) {
+		this.codice = codice;
+	}
+	public void setCredenziali(Credenziali credenziali) {
+		this.credenziali = credenziali;
+	}
+	
 	
 }

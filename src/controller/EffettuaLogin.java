@@ -15,6 +15,7 @@ import model.Giocatore;
 import model.TipoCredenziali;
 import persistence.DAOFactory;
 import persistence.PostgresDAOFactory;
+import persistence.dao.GiocatoreDao;
 
 public class EffettuaLogin extends HttpServlet {
 
@@ -32,12 +33,10 @@ public class EffettuaLogin extends HttpServlet {
 				String messaggio="Benvenuto "+username+"  ";
 				session.setAttribute("username", username);
 				session.setAttribute("mex", messaggio);
-				session.setAttribute("loggato", TipoCredenziali.USER);
-				session.setAttribute("conto", g.getConto().getCodice());
+				session.setAttribute("loggato", g);
 			}
 		}else {
 			boolean result =PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getAmministratoreDAO().findByCredenziali(c);
-			System.out.println("pippo");
 			if(result) {
 				String messaggio="Benvenuto Amministratore "+username+"    ";
 				session.setAttribute("username", username);

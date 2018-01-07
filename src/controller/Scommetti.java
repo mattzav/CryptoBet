@@ -3,6 +3,7 @@ package controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Enumeration;
 
 import javax.servlet.RequestDispatcher;
@@ -12,13 +13,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import model.Conto;
 import model.Esito;
 import model.EsitoPartita;
+import model.Giocatore;
+import model.MovimentoScommessa;
 import model.Partita;
 import model.SchemaDiScommessa;
+import model.Scommessa;
+import model.TipoMovimento;
 import persistence.DAOFactory;
 import persistence.PostgresDAOFactory;
 import persistence.dao.CampionatoDao;
+import persistence.dao.ContoDao;
 import persistence.dao.EsitoPartitaDao;
 import persistence.dao.PartitaDao;
 
@@ -107,7 +114,6 @@ public class Scommetti extends HttpServlet{
 			}
 			else {
 				String btn=req.getParameterNames().nextElement();
-				System.out.println(btn);
 				if(btn.contains(";")) {
 					String[] datiEsitoSelezionato=btn.split(";");
 					Long codicePartita=Long.valueOf(datiEsitoSelezionato[0]);
@@ -115,21 +121,61 @@ public class Scommetti extends HttpServlet{
 					for(EsitoPartita esito:esitiAttivi) {
 						String desc=esito.getEsito().getDescrizione()+" ";
 						if(esito.getPartita().getCodice().equals(codicePartita) && desc.equals(esitoSelezionato)) {
-							if(esito.isDisponibile()) {	
-								schemaDiScommessa.addEsito(esito);
-								esito.setDisponibile(false);
+							if(schemaDiScommessa.canAdd(esito)) {
+								if(esito.isDisponibile()) {	
+									System.out.println("aggiunto");
+									schemaDiScommessa.addEsito(esito);
+									esito.setDisponibile(false);
+								}
+								else {
+									System.out.println("rimosso");
+									schemaDiScommessa.removeEsito(esito);
+									esito.setDisponibile(true);
+								}
 							}
 							else {
-								schemaDiScommessa.removeEsito(esito);
-								esito.setDisponibile(true);
+								System.out.println("esito già presente per questa partita");
 							}
-							System.out.println(schemaDiScommessa.getQuota_totale());
 							resp.getWriter().print(esito.getPartita().getSquadra_casa().getNome()+";"
 													+esito.getPartita().getSquadra_ospite().getNome()+";"
 													+ esito.getQuota()+";"+schemaDiScommessa.getQuota_totale()+";"+
 													+schemaDiScommessa.getBonus()+";"+schemaDiScommessa.getVincita_potenziale());
 							return;
 						}
+					}
+				}
+				else if(btn.equals("giocaScommessa")) {
+					Giocatore utente= (Giocatore) session.getAttribute("loggato");
+					System.out.println(utente);
+					if(utente!=null) {
+						Conto contoUtente=utente.getConto();
+						if(contoUtente.preleva((Float) session.getAttribute("importo"))){
+							
+							
+							session.removeAttribute("schema");
+							PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getScommessaDao().save(new Scommessa(new Date(), contoUtente, schemaDiScommessa));
+							ContoDao contoDao=PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getContoDAO();
+							contoDao.update(contoUtente);
+
+							for(EsitoPartita e:schemaDiScommessa.getEsiti_giocati()) {
+								e.setDisponibile(true);
+							}
+							
+							resp.getWriter().print("ok");
+						}
+						else {
+							resp.getWriter().print("credito non sufficente");
+						}
+					}
+					else {
+						resp.getWriter().print("utente non loggato");
+					}
+					return;
+				}
+				else if(btn.equals("svuota")) {
+					session.removeAttribute("schema");
+					for(EsitoPartita e:schemaDiScommessa.getEsiti_giocati()) {
+						e.setDisponibile(true);
 					}
 				}
 			}

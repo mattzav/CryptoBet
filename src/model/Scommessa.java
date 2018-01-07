@@ -2,6 +2,8 @@ package model;
 
 import java.util.Date;
 
+import persistence.IdBroker;
+
 public class Scommessa {
 	
 	private Long codice;
@@ -17,6 +19,13 @@ public class Scommessa {
 		this.schema_scommessa = schema_scommessa;
 	}
 	
+	public Scommessa(Date date, Conto contoUtente, SchemaDiScommessa schemaDiScommessa) {
+		codice=IdBroker.getIstance("scommessa").getId();
+		this.data_emissione = date;
+		this.conto_associato = contoUtente;
+		this.schema_scommessa = schemaDiScommessa;
+	}
+
 	public Long getCodice() {
 		return codice;
 	}

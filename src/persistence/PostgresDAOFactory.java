@@ -11,6 +11,7 @@ import persistence.dao.GiocatoreDao;
 import persistence.dao.MovimentoCartaDao;
 import persistence.dao.MovimentoScommessaDao;
 import persistence.dao.PartitaDao;
+import persistence.dao.ScommessaDao;
 import persistence.dao.SquadraDao;
 
 public class PostgresDAOFactory extends DAOFactory {
@@ -116,6 +117,13 @@ public class PostgresDAOFactory extends DAOFactory {
 	@Override
 	public MovimentoScommessaDao getMovimentoScommessaDAO() {
 		return new MovimentoScommessaDaoJDBC();
+	}
+
+
+	@Override
+	public ScommessaDao getScommessaDao() {
+		// TODO Auto-generated method stub
+		return new ScommessaDaoJDBC();
 	}
 	
 	// --------------------------------------------

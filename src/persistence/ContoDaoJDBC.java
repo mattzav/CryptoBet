@@ -5,6 +5,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,8 +54,23 @@ public class ContoDaoJDBC implements ContoDao {
 
 	@Override
 	public void update(Conto conto) {
-		// TODO Auto-generated method stub
 		
+		Connection connection = PostgresDAOFactory.dataSource.getConnection();
+		try {
+			String update = "update conto SET saldo = ? where codice=? ";
+			PreparedStatement statement = connection.prepareStatement(update);
+			statement.setFloat(1, conto.getSaldo());
+			statement.setLong(2, conto.getCodice());
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}
 	}
 
 	@Override

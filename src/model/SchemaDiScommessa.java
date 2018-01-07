@@ -88,5 +88,15 @@ public class SchemaDiScommessa {
 		vincita_potenziale=(quota_totale*importo_giocato)+bonus;
 		esiti_giocati.remove(esito);
 	}
+
+	public boolean canAdd(EsitoPartita esito) {
+		// TODO Auto-generated method stub
+		for(EsitoPartita e:esiti_giocati) {
+			if(e.getPartita().getCodice().equals(esito.getPartita().getCodice()) 
+					&& !(e.getEsito().getDescrizione().equals(esito.getEsito().getDescrizione())))
+					return false;
+		}
+		return true;
+	}
 	
 }

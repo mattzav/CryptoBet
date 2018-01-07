@@ -60,6 +60,14 @@
 		<div id="fh5co-page">
 			<div id="fh5co-header">
 				<header id="fh5co-header-section">
+					<c:if test="${loggato!=null}">
+						<div>
+							<span class="col-sm-8"></span> 
+							<span class="col-sm-4">
+								${mex} <a href="login"><input type="button" class="btn btn-primary" value=LOG-OUT onclick="<c:set var="page" value="index.jsp" scope="session"  />"></a>
+							</span>
+						</div>
+					</c:if>
 					<div class="container">
 						<div class="nav-header">
 							<a href="#" class="js-fh5co-nav-toggle fh5co-nav-toggle"><i></i></a>
@@ -69,41 +77,15 @@
 							<!-- START #fh5co-menu-wrap -->
 							<nav id="fh5co-menu-wrap" role="navigation">
 								<ul class="sf-menu" id="fh5co-primary-menu">
-									<li><a href="index.html">Home</a></li>
-									<li class="active"><a href="classes.html"
-										class="fh5co-sub-ddown">Classes</a>
-										<ul class="fh5co-sub-menu">
-											<li><a href="left-sidebar.html">Web Development</a></li>
-											<li><a href="right-sidebar.html">Branding &amp;
-													Identity</a></li>
-											<li><a href="#" class="fh5co-sub-ddown">Free HTML5</a>
-												<ul class="fh5co-sub-menu">
-													<li><a
-														href="http://freehtml5.co/preview/?item=build-free-html5-bootstrap-template"
-														target="_blank">Build</a></li>
-													<li><a
-														href="http://freehtml5.co/preview/?item=work-free-html5-template-bootstrap"
-														target="_blank">Work</a></li>
-													<li><a
-														href="http://freehtml5.co/preview/?item=light-free-html5-template-bootstrap"
-														target="_blank">Light</a></li>
-													<li><a
-														href="http://freehtml5.co/preview/?item=relic-free-html5-template-using-bootstrap"
-														target="_blank">Relic</a></li>
-													<li><a
-														href="http://freehtml5.co/preview/?item=display-free-html5-template-using-bootstrap"
-														target="_blank">Display</a></li>
-													<li><a
-														href="http://freehtml5.co/preview/?item=sprint-free-html5-template-bootstrap"
-														target="_blank">Sprint</a></li>
-												</ul></li>
-											<li><a href="#">UI Animation</a></li>
-											<li><a href="#">Copywriting</a></li>
-											<li><a href="#">Photography</a></li>
-										</ul></li>
-
-									<li><a href="schedule.html">Schedule</a></li>
-									<li><a href="trainer.html">Trainers</a></li>
+									<li><a href="index.jsp">Home</a></li>
+									<li>
+										<a class="fh5co-sub-ddown" href="scommetti">Scommesse</a>
+										<ul class="fh5co-sub-menu campionati">
+		
+										</ul>
+									</li>
+									<li><a href="MioConto.jsp">Il Mio Conto</a></li>
+									<li><a href="gestisciPartite.jsp"> Gestisci Partite</a></li>
 									<li><a href="about.html">About</a></li>
 									<li><a href="contact.html">Contact</a></li>
 								</ul>
@@ -121,9 +103,37 @@
 					<div class="row">
 						<div class="col-md-8 col-md-offset-2 col-sm-12 col-sm-offset-0 col-xs-12 col-xs-offset-0 text-center fh5co-table">
 							<div class="fh5co-intro fh5co-table-cell animate-box">
-								<div class="col-sm-12">
+								<div class="col-sm-12" id="welcomeMessage">
+									<br>
+									<br>
 									<h1 class="text-center">Crea le tue scommesse </h1>
 									<p>Qui potrai creare le tue scommesse e personalizzarle a tuo piacimento </p>
+								</div>
+								
+								<div style="display: none" id="login">
+									<br>
+									<br>
+									<br>
+									<br>
+									<div class="col-sm-6">
+										<h1>Esegui l'accesso</h1>
+									</div>
+									<div class="col-sm-6">
+										<form method="post" action="login">
+											<div class="form-group">
+												<label for="user"> Username: </label>
+												<input type="text" class="form-control" name="user">
+											</div>
+											<div class="form-group">
+												<label for="pwd"> Password: </label>
+												<input type="password" class="form-control" name="pwd">
+											</div>
+											<div class="form-group">
+												<input class="btn btn-primary" type="submit" name="accesso" value="Accedi" onclick="<c:set var="page" value="Scommetti.jsp" scope="session"/>"/>
+												<a class="btn btn-primary" href="Registrati.html">Registrati</a>
+											</div>
+										</form>
+									</div>
 								</div>
 							</div>
 						
@@ -150,19 +160,19 @@
 									Esito
 								</th>
 								<th>
-									<a class="glyphicon glyphicon-trash" href="scommetti"></a>
+									<a class="glyphicon glyphicon-trash" onclick="pulisciScommessa()"></a>
 								</th>
 							</tr>
 							<tbody class="scommessa">
 								<c:forEach items="${schema.esiti_giocati}" var="esito">
-									<tr class="info">
+									<tr class="${esito.partita.codice}">
 										<td colspan="2">
 											${esito.partita.squadra_casa.nome} vs ${esito.partita.squadra_ospite.nome}
 										</td>
 										<td>
 												${esito.quota} 
 										</td>
-										<td>
+										<td class="${esito.esito.descrizione}">
 												${esito.esito.descrizione} 	
 										</td>
 									</tr>
