@@ -27,25 +27,52 @@ public class RegistraCliente extends HttpServlet {
 		String codCarta =req.getParameter("creditCard");
 		String password =req.getParameter("password");
 		String username = req.getParameter("usr");
-		//creo le credenziali del nuovo giocatore
-		Credenziali nuovaCredenziale=new Credenziali(username,password);
-		nuovaCredenziale.setTipo(TipoCredenziali.USER);
-		//creo la carta di credito del nuovo giocatore
-		CartaDiCredito carta=new CartaDiCredito(codCarta);
-		PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCartaDiCreditoDAO().save(carta);
-		//creo il conto del nuovo giocatore con la carta di credito appena creata
-		Conto conto=new Conto(5.0f,new java.util.Date(),carta);
-		PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getContoDAO().save(conto);
-		PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCredenzialiDAO().save(nuovaCredenziale);
-		//creo il nuovo giocatore con nome cognome credenziali e conto 
-		Giocatore nuovoGiocatore=new Giocatore(nome,cognome,nuovaCredenziale,conto);
+		System.out.println(req.getParameter("checkUsername")+" "+username);
 		
-		PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getGiocatoreDAO().save(nuovoGiocatore);
+		if(req.getParameter("checkUsername")!=null) {
+			if(username.equals("") ||PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCredenzialiDAO().findByPrimaryKey(username)!=null) {
+				resp.getWriter().print("errore");
+			}
+			else {
+				resp.getWriter().print("ok");
+				
+			}
+			return;
+		}
 		HttpSession session=req.getSession();
-		session.setAttribute("username", username);
-		session.setAttribute("mex", "Bevenuto "+username);
-		session.setAttribute("loggato", true);
-		RequestDispatcher disp=req.getRequestDispatcher("index.jsp");
-		disp.forward(req, resp);
+		String error = req.getParameter("errore");
+		if(error!=null) {
+			if(error.equals("true")) {
+				System.out.println("c'è un errore");
+				session.setAttribute("errore", true);
+			}
+			else session.removeAttribute("errore");
+			return;
+		}
+		boolean existError=false;
+		if (session.getAttribute("errore")!=null) {
+			existError=(boolean) session.getAttribute("errore");
+		}
+		if(!existError) {
+			//creo le credenziali del nuovo giocatore
+			Credenziali nuovaCredenziale=new Credenziali(username,password);
+			nuovaCredenziale.setTipo(TipoCredenziali.USER);
+			//creo la carta di credito del nuovo giocatore
+			CartaDiCredito carta=new CartaDiCredito(codCarta);
+			PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCartaDiCreditoDAO().save(carta);
+			//creo il conto del nuovo giocatore con la carta di credito appena creata
+			Conto conto=new Conto(5.0f,new java.util.Date(),carta);
+			PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getContoDAO().save(conto);
+			PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCredenzialiDAO().save(nuovaCredenziale);
+			//creo il nuovo giocatore con nome cognome credenziali e conto 
+			Giocatore nuovoGiocatore=new Giocatore(nome,cognome,nuovaCredenziale,conto);
+			
+			PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getGiocatoreDAO().save(nuovoGiocatore);
+			session.setAttribute("username", username);
+			session.setAttribute("mex", "Bevenuto "+username);
+			session.setAttribute("loggato", nuovoGiocatore);
+		}
+		RequestDispatcher dispatcher=req.getRequestDispatcher("Registrati.html");
+		dispatcher.forward(req, resp);
 	}
 }
