@@ -57,12 +57,13 @@ public class PartitaDaoJDBC implements PartitaDao {
 
 			EsitoDao esitoDao = PostgresDAOFactory.getDAOFactory(PostgresDAOFactory.POSTGRESQL).getEsitoDao();
 			for (Esito e : esitoDao.findAll()) {
-				insert = "insert into esitopartita(esito,partita,quota,disponibile) values (?,?,?,?)";
+				insert = "insert into esitopartita(esito,partita,quota,disponibile,stato) values (?,?,?,?,?)";
 				statement = connection.prepareStatement(insert);
 				statement.setString(1, e.getDescrizione());
 				statement.setLong(2, partita.getCodice());
 				statement.setFloat(3, 1.0f);
 				statement.setBoolean(4, true);
+				statement.setString(5, "non verificato");
 				statement.executeUpdate();
 			}
 		} catch (SQLException e) {
@@ -101,6 +102,44 @@ public class PartitaDaoJDBC implements PartitaDao {
 			statement.setString(10, partita.getSquadra_ospite().getNome());
 			statement.setLong(11, partita.getCampionato().getCodice());
 			statement.executeUpdate();
+			if(partita.isFinita()) {
+				if(partita.getGoal_casa()>partita.getGoal_ospite()) {
+					update = "update esitopartita SET stato=\"vinto\" where partita=? and (esito=\"1\" or esito=\"1X\" or esito=\"12\")";
+				}
+				else if(partita.getGoal_casa()<partita.getGoal_ospite()) {
+					update = "update esitopartita SET stato=\"vinto\" where partita=? and (esito=\"2\" or esito=\"X2\" or esito=\"12\")";
+				}
+				else
+					update = "update esitopartita SET stato=\"vinto\" where partita=? and (esito=\"X\" or esito=\"1X\" or esito=\"X2\")";
+				statement = connection.prepareStatement(update);
+				statement.setLong(1, partita.getCodice());
+				statement.executeUpdate();
+				
+				if(partita.getGoal_casa()+partita.getGoal_ospite()>=3)
+					update = "update esitopartita SET stato=\"vinto\" where partita=? and esito=\"O\"";
+				else 
+					update = "update esitopartita SET stato=\"vinto\" where partita=? and esito=\"U\"";
+
+				statement = connection.prepareStatement(update);
+				statement.setLong(1, partita.getCodice());
+				statement.executeUpdate();
+				
+				if(partita.getGoal_casa()!=0 && partita.getGoal_ospite()!=0)
+					update = "update esitopartita SET stato=\"vinto\" where partita=? and esito=\"GG\"";
+				else
+					update = "update esitopartita SET stato=\"vinto\" where partita=? and esito=\"NG\"";
+				
+				statement = connection.prepareStatement(update);
+				statement.setLong(1, partita.getCodice());
+				statement.executeUpdate();
+				
+				update = "update esitopartita SET stato=\"perso\" where partita=? and stato=\"non verificato\"";
+				statement = connection.prepareStatement(update);
+				statement.setLong(1, partita.getCodice());
+				statement.executeUpdate();
+			}
+			
+			
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
 		} finally {

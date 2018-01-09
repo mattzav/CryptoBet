@@ -5,10 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import model.Conto;
 import model.EsitoPartita;
+import model.Giocatore;
 import model.MovimentoScommessa;
 import model.Partita;
 import model.SchemaDiScommessa;
@@ -97,9 +99,32 @@ public class ScommessaDaoJDBC implements ScommessaDao {
 	}
 
 	@Override
-	public List<Scommessa> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Scommessa> findAll(Giocatore giocatore) {
+		Connection connection = PostgresDAOFactory.dataSource.getConnection();
+		List<Scommessa> scommesse = new ArrayList<>();
+		try {
+			
+			PreparedStatement statement;
+			String query = "select s.codice,s.data_emissione,s.importo_giocato,s.numero_esiti,s.vincita_potenziale from scommessa as s where s.conto_associato = ?";
+			statement = connection.prepareStatement(query);
+			statement.setLong(1, giocatore.getConto().getCodice());
+			ResultSet result = statement.executeQuery();
+
+			while (result.next()) {
+				Scommessa scommessa = new Scommessa(result.getLong(1),result.getDate(2), null, new SchemaDiScommessa(result.getFloat(3), 0, 0, result.getInt(4),result.getFloat(5), null));
+				scommesse.add(scommessa);
+			}
+
+		} catch (SQLException e) {
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}
+		return scommesse;
 	}
 
 	@Override

@@ -58,4 +58,13 @@
     <url-pattern>/scommetti</url-pattern>
   </servlet-mapping> 
   
+   <servlet>
+    <servlet-name>MostraScommesse</servlet-name>
+    <servlet-class>controller.MostraUltimeScommesse</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MostraScommesse</servlet-name>
+    <url-pattern>/mostraScommesse</url-pattern>
+  </servlet-mapping>  
+  
 </web-app>
