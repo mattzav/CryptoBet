@@ -65,4 +65,8 @@ public class Conto {
 		}
 		return false;
 	}
+
+	public void versa(Float importo) {
+		saldo+=importo;
+	}
 }

@@ -64,7 +64,7 @@
 						<div>
 							<span class="col-sm-8"></span> 
 							<span class="col-sm-4">
-								${mex} <a href="login"><input type="button" class="btn btn-primary" value=LOG-OUT onclick="<c:set var="page" value="index.jsp" scope="session"  />"></a>
+								${mex} <a href="login"><input type="button" class="btn btn-primary" value=LOG-OUT onclick="<c:set var="page" value="Scommetti.jsp" scope="session"  />"></a>
 							</span>
 						</div>
 					</c:if>
@@ -103,38 +103,46 @@
 					<div class="row">
 						<div class="col-md-8 col-md-offset-2 col-sm-12 col-sm-offset-0 col-xs-12 col-xs-offset-0 text-center fh5co-table">
 							<div class="fh5co-intro fh5co-table-cell animate-box">
-								<div class="col-sm-12" id="welcomeMessage">
-									<br>
-									<br>
-									<h1 class="text-center">Crea le tue scommesse </h1>
-									<p>Qui potrai creare le tue scommesse e personalizzarle a tuo piacimento </p>
-								</div>
-								
-								<div style="display: none" id="login">
-									<br>
-									<br>
-									<br>
-									<br>
-									<div class="col-sm-6">
-										<h1>Esegui l'accesso</h1>
+								<c:if test="${utente==\"USER\"}">
+									<div class="col-sm-12" id="welcomeMessage" style="display: block">
+										<br>
+										<br>
+										<h1 class="text-center">Crea le tue scommesse </h1>
+										<p>Qui potrai creare le tue scommesse e personalizzarle a tuo piacimento </p>
 									</div>
-									<div class="col-sm-6">
-										<form method="post" action="login">
-											<div class="form-group">
-												<label for="user"> Username: </label>
-												<input type="text" class="form-control" name="user">
-											</div>
-											<div class="form-group">
-												<label for="pwd"> Password: </label>
-												<input type="password" class="form-control" name="pwd">
-											</div>
-											<div class="form-group">
-												<input class="btn btn-primary" type="submit" name="accesso" value="Accedi" onclick="<c:set var="page" value="Scommetti.jsp" scope="session"/>"/>
-												<a class="btn btn-primary" href="Registrati.html">Registrati</a>
-											</div>
-										</form>
+								</c:if>
+								<c:if test="${utente==null}">
+									<div style="display: block" id="login">
+										<br>
+										<br>
+										<br>
+										<br>
+										<div class="col-sm-6">
+											<h1>Esegui l'accesso</h1>
+										</div>
+										<div class="col-sm-6">
+											<form method="post" action="login">
+												<div class="form-group">
+													<label for="user"> Username: </label>
+													<input type="text" class="form-control" name="user">
+												</div>
+												<div class="form-group">
+													<label for="pwd"> Password: </label>
+													<input type="password" class="form-control" name="pwd">
+												</div>
+												<div class="form-group">
+													<input class="btn btn-primary" type="submit" name="accesso" value="Accedi" onclick="<c:set var="page" value="Scommetti.jsp" scope="session"/>"/>
+													<a class="btn btn-primary" href="sendData">Registrati</a>
+												</div>
+											</form>
+										</div>
 									</div>
-								</div>
+								</c:if>
+								<c:if test="${utente==\"ADMIN\"}">
+									<div>
+										<span class="btn btn-danger"> Errore: Effuttua il login come USER</span>
+									</div>
+								</c:if>
 							</div>
 						
 						</div>
@@ -156,7 +164,7 @@
 								<th>
 									Quota
 								</th>
-								<th>
+								<th colspan="3">
 									Esito
 								</th>
 								<th>
@@ -165,14 +173,14 @@
 							</tr>
 							<tbody class="scommessa">
 								<c:forEach items="${schema.esiti_giocati}" var="esito">
-									<tr class="${esito.partita.codice}">
+									<tr class="${esito.partita.codice} info">
 										<td colspan="2">
 											${esito.partita.squadra_casa.nome} vs ${esito.partita.squadra_ospite.nome}
 										</td>
 										<td>
 												${esito.quota} 
 										</td>
-										<td class="${esito.esito.descrizione}">
+										<td class="${esito.esito.descrizione}" colspan="3">
 												${esito.esito.descrizione} 	
 										</td>
 									</tr>
@@ -189,12 +197,12 @@
 									<td>
 										Importo:
 									</td>
-									<td>
+									<td colspan="3">
 										<form>
 											<div>
 												<input class="col-sm-4 btn btn-default btn-xs importo" type="text" name="importo" onkeyup="checkValue()" onmouseleave="getImporto()" value="${importo}">
 												<span class="col-sm-4 vincita">
-													Vincita potenziale : ${schema.vincita_potenziale}
+													Vincita : ${schema.vincita_potenziale}
 												</span>
 												<input class="col-sm-4 btn btn-primary btn-xs" type="button" name="gioca" value="Scommetti" onclick="giocaScommessa()">
 											</div>
@@ -230,8 +238,8 @@
 					</div>
 					<div class="col-sm-8">
 						<c:forEach items="${campionatiAttivi}" var="campionato">
-							<div>
-								<table class="table">
+							<div class="scroll-table">
+								<table class="table" id="esitiasd">
 									<tr>
 										<th>${campionato}</th>
 										<c:forEach items="${esiti}" var="esitoPossibile">

@@ -19,7 +19,7 @@ function checkValue(){
 		            error:function(){alert('error');}
 	        	}
 	    	).done(function(response){
-				$(".vincita").text("Vincita potenziale : "+response);
+				$(".vincita").text("Vincita : "+response);
 	    	});
 		}
 	}
@@ -55,7 +55,7 @@ function checkValue(){
 				}
 				$(".quotaTotale").text("Quota totale : "+dati[3]);
 				$(".bonus").text("Bonus : "+dati[4]);
-				$(".vincita").text("Vincita potenziale : "+dati[5]);
+				$(".vincita").text("Vincita : "+dati[5]);
 				
 	    	});
 	}
@@ -71,13 +71,17 @@ function checkValue(){
 	            cache:false,
 	            error:function(){alert('error');}
 			}).done(function(response){
+				alert(response);
 				if(response=="utente non loggato"){
 					$("#welcomeMessage").css({'display' : 'none'});
 					$("#login").css({'display' : 'block'});
 					alert("errore login");
 				}else if(response=="credito non sufficente"){
 					alert(response);
-				}else{
+				}else if(response=="utente loggato come admin"){
+					alert(response+" : effettua il logout ed accedi come user")
+				}
+				else{
 					svuotaScommessa();
 					alert("scommessa registrata con successo");
 				}
@@ -92,7 +96,7 @@ function checkValue(){
 		});
 		$(".quotaTotale").text("Quota totale :");
 		$(".bonus").text("Bonus :");
-		$(".vincita").text("Vincita potenziale :");
+		$(".vincita").text("Vincita :");
 		$('.btn-danger').addClass("btn-info");
 		$('.btn-danger').removeClass("btn-danger");
 	}
