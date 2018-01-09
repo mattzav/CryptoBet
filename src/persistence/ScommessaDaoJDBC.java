@@ -26,7 +26,7 @@ public class ScommessaDaoJDBC implements ScommessaDao {
 	public void save(Scommessa scommessa) {
 		Connection connection = PostgresDAOFactory.dataSource.getConnection();
 		try {
-			String insert = "insert into scommessa(codice, data_emissione, conto_associato, importo_giocato,quota_totale,bonus,numero_esiti,vincita_potenziale) values (?,?,?,?,?,?,?,?)";
+			String insert = "insert into scommessa(codice, data_emissione, conto_associato, importo_giocato,quota_totale,bonus,numero_esiti,vincita_potenziale,stato) values (?,?,?,?,?,?,?,?,?)";
 			PreparedStatement statement = connection.prepareStatement(insert);
 			statement.setLong(1, scommessa.getCodice());
 			statement.setDate(2, new java.sql.Date(scommessa.getData_emissione().getTime()));
@@ -36,6 +36,7 @@ public class ScommessaDaoJDBC implements ScommessaDao {
 			statement.setFloat(6, scommessa.getSchema_scommessa().getBonus());
 			statement.setFloat(7, scommessa.getSchema_scommessa().getNumero_esiti());
 			statement.setFloat(8, scommessa.getSchema_scommessa().getVincita_potenziale());
+			statement.setString(9, "non verificata");
 			statement.executeUpdate();
 			
 			for(EsitoPartita esito_giocato : scommessa.getSchema_scommessa().getEsiti_giocati()) {
@@ -68,23 +69,23 @@ public class ScommessaDaoJDBC implements ScommessaDao {
 		try {
 			PreparedStatement statement;
 			String query = "select s.dataemissione, s.contoassociato, s.importo_giocato,s.quota_totale,s.bonus,s.numero_esiti,"
-					+ "s.vincita_potenziale from scommessa as s where s.codice=? "; 
+					+ "s.vincita_potenziale,s.stato from scommessa as s where s.codice=? "; 
 			statement = connection.prepareStatement(query);
 			statement.setLong(1, codice);
 			ResultSet result = statement.executeQuery();
 			if (result.next()){
 				ArrayList<EsitoPartita> esiti_giocati = new ArrayList<EsitoPartita>();
 				//controllare se va bene discutere ( aggiungere il join con la partita
-				query = "select e.esito,e.quota,p.codice,p.squadraCasa,p.squadraOspite,p.data from scommessa_esitopartita as se, esitopartita as e, partita as p where se.partita=e.partita and se.esito = e.esito and e.partita=p.codice and se.scommessa=?";
+				query = "select e.esito,e.quota,p.codice,p.squadraCasa,p.squadraOspite,p.data,e.stato from scommessa_esitopartita as se, esitopartita as e, partita as p where se.partita=e.partita and se.esito = e.esito and e.partita=p.codice and se.scommessa=?";
 				statement=connection.prepareStatement(query);
 				statement.setLong(1, codice);
 				ResultSet result2 = statement.executeQuery();
 				while (result2.next()) {
-					EsitoPartita corrente = new EsitoPartita(true,new model.Esito(result.getString(1)), result.getFloat(2), new Partita(result.getLong(3),new Squadra(result.getString(4)),new Squadra(result.getString(5)),-1,-1,null,result.getDate(6).getTime(),false));
+					EsitoPartita corrente = new EsitoPartita(true,new model.Esito(result.getString(1)), result.getFloat(2), new Partita(result.getLong(3),new Squadra(result.getString(4)),new Squadra(result.getString(5)),-1,-1,null,result.getDate(6).getTime(),false),result2.getString(7));
 					esiti_giocati.add(corrente);
 				}
 				SchemaDiScommessa schema_scommessa  = new SchemaDiScommessa(result.getFloat(3), result.getFloat(4), result.getFloat(5), result.getInt(6), result.getFloat(7), esiti_giocati);
-				scommessa=new Scommessa(codice, result.getDate(1), new Conto(result.getLong(2), 0.0f , null, null),schema_scommessa);
+				scommessa=new Scommessa(codice, result.getDate(1), new Conto(result.getLong(2), 0.0f , null, null),schema_scommessa,result.getString(8));
 			}
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
@@ -105,13 +106,13 @@ public class ScommessaDaoJDBC implements ScommessaDao {
 		try {
 			
 			PreparedStatement statement;
-			String query = "select s.codice,s.data_emissione,s.importo_giocato,s.numero_esiti,s.vincita_potenziale from scommessa as s where s.conto_associato = ?";
+			String query = "select s.codice,s.data_emissione,s.importo_giocato,s.numero_esiti,s.vincita_potenziale,s.stato from scommessa as s where s.conto_associato = ?";
 			statement = connection.prepareStatement(query);
 			statement.setLong(1, giocatore.getConto().getCodice());
 			ResultSet result = statement.executeQuery();
 
 			while (result.next()) {
-				Scommessa scommessa = new Scommessa(result.getLong(1),result.getDate(2), null, new SchemaDiScommessa(result.getFloat(3), 0, 0, result.getInt(4),result.getFloat(5), null));
+				Scommessa scommessa = new Scommessa(result.getLong(1),result.getDate(2), null, new SchemaDiScommessa(result.getFloat(3), 0, 0, result.getInt(4),result.getFloat(5), null),result.getString(6));
 				scommesse.add(scommessa);
 			}
 

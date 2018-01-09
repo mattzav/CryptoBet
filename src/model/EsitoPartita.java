@@ -2,18 +2,28 @@ package model;
 
 public class EsitoPartita {
 
+	private String stato;
 	private Esito esito;
 	private float quota;
 	private Partita partita;
 	private boolean disponibile;
 
-	public EsitoPartita(boolean disponibile, Esito esito, float quota, Partita partita) {
+	public EsitoPartita(boolean disponibile, Esito esito, float quota, Partita partita, String stato) {
 		this.esito = esito;
 		this.quota = quota;
 		this.partita = partita;
 		this.disponibile = disponibile;
+		this.stato = stato;
+	}
+	
+	public String getStato() {
+		return stato;
 	}
 
+	public void setStato(String stato) {
+		this.stato = stato;
+	}
+	
 	public Esito getEsito() {
 		return esito;
 	}

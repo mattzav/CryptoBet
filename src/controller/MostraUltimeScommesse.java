@@ -26,7 +26,7 @@ public class MostraUltimeScommesse extends HttpServlet{
 		ArrayList<Scommessa> scommesse = (ArrayList<Scommessa>) scommessaDao.findAll(giocatore);
 		PrintWriter writer = resp.getWriter();
 		for(Scommessa s: scommesse) {
-			writer.write(s.getCodice()+":"+s.getData_emissione()+":"+s.getSchema_scommessa().getImporto_giocato()+":"+s.getSchema_scommessa().getNumero_esiti()+":"+s.getSchema_scommessa().getVincita_potenziale()+";");
+			writer.write(s.getCodice()+":"+s.getData_emissione()+":"+s.getSchema_scommessa().getImporto_giocato()+":"+s.getSchema_scommessa().getNumero_esiti()+":"+s.getSchema_scommessa().getVincita_potenziale()+":"+s.getStato()+";");
 		}
 	}
 }
