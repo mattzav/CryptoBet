@@ -6,24 +6,35 @@ import persistence.IdBroker;
 
 public class Scommessa {
 	
+	private String stato;
 	private Long codice;
 	private Date data_emissione;
 	private Conto conto_associato;
 	private SchemaDiScommessa schema_scommessa;
 	
 	public Scommessa(Long codice, Date data_emissione, Conto conto_associato,
-			 SchemaDiScommessa schema_scommessa) {
+			 SchemaDiScommessa schema_scommessa, String stato) {
 		this.codice = codice;
 		this.data_emissione = data_emissione;
 		this.conto_associato = conto_associato;
 		this.schema_scommessa = schema_scommessa;
+		this.stato=stato;
 	}
 	
-	public Scommessa(Date date, Conto contoUtente, SchemaDiScommessa schemaDiScommessa) {
+	public Scommessa(Date date, Conto contoUtente, SchemaDiScommessa schemaDiScommessa,String stato) {
 		codice=IdBroker.getIstance("scommessa").getId();
 		this.data_emissione = date;
 		this.conto_associato = contoUtente;
 		this.schema_scommessa = schemaDiScommessa;
+		this.stato=stato;
+	}
+	
+	public String getStato() {
+		return stato;
+	}
+	
+	public void setStato(String stato) {
+		this.stato = stato;
 	}
 
 	public Long getCodice() {

@@ -12,5 +12,6 @@ public interface ScommessaDao {
 	public Scommessa findByPrimaryKey(Long codice);     // Retrieve
 	public void update(Scommessa scommessa); //Update
 	public void delete(Scommessa scommessa); //Delete
-	List<Scommessa> findAll(Giocatore giocatore);
+	public List<Scommessa> findAll(Giocatore giocatore);
+	public String verificaScommessa(Long valueOf);
 }

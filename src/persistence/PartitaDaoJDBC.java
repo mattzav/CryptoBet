@@ -104,36 +104,36 @@ public class PartitaDaoJDBC implements PartitaDao {
 			statement.executeUpdate();
 			if(partita.isFinita()) {
 				if(partita.getGoal_casa()>partita.getGoal_ospite()) {
-					update = "update esitopartita SET stato=\"vinto\" where partita=? and (esito=\"1\" or esito=\"1X\" or esito=\"12\")";
+					update = "update esitopartita SET stato=\"indovinato\" where partita=? and (esito=\"1\" or esito=\"1X\" or esito=\"12\")";
 				}
 				else if(partita.getGoal_casa()<partita.getGoal_ospite()) {
-					update = "update esitopartita SET stato=\"vinto\" where partita=? and (esito=\"2\" or esito=\"X2\" or esito=\"12\")";
+					update = "update esitopartita SET stato=\"indovinato\" where partita=? and (esito=\"2\" or esito=\"X2\" or esito=\"12\")";
 				}
 				else
-					update = "update esitopartita SET stato=\"vinto\" where partita=? and (esito=\"X\" or esito=\"1X\" or esito=\"X2\")";
+					update = "update esitopartita SET stato=\"indovinato\" where partita=? and (esito=\"X\" or esito=\"1X\" or esito=\"X2\")";
 				statement = connection.prepareStatement(update);
 				statement.setLong(1, partita.getCodice());
 				statement.executeUpdate();
 				
 				if(partita.getGoal_casa()+partita.getGoal_ospite()>=3)
-					update = "update esitopartita SET stato=\"vinto\" where partita=? and esito=\"O\"";
+					update = "update esitopartita SET stato=\"indovinato\" where partita=? and esito=\"O\"";
 				else 
-					update = "update esitopartita SET stato=\"vinto\" where partita=? and esito=\"U\"";
+					update = "update esitopartita SET stato=\"indovinato\" where partita=? and esito=\"U\"";
 
 				statement = connection.prepareStatement(update);
 				statement.setLong(1, partita.getCodice());
 				statement.executeUpdate();
 				
 				if(partita.getGoal_casa()!=0 && partita.getGoal_ospite()!=0)
-					update = "update esitopartita SET stato=\"vinto\" where partita=? and esito=\"GG\"";
+					update = "update esitopartita SET stato=\"indovinato\" where partita=? and esito=\"GG\"";
 				else
-					update = "update esitopartita SET stato=\"vinto\" where partita=? and esito=\"NG\"";
+					update = "update esitopartita SET stato=\"indovinato\" where partita=? and esito=\"NG\"";
 				
 				statement = connection.prepareStatement(update);
 				statement.setLong(1, partita.getCodice());
 				statement.executeUpdate();
 				
-				update = "update esitopartita SET stato=\"perso\" where partita=? and stato=\"non verificato\"";
+				update = "update esitopartita SET stato=\"sbagliato\" where partita=? and stato=\"non verificato\"";
 				statement = connection.prepareStatement(update);
 				statement.setLong(1, partita.getCodice());
 				statement.executeUpdate();

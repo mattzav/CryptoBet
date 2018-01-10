@@ -70,6 +70,7 @@
 			 if($("table").length){
 				  $("#nomeOperazione").remove();
 				  $("table").remove();
+				  
 			  }
 			 else{
 				$.ajax({
@@ -83,26 +84,52 @@
 								"<th > data di emissione </th>"+
 								"<th > importo scommessa </th>"+
 								"<th > numero esiti </th>"+
-								"<th > vincita potenziale </th>";
+								"<th > vincita potenziale </th>"+
+								"<th > stato </th>"+
+								"<th > verifica </th>";
 			      $("#risultatoGestione>table").append(firstRow);
 				  var scommesse = data.split(";");
 				  for(var i = 0; i<scommesse.length-1; i++){
 					 var dati = scommesse[i].split(":");
 					 for(var j=0; j<dati.length; j++){
-						var row = $('<tr>'+
-								'<td >'+dati[0]+'</td>'+
+						var verifica="";
+						 if(!(dati[5] == "vinta" || dati[5] == "persa")){
+						 	verifica='<td class=\"verificata\"><button class=\"glyphicon glyphicon-ok\"  onclick=\"verificaScommessa('+dati[0]+');\"></td>';
+						 }
+						 else{
+							 verifica='<td> Già verificata</td>';
+						 }
+						 var row = $("<tr id= "+dati[0]+" class=\"success\">"+
+								'<td>'+dati[0]+'</td>'+
 								'<td >'+dati[1]+'</td>'+
 								'<td >'+dati[2]+'</td>'+
 								'<td >'+dati[3]+'</td>'+
 								'<td >'+dati[4]+'</td>'+
+								'<td class=\"stato\">'+dati[5]+'</td>'+
+								verifica+
 								'</tr>');	
 						
-					 }
+						}
 					 $("#risultatoGestione>table").append(row);
 				 }
 			  },
 			 });
 		  }
+		}
+		
+		function verificaScommessa(codice){
+			$.ajax({
+				  type: 'POST',
+				  url: 'verificaScommessa',
+				  data: {codiceScommessa: codice},
+				  success: function(data){
+					  if(data != "non conclusa"){
+					 		$("#"+codice+" .stato").text(data);
+					 		$("#"+codice+" .verificata").remove();
+					 		$("#"+codice).append('<td> Già verificata</td>');
+					  }
+				  }
+			 });
 		}
 	
 	</script>
@@ -232,11 +259,10 @@
 										</div>
 									</div>
 									<div class="col-md-3 col-sm-6">
-										<div class="program program-schedule">
-											<img src="images/listaPartite.png" onclick="print()" alt="">
+										<div class="program program-schedule "
+											onclick="mostraUltimeScommesse()">
+											<img src="images/listaPartite.png" alt="">
 											<h3>Lista Ultime Scommesse</h3>
-											<button class="glyphicon glyphicon-ok"
-												onclick="mostraUltimeScommesse()"></button>
 										</div>
 									</div>
 									<div class="col-md-3 col-sm-6">

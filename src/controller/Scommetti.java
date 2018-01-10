@@ -173,7 +173,7 @@ public class Scommetti extends HttpServlet{
 						Conto contoUtente=utente.getConto();
 						if(contoUtente.preleva((Float) session.getAttribute("importo"))){
 							session.removeAttribute("schema");
-							PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getScommessaDao().save(new Scommessa(new Date(), contoUtente, schemaDiScommessa));
+							PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getScommessaDao().save(new Scommessa(new Date(), contoUtente, schemaDiScommessa,"non verificata"));
 							ContoDao contoDao=PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getContoDAO();
 							contoDao.update(contoUtente);
 							

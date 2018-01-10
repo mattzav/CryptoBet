@@ -76,6 +76,7 @@
     <url-pattern>/mostraScommesse</url-pattern>
   </servlet-mapping>  
   
+<<<<<<< HEAD
   <servlet>
     <servlet-name>ListaMovimenti</servlet-name>
     <servlet-class>controller.ListaMovimenti</servlet-class>
@@ -84,4 +85,15 @@
     <servlet-name>ListaMovimenti</servlet-name>
     <url-pattern>/listaMovimenti</url-pattern>
   </servlet-mapping>  
+=======
+    <servlet>
+    <servlet-name>VerificaScommessa</servlet-name>
+    <servlet-class>controller.VerificaScommessa</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>VerificaScommessa</servlet-name>
+    <url-pattern>/verificaScommessa</url-pattern>
+  </servlet-mapping>  
+  
+>>>>>>> 8a7fd7828c46bd21293d93104b83d6c9e18b0413
 </web-app>
