@@ -132,11 +132,11 @@ public class PartitaDaoJDBC implements PartitaDao {
 				esiti=null;
 				if(partita.getGoal_casa()+partita.getGoal_ospite()>=3) {
 					update = "update esitopartita SET stato=? where partita=? and esito=?";
-					esiti=new String[] {"OV 2,5"};
+					esiti=new String[] {"O"};
 				}
 				else { 
 					update = "update esitopartita SET stato=? where partita=? and esito=?";
-					esiti=new String[] {"UN 2,5"};
+					esiti=new String[] {"U"};
 				}
 				statement = connection.prepareStatement(update);
 				statement.setString(1, "indovinato");
@@ -144,18 +144,25 @@ public class PartitaDaoJDBC implements PartitaDao {
 				statement.setString(3,esiti[0]);
 				statement.executeUpdate();
 				
-				if(partita.getGoal_casa()!=0 && partita.getGoal_ospite()!=0)
-					update = "update esitopartita SET stato=\"indovinato\" where partita=? and esito=\"GG\"";
-				else
-					update = "update esitopartita SET stato=\"indovinato\" where partita=? and esito=\"NG\"";
-				
+				if(partita.getGoal_casa()!=0 && partita.getGoal_ospite()!=0) {
+					update = "update esitopartita SET stato=? where partita=? and esito=?";
+					esiti[0]= "GG";
+				}
+				else {
+					update = "update esitopartita SET stato=? where partita=? and esito=?";
+					esiti[0]= "NG";
+				}
 				statement = connection.prepareStatement(update);
-				statement.setLong(1, partita.getCodice());
+				statement.setString(1, "indovinato");
+				statement.setLong(2, partita.getCodice());
+				statement.setString(3,esiti[0]);
 				statement.executeUpdate();
 				
-				update = "update esitopartita SET stato=\"sbagliato\" where partita=? and stato=\"non verificato\"";
+				update = "update esitopartita SET stato=? where partita=? and stato=?";
 				statement = connection.prepareStatement(update);
-				statement.setLong(1, partita.getCodice());
+				statement.setString(1, "sbagliato");
+				statement.setLong(2, partita.getCodice());
+				statement.setString(3, "non verificato");
 				statement.executeUpdate();
 			}
 			

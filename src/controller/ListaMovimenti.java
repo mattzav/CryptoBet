@@ -27,7 +27,10 @@ public class ListaMovimenti extends HttpServlet{
 		ArrayList<MovimentoScommessa> movimentiScommessa=(ArrayList<MovimentoScommessa>) PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getMovimentoScommessaDAO().findAll(user.getConto());
 		PrintWriter pw=resp.getWriter();
 		for(MovimentoCarta movimento:movimentiCarta) {
-			pw.println(movimento.getCodice()+";"+movimento.getImporto()+";"+movimento.getTipo());
+			int tipo=1;
+			if(movimento.getTipo().equals("VERSAMENTO"))
+				tipo=0;
+			pw.println(movimento.getCodice()+";"+movimento.getImporto()+";"+tipo);
 		}
 		for(MovimentoScommessa movimento:movimentiScommessa) {
 			pw.println(movimento.getCodice_transazione()+";"+movimento.getImporto()+";"+movimento.getTipo_transazione()+";"+movimento.getScommessa().getCodice());

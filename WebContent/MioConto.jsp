@@ -196,17 +196,6 @@
 						</div>
 					</div>
 				</div>
-				<div id="fh5co-schedule-section" class="fh5co-lightgray-section">
-					<div class="container">
-						<div class="row">
-							<div class="col-md-8 col-md-offset-2">
-								<div id="operazione"
-									class="heading-section text-center animate-box"></div>
-							</div>
-						</div>
-						<div id="risultatoGestione"></div>
-					</div>
-				</div>
 			</div>
 			</c:if>
 		</div>

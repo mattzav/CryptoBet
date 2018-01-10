@@ -3,10 +3,8 @@
  */
 
 function mostraUltimeScommesse(){
-		 if($("table").length){
-			  $("#nomeOperazione").remove();
-			  $("table").remove();
-			  
+		 if($("#operazione").length){
+			  $("#operazione").remove();  
 		  }
 		 else{
 			$.ajax({
@@ -14,8 +12,8 @@ function mostraUltimeScommesse(){
 			  url: 'mostraScommesse',
 			  success: function(data){
 		 
-			  $("#operazione").append("<h2 id=\"nomeOperazione\"> ECCO LE TUE SCOMMESSE: </h1>");
-    		  $("#risultatoGestione").append("<table class=\"col-sm-12\">");
+			  $("#operazioni").append("<div id=\"operazione\"><h2 id=\"nomeOperazione\"> ECCO LE TUE SCOMMESSE: </h1></div>");
+    		  $("#operazione").append("<table class=\"col-sm-12\">");
 			  var firstRow = "<th > codici scommessa </th>"+
 							"<th > data di emissione </th>"+
 							"<th > importo scommessa </th>"+
@@ -23,7 +21,7 @@ function mostraUltimeScommesse(){
 							"<th > vincita potenziale </th>"+
 							"<th > stato </th>"+
 							"<th > verifica </th>";
-		      $("#risultatoGestione>table").append(firstRow);
+		      $("#operazione>table").append(firstRow);
 			  var scommesse = data.split(";");
 			  for(var i = 0; i<scommesse.length-1; i++){
 				 var dati = scommesse[i].split(":");
@@ -46,7 +44,7 @@ function mostraUltimeScommesse(){
 							'</tr>');	
 					
 					}
-				 $("#risultatoGestione>table").append(row);
+				 $("#operazione>table").append(row);
 			 }
 		  },
 		 });
@@ -162,11 +160,13 @@ function getListaMovimenti(){
 		$.each(rows,function(i,item){
 			if(item!=""){
 				var dati=item.split(";");
-				var classe="success";
-				if(dati[2]=="PRELIEVO"){
-					classe="danger";
-				}
 				if(dati.length==3){
+					var tipo="VERSAMENTO";
+					var classe="success";
+					if(dati[2]==1){
+						tipo="PRELIEVO";
+						classe="danger"
+					}
 					$("#lista").append(
 						"<tr class=\""+classe+"\">" +
 							"<td>" +
@@ -179,7 +179,7 @@ function getListaMovimenti(){
 								dati[1]+
 							"</td>" +
 							"<td>"+
-								dati[2]+
+								tipo+
 							"</td>" +
 							"<td>"+
 								" / "+
@@ -187,6 +187,10 @@ function getListaMovimenti(){
 						"</tr>");
 				}
 				else{
+					var classe="success";
+					if(dati[2]=="PRELIEVO"){
+						classe="danger";
+					}
 					$("#lista").append(
 						"<tr class=\""+classe+"\">" +
 							"<td>" +
