@@ -67,4 +67,13 @@
     <url-pattern>/mostraScommesse</url-pattern>
   </servlet-mapping>  
   
+    <servlet>
+    <servlet-name>VerificaScommessa</servlet-name>
+    <servlet-class>controller.VerificaScommessa</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>VerificaScommessa</servlet-name>
+    <url-pattern>/verificaScommessa</url-pattern>
+  </servlet-mapping>  
+  
 </web-app>

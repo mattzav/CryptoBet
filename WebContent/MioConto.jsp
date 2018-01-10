@@ -92,18 +92,21 @@
 				  for(var i = 0; i<scommesse.length-1; i++){
 					 var dati = scommesse[i].split(":");
 					 for(var j=0; j<dati.length; j++){
-						var classe="";
-						 if(dati[5] == "vinta"){
-								classe=" class=\"success\"";
-						}
-						 var row = $("<tr class=\"success\">"+
+						var verifica="";
+						 if(!(dati[5] == "vinta" || dati[5] == "persa")){
+						 	verifica='<td class=\"verificata\"><button class=\"glyphicon glyphicon-ok\"  onclick=\"verificaScommessa('+dati[0]+');\"></td>';
+						 }
+						 else{
+							 verifica='<td> Già verificata</td>';
+						 }
+						 var row = $("<tr id= "+dati[0]+" class=\"success\">"+
 								'<td>'+dati[0]+'</td>'+
 								'<td >'+dati[1]+'</td>'+
 								'<td >'+dati[2]+'</td>'+
 								'<td >'+dati[3]+'</td>'+
 								'<td >'+dati[4]+'</td>'+
-								'<td >'+dati[5]+'</td>'+
-								'<td ><button class=\"glyphicon glyphicon-ok\"  onclick=\"verificaScommessa('+dati[0]+');\"></td>'+
+								'<td class=\"stato\">'+dati[5]+'</td>'+
+								verifica+
 								'</tr>');	
 						
 						}
@@ -112,6 +115,21 @@
 			  },
 			 });
 		  }
+		}
+		
+		function verificaScommessa(codice){
+			$.ajax({
+				  type: 'POST',
+				  url: 'verificaScommessa',
+				  data: {codiceScommessa: codice},
+				  success: function(data){
+					  if(data != "non conclusa"){
+					 		$("#"+codice+" .stato").text(data);
+					 		$("#"+codice+" .verificata").remove();
+					 		$("#"+codice).append('<td> Già verificata</td>');
+					  }
+				  }
+			 });
 		}
 	
 	</script>
