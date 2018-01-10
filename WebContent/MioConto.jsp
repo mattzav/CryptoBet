@@ -174,7 +174,7 @@
 									</div>
 								</div>
 								<div class="col-md-3 col-sm-6">
-									<div class="program program-schedule">
+									<div class="program program-schedule" onclick="effettuaPrelievo()">
 										<img src="images/Preleva.png" alt="">
 										<h3>Effettua Prelievo</h3>
 									</div>

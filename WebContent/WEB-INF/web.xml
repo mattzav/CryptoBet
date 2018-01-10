@@ -22,17 +22,6 @@
     <url-pattern>/sendData</url-pattern>
   </servlet-mapping>  
   
-  
-  <servlet>
-    <servlet-name>Versamento</servlet-name>
-    <servlet-class>controller.VersamentoSuConto</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>Versamento</servlet-name>
-    <url-pattern>/versamentoConto</url-pattern>
-  </servlet-mapping>  
-  
-  
    <servlet>
     <servlet-name>AggiornaDati</servlet-name>
     <servlet-class>controller.AggiornaDati</servlet-class>
@@ -95,5 +84,21 @@
     <servlet-name>VerificaScommessa</servlet-name>
     <url-pattern>/verificaScommessa</url-pattern>
   </servlet-mapping>  
-  
+
+  <servlet>
+    <servlet-name>Versamento</servlet-name>
+    <servlet-class>controller.VersamentoSuConto</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Versamento</servlet-name>
+    <url-pattern>/versamentoConto</url-pattern>
+  </servlet-mapping>  
+  <servlet>
+    <servlet-name>Prelievo</servlet-name>
+    <servlet-class>controller.PrelievoSuConto</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Prelievo</servlet-name>
+    <url-pattern>/prelievoConto</url-pattern>
+  </servlet-mapping>    
 </web-app>

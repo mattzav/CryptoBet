@@ -44,4 +44,9 @@ public class CartaDiCredito {
 		return true;
 	}
 
+	public void versa(Float importo) {
+		saldo+=importo;
+		
+	}
+
 }

@@ -102,26 +102,46 @@ public class PartitaDaoJDBC implements PartitaDao {
 			statement.setString(10, partita.getSquadra_ospite().getNome());
 			statement.setLong(11, partita.getCampionato().getCodice());
 			statement.executeUpdate();
+			String[] esiti;
 			if(partita.isFinita()) {
+				
 				if(partita.getGoal_casa()>partita.getGoal_ospite()) {
-					update = "update esitopartita SET stato=\"indovinato\" where partita=? and (esito=\"1\" or esito=\"1X\" or esito=\"12\")";
+					update = "update esitopartita SET stato=? where partita=? and (esito=? or esito=? or esito=?)";
+					esiti= new String[]{"1","1X","12"};
 				}
+				
 				else if(partita.getGoal_casa()<partita.getGoal_ospite()) {
-					update = "update esitopartita SET stato=\"indovinato\" where partita=? and (esito=\"2\" or esito=\"X2\" or esito=\"12\")";
+					update = "update esitopartita SET stato=? where partita=? and (esito=? or esito=? or esito=?)";
+					esiti= new String[]{"2","2X","12"};
 				}
-				else
-					update = "update esitopartita SET stato=\"indovinato\" where partita=? and (esito=\"X\" or esito=\"1X\" or esito=\"X2\")";
+				
+				else {
+					update = "update esitopartita SET stato=? where partita=? and (esito=? or esito=? or esito=?)";
+					esiti= new String[]{"X","1X","2X"};
+				}
 				statement = connection.prepareStatement(update);
-				statement.setLong(1, partita.getCodice());
+				statement.setString(1, "indovinato");
+				statement.setLong(2, partita.getCodice());
+				int i=3;
+				for(String s:esiti) {
+					statement.setString(i,s);
+					i++;
+				}
 				statement.executeUpdate();
 				
-				if(partita.getGoal_casa()+partita.getGoal_ospite()>=3)
-					update = "update esitopartita SET stato=\"indovinato\" where partita=? and esito=\"O\"";
-				else 
-					update = "update esitopartita SET stato=\"indovinato\" where partita=? and esito=\"U\"";
-
+				esiti=null;
+				if(partita.getGoal_casa()+partita.getGoal_ospite()>=3) {
+					update = "update esitopartita SET stato=? where partita=? and esito=?";
+					esiti=new String[] {"OV 2,5"};
+				}
+				else { 
+					update = "update esitopartita SET stato=? where partita=? and esito=?";
+					esiti=new String[] {"UN 2,5"};
+				}
 				statement = connection.prepareStatement(update);
-				statement.setLong(1, partita.getCodice());
+				statement.setString(1, "indovinato");
+				statement.setLong(2, partita.getCodice());
+				statement.setString(3,esiti[0]);
 				statement.executeUpdate();
 				
 				if(partita.getGoal_casa()!=0 && partita.getGoal_ospite()!=0)
