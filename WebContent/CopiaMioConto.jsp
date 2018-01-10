@@ -186,7 +186,7 @@
 									</div>
 								</div>
 								<div class="col-md-3 col-sm-6">
-									<div class="program program-schedule">
+									<div class="program program-schedule" onclick="getListaMovimenti()">
 										<img src="images/listaMovimenti.png" alt="Cycling">
 										<h3>Lista Ultimi Movimenti</h3>
 									</div>

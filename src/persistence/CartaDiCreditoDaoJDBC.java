@@ -75,9 +75,11 @@ public class CartaDiCreditoDaoJDBC implements CartaDiCreditoDao {
 	public void update(CartaDiCredito carta) {
 		Connection connection = PostgresDAOFactory.dataSource.getConnection();
 		try {
-			String update = "update cartaDiCredito SET dataScadenza = ?, saldo= ? where codice=? ";
+			String update = "update cartaDiCredito SET data_scadenza = ?, saldo= ? where codice=? ";
 			PreparedStatement statement = connection.prepareStatement(update);
-			statement.setDate(1, new java.sql.Date(carta.getScadenza().getTime()));
+			if(carta.getScadenza()!=null)
+				statement.setDate(1, new java.sql.Date(carta.getScadenza().getTime()));
+			else statement.setDate(1, null);
 			statement.setFloat(2, carta.getSaldo());
 			statement.setString(3, carta.getCodiceCarta());
 			statement.executeUpdate();

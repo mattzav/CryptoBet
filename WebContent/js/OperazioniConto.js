@@ -21,17 +21,30 @@ function effettuaVersamento(){
 						"<input class=\"btn btn-primary\" type=\"button\" value=\"Versa\" onclick=\"versa()\">"+
 					"</div>" +
 				"</div>" +
-			"</div>")
+			"</div>");
+			alert("ciao");
 }
 function versa(){
-	alert($("#importoDaVersare").val());
 	$.ajax({
-		url:'effetuaOperazioneConto',
-		data: 'operazione=versamento &importo='+$("#importoDaVersare").val()+'',
+		url:'versamentoConto',
+		data: 'importo='+$("#importoDaVersare").val()+'',
 		type:'POST',
         cache:false,
         error:function(){alert('error');}
 	}).done(function(response){
-		
+		if(response!="" && response!=null){
+			alert(response);
+		}
+	});
+}
+function getListaMovimenti(){
+	
+	$.ajax({
+		url:'listaMovimenti',
+		type:'get',
+        cache:false,
+        error:function(){alert('error');}
+	}).done(function(response){
+		alert(response);
 	});
 }

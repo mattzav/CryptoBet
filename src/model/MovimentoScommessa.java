@@ -16,6 +16,7 @@ public class MovimentoScommessa {
 		this.scommessa=scommessa;
 	}
 	
+	
 	public MovimentoScommessa(float importo_giocato, String versamento,Scommessa scommessa) {
 		this.codice_transazione=IdBroker.getIstance("movimentoscommessa").getId();
 		this.importo = importo_giocato;
@@ -23,9 +24,6 @@ public class MovimentoScommessa {
 		this.scommessa=scommessa;
 	}
 
-	public MovimentoScommessa(Conto contoUtente, Float valueOf, String prelievo) {
-		// TODO Auto-generated constructor stub
-	}
 
 	public Long getCodice_transazione() {
 		return codice_transazione;

@@ -9,7 +9,7 @@ public interface MovimentoScommessaDao {
 
 	public void save(MovimentoScommessa movimentoScommessa);  // Create
 	public MovimentoScommessa findByPrimaryKey();     // Retrieve
-	public List<MovimentoScommessa> findAll();       
+	public List<MovimentoScommessa> findAll(Conto c);       
 	public void update(MovimentoScommessa movimentoScommessa); //Update
 	public void delete(MovimentoScommessa movimentoScommessa); //Delete
 }

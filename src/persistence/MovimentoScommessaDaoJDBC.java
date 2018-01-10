@@ -2,11 +2,16 @@ package persistence;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
+import model.Conto;
 import model.EsitoPartita;
+import model.MovimentoCarta;
 import model.MovimentoScommessa;
+import model.Scommessa;
 import model.TipoMovimento;
 import persistence.dao.MovimentoScommessaDao;
 
@@ -38,14 +43,37 @@ public class MovimentoScommessaDaoJDBC implements MovimentoScommessaDao {
 
 	@Override
 	public MovimentoScommessa findByPrimaryKey() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<MovimentoScommessa> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<MovimentoScommessa> findAll(Conto c) {
+		
+		Connection connection = PostgresDAOFactory.dataSource.getConnection();
+		List<MovimentoScommessa> movimenti = new ArrayList<>();
+		try {
+
+			PreparedStatement statement;
+			String query = "select m.codice, m.importo, m.tipo, m.scommessa "
+							+ "from movimentoScommessa as m, scommessa s "
+							+ "where m.scommessa=s.codice and s.conto_associato=?";
+			statement = connection.prepareStatement(query);
+			statement.setLong(1, c.getCodice());
+			ResultSet result = statement.executeQuery();
+			while (result.next()) {
+				MovimentoScommessa movimento=new MovimentoScommessa(result.getLong(1), result.getFloat(2), result.getString(3), new Scommessa(result.getLong(4), null, null, null));
+				movimenti.add(movimento);
+			}
+		} catch (SQLException e) {
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}
+		return movimenti;
 	}
 
 	@Override

@@ -40,7 +40,7 @@ public class CartaDiCredito {
 	public boolean preleva(Float importo) {
 		if(importo>saldo)
 			return false;
-		importo-=saldo;
+		saldo-=importo;
 		return true;
 	}
 

@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -56,12 +57,12 @@ public class MovimentoCartaDaoJDBC implements MovimentoCartaDao{
 	public List<MovimentoCarta> findAll(Conto conto) {
 		
 		Connection connection = PostgresDAOFactory.dataSource.getConnection();
-		List<MovimentoCarta> movimenti = new LinkedList<>();
+		List<MovimentoCarta> movimenti = new ArrayList<>();
 		try {
 
 			PreparedStatement statement;
 			String query = "select m.codice, m.data, m.ora, m.tipo, m.importo "
-							+ "from movimentCarta as m"
+							+ "from movimentoCarta as m "
 							+ "where m.conto=?";
 			statement = connection.prepareStatement(query);
 			statement.setLong(1, conto.getCodice());
