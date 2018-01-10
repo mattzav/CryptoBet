@@ -34,95 +34,7 @@
 	<![endif]-->
 	
 	<!-- Utility script -->
-	<script type="text/javascript">
-		function error(errore){
-			$.ajax({
-				
-				url:'sendData',
-				data:"errore="+errore,
-	            type:'POST',
-	            cache:false,
-	            error:function(){alert('error');}
-				
-			});
-		}
-		
-		function checkName(){
-			var value=$("#name").val();
-			var error= value.match(/\d+/g);
-			if (error != null) {
-				$("#nameError").css('display', 'block');
-				error("true");
-			}
-			else{
-				$("#nameError").css('display','none');
-				error("false");
-			}
-			
-		}
-		function checkSurname(){
-			
-			var value=$("#surname").val();
-			var error= value.match(/\d+/g);
-			if (error != null) {
-				$("#surnameError").css('display', 'block');
-				error("true");
-			}
-			else{
-				$("#surnameError").css('display','none');
-				error("false");
-			}
-		}
-		
-		function checkCreditCard(){
-			var value=$("#creditCard").val();
-			var format=/[0-9][0-9][0-9][0-9]\s[0-9][0-9][0-9][0-9]\s[0-9][0-9][0-9][0-9]\s[0-9][0-9][0-9][0-9]/;
-			var result= format.test(value);
-			if(result==false){
-				$("#creditCardError").css('display', 'block');
-				error("true");
-			}
-			else{
-				$("#creditCardError").css('display','none');
-				error("false");
-			}
-		
-		}
-		function checkUsername(){
-			$.ajax({
-				
-				url:'sendData',
-				data:"usr=" +$("#username").val()+ "&checkUsername=check",
-	            type:'POST',
-	            cache:false,
-	            error:function(){alert('error');}
-				
-			}).done(function(response){
-				if(response!="ok"){
-					$("#usernameError").css('display','block');
-					error("true");
-				}else{
-					$("#usernameError").css('display','none');
-					error("false");
-				}
-			});
-		}
-		
-		function checkCheckPwd(){
-			var confPwd=$("#checkPwd").val();
-			var pwd=$("#password").val();
-			if (confPwd != pwd) {
-				$("#checkPwdError").css('display', 'block');
-				error("true");
-			}
-			else{
-				$("#checkPwdError").css('display', 'none');
-				error("false");
-			}
-		}
-		
-	</script>
-
+	<script src="js/Registrazione.js"></script>
 	</head>
 	<body style="background-image: url(images/home-image-3.jpg);">
 		<div class="container">
@@ -159,7 +71,7 @@
 							<form method="post" action="sendData">
 								<div class="form-group" id="nameDiv">
 									<label class="label" for="name"> Nome: </label>
-									<input type="text" class="form-control" id="name" name="name" onkeyup="checkName();">
+									<input type="text" class="form-control" id="name" name="name" onkeyup="checkName()">
 									<span class="label glyphicon glyphicon-remove" id="nameError" style="display:none"> Errore non può contenere numeri </span>
 								</div>
 								<div class="form-group">
@@ -169,8 +81,8 @@
 								</div>
 								<div class="form-group">
 									<label for="creditCard" class="label"> Codice carta di credito: </label>
-									<input type="text" id="creditCard" class="form-control" name="creditCard" onkeyup="checkCreditCard()">
-									<span class="label glyphicon glyphicon-remove" id="creditCardError" style="display:none"> Errore formato non riconosciuto </span>
+									<input type="text" id="creditCard" class="form-control" name="creditCard" onblur="checkCreditCard()">
+									<span class="label glyphicon glyphicon-remove" id="creditCardError" style="display:none"> Carta non riconosciuta</span>
 								</div>
 								<div class="form-group">
 									<label for="usr" class="label"> Username: </label>
@@ -188,7 +100,7 @@
 									<span class="label glyphicon glyphicon-remove" id="checkPwdError" style="display:none"> La password non coincide </span>
 								</div>
 								<div class="form-group">
-									<input type="submit" class="btn btn-primary" id="registerUser" onclick="sendData()" value="Registrati">
+									<input type="submit" class="btn btn-primary" id="registerUser" onclick="sendData()" value="Registrati" name="button">
 								</div>
 							</form>
 						</div>

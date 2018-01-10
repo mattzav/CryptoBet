@@ -86,7 +86,7 @@
 								<ul class="fh5co-sub-menu campionati">
 
 								</ul></li>
-							<li><a href="MioConto.jsp">Il Mio Conto</a></li>
+							<li><a href="CopiaMioConto.jsp">Il Mio Conto</a></li>
 							<li><a href="gestisciPartite.jsp"> Gestisci Partite</a></li>
 							<li><a href="about.html">About</a></li>
 							<li><a href="contact.html">Contact</a></li>
@@ -98,12 +98,13 @@
 			</div>
 			<!-- end:fh5co-header -->
 			<div class="fh5co-hero">
-				<div class="fh5co-overlay"></div>
 				<div class="fh5co-cover" data-stellar-background-ratio="0.5">
 					<div class="desc animate-box">
 						<div class="container ">
-							<div class="row" style="margin-left: 250px">
-								<div class="col-sm-8">
+							<div class="row">	
+								<div class="col-sm-2">
+								</div>
+								<div class="col-sm-6">
 									<h2>
 										<a href="scommesse.html">Bet &amp; Win</a><br> <b>Unisciti
 											a CryptoBet</b>
@@ -127,7 +128,7 @@
 											</div>
 											<div class="form-group">
 												<span class="col-sm-6"><input class="btn btn-primary" type="submit" name="accesso" value="Accedi" onclick="<c:set var="page" value="index.jsp" scope="session"/>" /></span> 
-												<span class="col-sm-6"> <a class="btn btn-primary" href="Registrati.html"> Registrati</a></span>
+												<span class="col-sm-6"> <a class="btn btn-primary" href="sendData"> Registrati</a></span>
 											</div>
 										</form>
 									</c:if>

@@ -37,6 +37,11 @@ public class CartaDiCredito {
 		this.saldo = saldo;
 	}
 
-	
+	public boolean preleva(Float importo) {
+		if(importo>saldo)
+			return false;
+		importo-=saldo;
+		return true;
+	}
 
 }

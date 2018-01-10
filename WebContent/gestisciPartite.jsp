@@ -237,7 +237,7 @@
 						<div
 							class="col-md-8 col-md-offset-2 col-sm-12 col-sm-offset-0 col-xs-12 col-xs-offset-0 text-center fh5co-table">
 							<div class="fh5co-intro fh5co-table-cell animate-box">
-								<c:if test="${loggato==\"ADMIN\"}">
+								<c:if test="${utente==\"ADMIN\"}">
 									<h1 class="text-center">Aggiorna il tuo sito</h1>
 									<br />
 									<p>Qui potrai modificare le quote relative alle partite
@@ -277,7 +277,7 @@
 										</div>
 									</div>
 								</c:if>
-								<c:if test="${loggato==\"USER\"}">
+								<c:if test="${utente==\"USER\"}">
 									<div>
 										<span class="btn btn-danger"> Errore: Effuttua il login
 											come amministratore</span>
@@ -291,7 +291,7 @@
 			<!-- end: fh5co-parallax -->
 			<!-- end:fh5co-hero -->
 			<div id="fh5co-team-section">
-				<c:if test="${loggato==\"ADMIN\"}">
+				<c:if test="${utente==\"ADMIN\"}">
 					<div class="container">
 						<div class="row">
 							<div class="col-md-8 col-md-offset-2">

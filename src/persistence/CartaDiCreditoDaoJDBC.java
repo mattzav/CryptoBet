@@ -10,6 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.CartaDiCredito;
+import model.Conto;
+import model.EsitoPartita;
+import model.Partita;
+import model.SchemaDiScommessa;
+import model.Scommessa;
+import model.Squadra;
 import persistence.dao.CartaDiCreditoDao;
 
 
@@ -41,8 +47,28 @@ public class CartaDiCreditoDaoJDBC implements CartaDiCreditoDao {
 
 	@Override
 	public CartaDiCredito findByPrimaryKey(String matricola) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection connection = PostgresDAOFactory.dataSource.getConnection();
+		CartaDiCredito carta= null;
+		try {
+			PreparedStatement statement;
+			String query = "select c.data_scadenza, c.saldo from cartaDiCredito as c where c.codice=? "; 
+			statement = connection.prepareStatement(query);
+			statement.setString(1, matricola);
+			ResultSet result = statement.executeQuery();
+			if (result.next()){
+				carta=new CartaDiCredito(matricola);
+				carta.setSaldo(result.getFloat(2));
+			}
+		} catch (SQLException e) {
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}	
+		return carta;
 	}
 
 	@Override

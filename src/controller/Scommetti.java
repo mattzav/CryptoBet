@@ -75,12 +75,29 @@ public class Scommetti extends HttpServlet{
 		}
 		
 		String current = req.getParameter("campionato");
+		SchemaDiScommessa schemaDiScommessa=(SchemaDiScommessa) session.getAttribute("schema");
+		
 		if(!(current==null || current.equals(""))) {
+			
+			//click su un campionato
 			if(!campionatiAttivi.contains(current)) {
 				
+				//aggiungi campionato
 				campionatiAttivi.add(current);
 				for(Partita partita:partitaDao.findAll(current)) {
-					esitiAttivi.addAll(esitoPartitaDao.findByPartita(partita));
+					ArrayList<EsitoPartita> listaEsiti=(ArrayList<EsitoPartita>) esitoPartitaDao.findByPartita(partita);
+					for(EsitoPartita esito : listaEsiti) {
+						if(schemaDiScommessa!=null) {
+							for(EsitoPartita esitoGiocato:schemaDiScommessa.getEsiti_giocati()) {
+								if(esito.getPartita().getCodice().equals(esitoGiocato.getPartita().getCodice()) && esito.getEsito().getDescrizione().equals(esitoGiocato.getEsito().getDescrizione()) )
+								{
+									esito.setDisponibile(false);
+									break;
+								}
+							}
+						}
+					}
+					esitiAttivi.addAll(listaEsiti);
 					partiteAttive.add(partita);
 				}
 			}
@@ -99,7 +116,6 @@ public class Scommetti extends HttpServlet{
 			}
 		}
 		else {
-			SchemaDiScommessa schemaDiScommessa=(SchemaDiScommessa) session.getAttribute("schema");
 			if(schemaDiScommessa==null) {
 				schemaDiScommessa=new SchemaDiScommessa(1.0f, 1.0f, 0.0f, 0, 1.0f, new ArrayList<EsitoPartita>());
 				session.setAttribute("schema", schemaDiScommessa);
@@ -115,6 +131,7 @@ public class Scommetti extends HttpServlet{
 			else {
 				String btn=req.getParameterNames().nextElement();
 				if(btn.contains(";")) {
+					
 					String[] datiEsitoSelezionato=btn.split(";");
 					Long codicePartita=Long.valueOf(datiEsitoSelezionato[0]);
 					String esitoSelezionato=datiEsitoSelezionato[1];
@@ -145,18 +162,21 @@ public class Scommetti extends HttpServlet{
 					}
 				}
 				else if(btn.equals("giocaScommessa")) {
-					Giocatore utente= (Giocatore) session.getAttribute("loggato");
-					System.out.println(utente);
-					if(utente!=null) {
+					System.out.println("gioca scommessa");
+					if(session.getAttribute("utente")==null) {
+						System.out.println("nessun utente");
+						resp.getWriter().print("utente non loggato");
+						return;
+					}
+					else if(session.getAttribute("utente").equals("USER")) {
+						Giocatore utente= (Giocatore) session.getAttribute("loggato");
 						Conto contoUtente=utente.getConto();
 						if(contoUtente.preleva((Float) session.getAttribute("importo"))){
-							
-							
 							session.removeAttribute("schema");
 							PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getScommessaDao().save(new Scommessa(new Date(), contoUtente, schemaDiScommessa,"non verificata"));
 							ContoDao contoDao=PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getContoDAO();
 							contoDao.update(contoUtente);
-
+							
 							for(EsitoPartita e:schemaDiScommessa.getEsiti_giocati()) {
 								e.setDisponibile(true);
 							}
@@ -166,11 +186,12 @@ public class Scommetti extends HttpServlet{
 						else {
 							resp.getWriter().print("credito non sufficente");
 						}
+						return;
+					}else{
+						System.out.println("ADMIN");
+						resp.getWriter().print("utente loggato come admin");
+						return;
 					}
-					else {
-						resp.getWriter().print("utente non loggato");
-					}
-					return;
 				}
 				else if(btn.equals("svuota")) {
 					session.removeAttribute("schema");

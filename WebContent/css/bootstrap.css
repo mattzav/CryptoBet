@@ -2847,6 +2847,10 @@ th {
   max-width: 100%;
   margin-bottom: 20px;
 }
+
+.scroll-table{
+  overflow-x: scroll;
+}
 .table > thead > tr > th,
 .table > thead > tr > td,
 .table > tbody > tr > th,

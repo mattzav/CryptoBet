@@ -34,6 +34,7 @@ public class EffettuaLogin extends HttpServlet {
 				session.setAttribute("username", username);
 				session.setAttribute("mex", messaggio);
 				session.setAttribute("loggato", g);
+				session.setAttribute("utente", TipoCredenziali.USER);
 			}
 		}else {
 			boolean result =PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getAmministratoreDAO().findByCredenziali(c);
@@ -41,7 +42,8 @@ public class EffettuaLogin extends HttpServlet {
 				String messaggio="Benvenuto Amministratore "+username+"    ";
 				session.setAttribute("username", username);
 				session.setAttribute("mex", messaggio);
-				session.setAttribute("loggato", TipoCredenziali.ADMIN);
+				session.setAttribute("loggato", true);
+				session.setAttribute("utente", TipoCredenziali.ADMIN);
 			}
 		}
 		RequestDispatcher disp;
@@ -55,6 +57,7 @@ public class EffettuaLogin extends HttpServlet {
 		HttpSession session=req.getSession();
 		session.removeAttribute("username");
 		session.removeAttribute("loggato");
+		session.removeAttribute("utente");
 		RequestDispatcher disp;
 		String page=(String) session.getAttribute("page");
 		disp= req.getRequestDispatcher(page);

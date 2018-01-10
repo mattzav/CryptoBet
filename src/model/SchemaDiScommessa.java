@@ -86,7 +86,12 @@ public class SchemaDiScommessa {
 		numero_esiti--;
 		//calcolo del bonus
 		vincita_potenziale=(quota_totale*importo_giocato)+bonus;
-		esiti_giocati.remove(esito);
+		for(EsitoPartita e: esiti_giocati) {
+			if(e.getPartita().getCodice().equals(esito.getPartita().getCodice()) && e.getEsito().getDescrizione().equals(esito.getEsito().getDescrizione())) {
+				esiti_giocati.remove(e);
+				break;
+			}
+		}
 	}
 
 	public boolean canAdd(EsitoPartita esito) {

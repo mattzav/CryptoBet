@@ -2,6 +2,8 @@ package model;
 
 import java.util.Date;
 
+import persistence.IdBroker;
+
 public class MovimentoCarta {
 
 	private Long codice;
@@ -17,6 +19,14 @@ public class MovimentoCarta {
 		this.tipo = tipo;
 		this.importo = importo;
 		this.conto = conto;
+	}
+
+	public MovimentoCarta(Date date, String prelievo, Float valueOf, Conto contoUtente) {
+		codice=IdBroker.getIstance("movimentoCarta").getId();
+		this.dataEffettuazione = date;
+		this.tipo = prelievo;
+		this.importo = valueOf;
+		this.conto = contoUtente;
 	}
 
 	public Long getCodice() {

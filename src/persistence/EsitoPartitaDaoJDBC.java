@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -95,7 +96,7 @@ public class EsitoPartitaDaoJDBC implements EsitoPartitaDao {
 	@Override
 	public List<EsitoPartita> findByPartita(Partita partita) {
 		Connection connection = PostgresDAOFactory.dataSource.getConnection();
-		List<EsitoPartita> esiti_partita = new LinkedList<>();
+		List<EsitoPartita> esiti_partita = new ArrayList<>();
 		try {
 			
 			PreparedStatement statement;
