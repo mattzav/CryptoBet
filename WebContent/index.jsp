@@ -86,7 +86,7 @@
 								<ul class="fh5co-sub-menu campionati">
 
 								</ul></li>
-							<li><a href="CopiaMioConto.jsp">Il Mio Conto</a></li>
+							<li><a href="MioConto.jsp">Il Mio Conto</a></li>
 							<li><a href="gestisciPartite.jsp"> Gestisci Partite</a></li>
 							<li><a href="about.html">About</a></li>
 							<li><a href="contact.html">Contact</a></li>

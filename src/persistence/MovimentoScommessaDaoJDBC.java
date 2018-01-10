@@ -61,7 +61,7 @@ public class MovimentoScommessaDaoJDBC implements MovimentoScommessaDao {
 			statement.setLong(1, c.getCodice());
 			ResultSet result = statement.executeQuery();
 			while (result.next()) {
-				MovimentoScommessa movimento=new MovimentoScommessa(result.getLong(1), result.getFloat(2), result.getString(3), new Scommessa(result.getLong(4), null, null, null));
+				MovimentoScommessa movimento=new MovimentoScommessa(result.getLong(1), result.getFloat(2), result.getString(3), new Scommessa(result.getLong(4), null, null, null,"non conclusa"));
 				movimenti.add(movimento);
 			}
 		} catch (SQLException e) {
