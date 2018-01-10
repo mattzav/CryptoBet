@@ -102,7 +102,7 @@
 			</header>		
 		</div>
 		<!-- end:fh5co-header -->
-		<div class="fh5co-parallax" style="background-image: url(images/home-image-5.jpg);" data-stellar-background-ratio="0.5">
+		<div class="fh5co-parallax" style="background-image: url(images/home-image-5.jpg);" data-stellar-background-ratio=\"0.5\">
 			<div class="overlay"></div>
 				<div class="container">
 					<div class="row">
@@ -145,17 +145,6 @@
 									</div>
 								</c:if>
 							</div>
-						</div>
-					</div>
-					<div id="fh5co-schedule-section" class="fh5co-lightgray-section">
-						<div class="container">
-							<div class="row">
-								<div class="col-md-8 col-md-offset-2">
-									<div id="operazione"
-										class="heading-section text-center animate-box"></div>
-								</div>
-							</div>
-							<div id="risultatoGestione"></div>
 						</div>
 					</div>
 				</div>
@@ -204,10 +193,18 @@
 								</div>
 							</div>
 							<!-- END sched-content -->
-
 						</div>
-
-						
+					</div>
+				</div>
+				<div id="fh5co-schedule-section" class="fh5co-lightgray-section">
+					<div class="container">
+						<div class="row">
+							<div class="col-md-8 col-md-offset-2">
+								<div id="operazione"
+									class="heading-section text-center animate-box"></div>
+							</div>
+						</div>
+						<div id="risultatoGestione"></div>
 					</div>
 				</div>
 			</div>
