@@ -37,7 +37,6 @@ public class AggiornaDati extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		System.out.println("debug");
 		if (req.getParameter("aggiorna").equals("Aggiorna")) {
 			String squadre = req.getParameter("squadre");
 			System.out.println(squadre);
@@ -60,7 +59,6 @@ public class AggiornaDati extends HttpServlet {
 			}
 		}
 		else if (req.getParameter("aggiorna").equals("Aggiorna Partite")) {
-			System.out.println("servlet iniziata");
 			PartitaDao partitaDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getPartitaDao();
 			String partite = req.getParameter("partite");
 			for(String p: partite.split(";")){

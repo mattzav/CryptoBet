@@ -107,7 +107,6 @@
 						});
 					});
 				});
-	
 			});
 			var result_squadre="";
 			var result_campionati="";
@@ -123,8 +122,18 @@
 				else
 					result_campionati=result_campionati.concat(";");
 			});
-			$(".updateDati").append("<input type=\"text\" style=\" display:none\" class=\"squadre\" name=\"squadre\" value=\""+result_squadre+"\">");
-			$(".updateDati").append("<input type=\"text\" style=\" display:none\" name=\"campionati\" value=\""+result_campionati+"\">");
+			$.ajax({
+				url : 'aggiornaDati',
+				type : 'POST',
+				data : {
+					squadre: result_squadre,
+					campionati: result_campionati,
+					aggiorna: "Aggiorna"
+				},
+				error:function(){
+					alert("error");
+				}
+			});
 		}
 	
 	}
