@@ -21,8 +21,7 @@ import persistence.dao.CartaDiCreditoDao;
 
 public class CartaDiCreditoDaoJDBC implements CartaDiCreditoDao {
 
-	public CartaDiCreditoDaoJDBC() {
-	}
+
 
 	@Override
 	public void save(CartaDiCredito carta) {

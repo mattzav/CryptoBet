@@ -34,7 +34,7 @@ public class ModificaQuota extends HttpServlet {
 				break;
 			}
 		}
-		// se non ha premuto su suggerimento quota allora significa che ha deciso di modificarne una
+		// se non ha premuto su suggerimento quota allora significa che l'amministratore ha deciso di modificarne una
 		if (!suggerimento) {
 			String esito = req.getParameter("esitoScelto");
 			String quota_ = req.getParameter("nuovaQuota");

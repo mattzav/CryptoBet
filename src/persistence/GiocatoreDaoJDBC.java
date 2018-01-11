@@ -14,11 +14,6 @@ import model.TipoCredenziali;
 import persistence.dao.GiocatoreDao;
 
 public class GiocatoreDaoJDBC implements GiocatoreDao {
-	
-
-	public GiocatoreDaoJDBC() {
-		
-	}
 
 	@Override
 	public void save(Giocatore giocatore) {

@@ -13,10 +13,6 @@ import persistence.dao.CampionatoDao;
 
 public class CampionatoDaoJDBC implements CampionatoDao {
 
-
-	public CampionatoDaoJDBC() {
-	}
-
 	
 	@Override
 	public void save(Campionato campionato) {

@@ -3,7 +3,7 @@
  */
 function getSquadre() {
 		if(!($(".squadre").length)){
-
+			$("#fh5co-team-section").append("<div class=\"loader\"></div>");
 			var squadre = [];
 			var campionati = [];
 			$.ajax({
@@ -105,7 +105,7 @@ function getSquadre() {
 					if(index == "fixtures"){
 						$.each(item, function(index2,item2){
 							var str = item2._links.competition.href;
-							partite.push(str.substr(str.length-3,str.length)+"£"+item2.homeTeamName+"£"+item2.awayTeamName+"£"+item2.result.goalsHomeTeam+"£"+item2.result.goalsAwayTeam+"£"+item2.status+"£"+item2.date);
+							partite.push(str.substr(str.length-3,str.length)+"@"+item2.homeTeamName+"@"+item2.awayTeamName+"@"+item2.result.goalsHomeTeam+"@"+item2.result.goalsAwayTeam+"@"+item2.status+"@"+item2.date);
 						});
 					}
 				});
@@ -116,6 +116,8 @@ function getSquadre() {
 				result=result.concat(item);
 				result=result.concat(";");
 			});
+			
+			alert(result);
 			
 			$.ajax({
 				url : 'aggiornaDati',

@@ -15,8 +15,6 @@ import persistence.dao.ContoDao;
 
 public class ContoDaoJDBC implements ContoDao {
 
-	public ContoDaoJDBC() {
-	}
 
 	@Override
 	public void save(Conto conto) {

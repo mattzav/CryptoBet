@@ -19,8 +19,6 @@ import persistence.dao.MovimentoCartaDao;
 
 public class MovimentoCartaDaoJDBC implements MovimentoCartaDao{
 
-	public MovimentoCartaDaoJDBC() {
-	}
 
 	@Override
 	public void save(MovimentoCarta movimento) {

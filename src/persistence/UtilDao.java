@@ -23,8 +23,6 @@ import sun.java2d.pipe.SpanShapeRenderer.Simple;
 
 public class UtilDao {
 
-	public UtilDao() {
-	}
 
 	public void dropDatabase() {
 

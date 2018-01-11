@@ -21,8 +21,6 @@ import sun.java2d.pipe.SpanShapeRenderer.Simple;
 
 public class PartitaDaoJDBC implements PartitaDao {
 
-	public PartitaDaoJDBC() {
-	}
 
 	@Override
 	public void save(Partita partita) {
@@ -32,7 +30,6 @@ public class PartitaDaoJDBC implements PartitaDao {
 			Long codice = findExistingMatch(partita);
 
 			if (codice != null) {
-				System.out.println(codice);
 				partita.setCodice(codice);
 				update(partita);
 				return;

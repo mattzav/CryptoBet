@@ -153,29 +153,29 @@ public class ScommessaDaoJDBC implements ScommessaDao {
 	@Override
 	public String verificaScommessa(Long codiceScommessa) {
 		Connection connection = PostgresDAOFactory.dataSource.getConnection();
-		String esito_scommessa = "non conclusa";
+		String esito_scommessa = "vinta";
 		try {
 			String query = "select (e.stato) from scommessa_esitopartita as s, esitopartita as e where s.scommessa=? and s.esito=e.esito and s.partita=e.partita";
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setLong(1, codiceScommessa);
 			ResultSet result = statement.executeQuery();
+
 			while (result.next()) {
 				if (result.getString(1).equals("sbagliato")) {
 					esito_scommessa = "persa";
 					break;
-				} else if (result.getString(1).equals("indovinato")) {
-					esito_scommessa = "vinta";
-					break;
+				} else if (result.getString(1).equals("non verificato")) {
+					esito_scommessa = "non conclusa";
 				}
 			}
 
-			//dopo aver controllato l'esito aggiorno la scommessa sul db
+			// dopo aver controllato l'esito aggiorno la scommessa sul db
 			String update = "UPDATE scommessa  SET stato=? where codice=?";
-			statement=connection.prepareStatement(update);
+			statement = connection.prepareStatement(update);
 			statement.setString(1, esito_scommessa);
 			statement.setLong(2, codiceScommessa);
 			statement.executeUpdate();
-			
+
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
 		} finally {

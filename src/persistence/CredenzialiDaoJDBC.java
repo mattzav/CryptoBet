@@ -15,9 +15,6 @@ import persistence.dao.CredenzialiDao;
 
 public class CredenzialiDaoJDBC implements CredenzialiDao {
 
-	public CredenzialiDaoJDBC() {
-	}
-
 	@Override
 	public void save(Credenziali credenziali) {
 		Connection connection = PostgresDAOFactory.dataSource.getConnection();

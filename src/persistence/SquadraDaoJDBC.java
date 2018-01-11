@@ -12,10 +12,6 @@ import persistence.dao.SquadraDao;
 
 public class SquadraDaoJDBC implements SquadraDao{
 
-
-	public SquadraDaoJDBC() {
-	}
-
 	
 	@Override
 	public void save(Squadra squadra) {

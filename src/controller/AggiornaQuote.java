@@ -32,11 +32,11 @@ public class AggiornaQuote extends HttpServlet {
 
 		CampionatoDao campionatoDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCampionatoDao();
 		req.getSession().setAttribute("campionati", campionatoDao.findAll());
+		req.getSession().setAttribute("esiti", new String[]{"1","X","2","1X","12","X2","U","O","GG","NG"});
 		req.getSession().removeAttribute("esitiAttivi");
 		req.getSession().removeAttribute("partiteAttive");
 		req.getSession().removeAttribute("campionatiAttivi");
 		req.getSession().removeAttribute("esiti");
-		req.getSession().setAttribute("esiti", new String[]{"1","X","2","1X","12","X2","U","O","GG","NG"});
 		req.getSession().removeAttribute("modificaQuota");
 		RequestDispatcher dispatcher = req.getRequestDispatcher("gestisciEsiti.jsp");
 		dispatcher.forward(req, resp);
@@ -50,9 +50,10 @@ public class AggiornaQuote extends HttpServlet {
 		EsitoDao esitoDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getEsitoDao();
 		
 		String richiesta = req.getParameterNames().nextElement();
-		System.out.println(richiesta);
 		HttpSession session = req.getSession();
 		ArrayList<EsitoPartita> esitiAttivi = (ArrayList<EsitoPartita>) session.getAttribute("esitiAttivi");
+		
+		// se la richiesta non contiene il ; significa che ho selezionato un campionato
 		if (!richiesta.contains(";")) {
 			ArrayList<Partita> partiteAttive = (ArrayList<Partita>) session.getAttribute("partiteAttive");
 			ArrayList<String> campionatiAttivi = (ArrayList<String>) session.getAttribute("campionatiAttivi");
@@ -73,6 +74,8 @@ public class AggiornaQuote extends HttpServlet {
 			}
 
 			String current = req.getParameter("campionato");
+			
+			// se il campionato passato nella richiesta non è attivo lo attivo e attivo tutte gli esiti relativi alle partite di quel campionato
 			if (!campionatiAttivi.contains(current)) {
 
 				campionatiAttivi.add(current);
@@ -80,7 +83,9 @@ public class AggiornaQuote extends HttpServlet {
 					esitiAttivi.addAll(esitoPartitaDao.findByPartita(partita));
 					partiteAttive.add(partita);
 				}
-			} else {
+			} 
+			//se invece è attivo lo rimuovo e rimuovo tutti gli esiti relativi alle partite di quel campionato
+			else {
 				campionatiAttivi.remove(current);
 				ArrayList<EsitoPartita> esitiDaEliminare = new ArrayList<>();
 
@@ -92,7 +97,9 @@ public class AggiornaQuote extends HttpServlet {
 
 				esitiAttivi.removeAll(esitiDaEliminare);
 			}
-		} else {
+		}
+		// se contiene invece il ; significa che ho selezionato un esito e quindi devo abilitarlo se disabilitato o viceversa
+		else {
 
 			String valori[] = richiesta.split(";");
 			String partita = valori[0];
