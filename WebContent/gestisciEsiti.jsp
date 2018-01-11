@@ -7,118 +7,24 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Fitness &mdash; 100% Free Fully Responsive HTML5 Template
-	by FREEHTML5.co</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Free HTML5 Template by FREEHTML5.CO" />
-<meta name="keywords"
-	content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive" />
-<meta name="author" content="FREEHTML5.CO" />
+<title>CryptoBet</title>
 
-<!-- Facebook and Twitter integration -->
-<meta property="og:title" content="" />
-<meta property="og:image" content="" />
-<meta property="og:url" content="" />
-<meta property="og:site_name" content="" />
-<meta property="og:description" content="" />
-<meta name="twitter:title" content="" />
-<meta name="twitter:image" content="" />
-<meta name="twitter:url" content="" />
-<meta name="twitter:card" content="" />
-
-<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 <link rel="shortcut icon" href="favicon.ico">
 
 <link
 	href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700,900'
 	rel='stylesheet' type='text/css'>
 
-<!-- Animate.css -->
 <link rel="stylesheet" href="css/animate.css">
-<!-- Icomoon Icon Fonts-->
 <link rel="stylesheet" href="css/icomoon.css">
-<!-- Bootstrap  -->
 <link rel="stylesheet" href="css/bootstrap.css">
-<!-- Superfish -->
 <link rel="stylesheet" href="css/superfish.css">
-
 <link rel="stylesheet" href="css/style.css">
 
 
-<!-- Modernizr JS -->
 <script src="js/modernizr-2.6.2.min.js"></script>
-<!-- FOR IE9 below -->
-<!--[if lt IE 9]>
-	<script src="js/respond.min.js"></script>
-	<![endif]-->
-<script type="text/javascript">
+<script src="js/gestisciEsiti.js"> </script>
 
-	function abilitaEsito(esito){
-		$.ajax({
-		  type: 'POST',
-		  url: 'aggiornaQuote',
-		  data: esito,
-		  success: function(){
-			  var selezionato = $('[name="'+esito+'"]');
-			  if(selezionato.hasClass("btn-danger")){
-				  selezionato.removeClass("btn-danger");
-				  selezionato.addClass("btn-info");
-			  }
-			  else{
-
-				  selezionato.removeClass("btn-info");
-				  selezionato.addClass("btn-danger");
-			  }
-		  },
-		});
-	}
-	
-	function aggiornaEsito(partita){
-		var esito=$("#inputModificaQuota"+partita+" "+'[name="'+"esitoScelto"+'"]').val();
-		var quota=$("#inputModificaQuota"+partita+" "+'[name="'+"nuovaQuota"+'"]').val();
-		
-		$.ajax({
-			  type: 'POST',
-			  url: 'modificaQuota',
-			  data: {
-				  esitoScelto:esito,
-				  nuovaQuota:quota,
-				  partita:partita
-			  },
-			  success: function(){
-				  $('[name="'+partita+";"+esito+'"]').val(quota);
-				}
-			});
-	}
-	
-	function selezionaPartitaDaModificare(partita,disabilita){
-		alert(partita);
-		if(!disabilita){
-			$(".partitaInModifica"+partita).parent().children().first().append("<div id=\"inputModificaQuota"+partita+"\"> <div class=\"modal-body\"><div class=\"form-group\"><label for=\"esitoScelto\" class=\"form-control-label\">Esito da modificare:</label><input type=\"text\" class=\"form-control\"name=\"esitoScelto\"></div><div class=\"form-group\"><label for=\"nuovaQuota\" class=\"form-control-label\">Nuova Quota:</label><textarea class=\"form-control\" name=\"nuovaQuota\"></textarea></div></div><div class=\"modal-footer\"><button name=\"annulla\" onclick=\"selezionaPartitaDaModificare("+partita+",true)\" class=\"btn btn-secondary btn-sm\"data-dismiss=\"modal\">Annulla</button><button name=\"aggiorna\" onclick=\"aggiornaEsito("+partita+")\" class=\"btn btn-primary btn-sm\">Aggiorna Esito</button><button name=\"suggerimento\" onclick=\"richiediSuggerimento("+partita+")\" class=\"btn btn-info btn-sm\"> Richiedi Suggerimento</button></div></div>");
-		}
-		else{
-		    $("#inputModificaQuota"+partita).remove();	
-		}
-	}
-	
-	function richiediSuggerimento(partita){
-		var esito=$("#inputModificaQuota"+partita+" "+'[name="'+"esitoScelto"+'"]').val();
-		$.ajax({
-			  type: 'POST',
-			  url: 'modificaQuota',
-			  data: {
-				  suggerimento:partita,
-				  esitoScelto:esito
-			  },
-			  success: function(quota){
-					$("#inputModificaQuota"+partita+" "+'[name="'+"nuovaQuota"+'"]').val(quota);
-
-			  }
-			});
-	}
-
-	
-</script>
 </head>
 <body>
 	<div id="fh5co-wrapper">
@@ -195,73 +101,6 @@
 					</div>
 				</div>
 			</div>
-			<!-- end: fh5co-parallax -->
-			<!-- end:fh5co-hero -->
-			<!-- 
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-1">
-						<br>
-						<br>
-						<br>
-						<span class="label label-default"> Ecco i tuoi Campionati</span>
-						<br>
-						<br>
-						<br>
-						<ul class="nav navbar-nav">
-							<c:forEach items="${campionati}" var="campionato">
-								<li>
-								
-									<form method="post" action="aggiornaQuote">
-										<input class="btn btn-primary" type="submit"
-											value="${campionato.nome}" name="campionato">
-									</form>
-											<br>
-								</li>
-							</c:forEach>
-						</ul>
-					</div>
-					<div class="col-sm-4">
-					</div>
-					<div class="col-sm-7">
-						<ul class="nav navbar-nav">
-							<c:forEach items="${campionatiAttivi}" var="campionato">
-								<li>
-									<div>
-									<span class="btn btn-danger"> ${campionato}</span>
-									<ul class="nav navbar-nav">
-										<c:forEach items="${partiteAttive}" var="partita">
-											<c:if test="${partita.campionato.nome==campionato}">
-												<li>
-													<div>
-														<span class="btn"> ${partita.squadra_casa.nome} vs ${partita.squadra_ospite.nome} </span>
-														<nav role="navigation">
-															<ul class="nav navbar-nav">
-																<c:forEach items="${esitiAttivi}" var="esito">
-																	<c:if test="${partita.codice==esito.partita.codice}">
-																		<li>
-																			<form method="post" action="aggiornaQuote">
-																				<input class="btn btn-primary" type="submit" value="${esito.esito.descrizione}" name="esito">
-																				<span> ${esito.quota}</span>
-																			</form>
-																		</li>
-																	</c:if>		
-																</c:forEach>
-															</ul>
-														</nav>
-													</div>
-												</li>
-											</c:if>
-										</c:forEach>
-									</ul>
-									</div>
-								</li>
-							</c:forEach>
-						</ul>
-					</div>
-				</div>
-			</div>
-			 -->
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-2">
@@ -408,23 +247,16 @@
 	</div>
 	<!-- END fh5co-wrapper -->
 
-	<!-- jQuery -->
 
 
 	<script src="js/jquery.min.js"></script>
-	<!-- jQuery Easing -->
 	<script src="js/jquery.easing.1.3.js"></script>
-	<!-- Bootstrap -->
 	<script src="js/bootstrap.min.js"></script>
-	<!-- Waypoints -->
 	<script src="js/jquery.waypoints.min.js"></script>
-	<!-- Stellar -->
 	<script src="js/jquery.stellar.min.js"></script>
-	<!-- Superfish -->
 	<script src="js/hoverIntent.js"></script>
 	<script src="js/superfish.js"></script>
 
-	<!-- Main JS (Do not remove) -->
 	<script src="js/main.js"></script>
 
 </body>

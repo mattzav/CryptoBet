@@ -2,199 +2,27 @@
 	pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!-->
 <html class="no-js">
-<!--<![endif]-->
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Fitness &mdash; 100% Free Fully Responsive HTML5 Template
-	by FREEHTML5.co</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Free HTML5 Template by FREEHTML5.CO" />
-<meta name="keywords"
-	content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive" />
-<meta name="author" content="FREEHTML5.CO" />
+<title>CryptoBet</title>
 
-<!-- 
-	//////////////////////////////////////////////////////
-
-	FREE HTML5 TEMPLATE 
-	DESIGNED & DEVELOPED by FREEHTML5.CO
-		
-	Website: 		http://freehtml5.co/
-	Email: 			info@freehtml5.co
-	Twitter: 		http://twitter.com/fh5co
-	Facebook: 		https://www.facebook.com/fh5co
-
-	//////////////////////////////////////////////////////
-	 -->
-
-<!-- Facebook and Twitter integration -->
-<meta property="og:title" content="" />
-<meta property="og:image" content="" />
-<meta property="og:url" content="" />
-<meta property="og:site_name" content="" />
-<meta property="og:description" content="" />
-<meta name="twitter:title" content="" />
-<meta name="twitter:image" content="" />
-<meta name="twitter:url" content="" />
-<meta name="twitter:card" content="" />
-
-<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 <link rel="shortcut icon" href="favicon.ico">
 
 <link
 	href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700,900'
 	rel='stylesheet' type='text/css'>
 
-<!-- Animate.css -->
 <link rel="stylesheet" href="css/animate.css">
-<!-- Icomoon Icon Fonts-->
 <link rel="stylesheet" href="css/icomoon.css">
-<!-- Bootstrap  -->
 <link rel="stylesheet" href="css/bootstrap.css">
-<!-- Superfish -->
 <link rel="stylesheet" href="css/superfish.css">
 
 <link rel="stylesheet" href="css/style.css">
 
-
-<!-- Modernizr JS -->
 <script src="js/modernizr-2.6.2.min.js"></script>
-<!-- FOR IE9 below -->
-<!--[if lt IE 9]>
-	<script src="js/respond.min.js"></script>
-	<![endif]-->
-
-<script type="text/javascript">
-	function getSquadre() {
-		if(!($(".squadre").length)){
-
-			var squadre = [];
-			var campionati = [];
-			$.ajax({
-				headers : {
-					'X-Auth-Token' : '9c8c10fb6ee545a5a46161e402d73dee'
-				},
-				url : 'http://api.football-data.org/v1/competitions/?season=2017',
-				dataType : 'json',
-				type : 'GET',
-				async : false,
-			}).done(function(response) {
-				$.each(response, function(index, item) {
-					campionati.push(item.id);
-					campionati.push(item.caption);
-					var _url = item._links.teams.href;
-					$.ajax({
-						headers : {
-							'X-Auth-Token' : '9c8c10fb6ee545a5a46161e402d73dee'
-						},
-						url : _url,
-						dataType : 'json',
-						type : 'GET',
-						async : false,
-					}).done(function(_response) {
-						$.each(_response, function(i, _item) {
-							if (i == "teams") {
-								$.each(_item, function(_i, item2) {
-									squadre.push(item2.name);
-								});
-							}
-						});
-					});
-				});
-			});
-			var result_squadre="";
-			var result_campionati="";
-			$.each(squadre,function(i,item){
-				result_squadre=result_squadre.concat(item);
-				result_squadre=result_squadre.concat(";");
-			});
-			
-			$.each(campionati,function(i,item){
-				result_campionati=result_campionati.concat(item);
-				if(i%2 == 0)
-					result_campionati=result_campionati.concat(":");
-				else
-					result_campionati=result_campionati.concat(";");
-			});
-			$.ajax({
-				url : 'aggiornaDati',
-				type : 'POST',
-				data : {
-					squadre: result_squadre,
-					campionati: result_campionati,
-					aggiorna: "Aggiorna"
-				},
-				error:function(){
-					alert("error");
-				}
-			});
-		}
-	
-	}
-	
-	function getPartite() {
-		if(!($(".partite").length)){
-
-			var data = new Date();
-			var data_inizio = new Date(data.getTime()-1000*60*60*24*7);
-			var data_inizio_string = data_inizio.getFullYear()+"-"+(data_inizio.getMonth()+1)+"-"+data_inizio.getDate();
-			alert(data_inizio_string);
-			if(data_inizio_string[7] != '-'){
-				data_inizio_string=data_inizio_string.substr(0,5)+"0"+data_inizio_string.substr(5,4);
-			}
-			alert(data_inizio_string);
-			if(data_inizio_string.length != 10){
-				data_inizio_string=data_inizio_string.substr(0,8)+"0"+data_inizio_string[8];
-			}
-			alert(data_inizio_string);
-			var data_fine = new Date(data.getTime()+1000*60*60*24*7);
-			var data_fine_string = data_fine.getFullYear()+"-"+(data_fine.getMonth()+1)+"-"+data_fine.getDate();
-			if(data_fine_string[7] != '-'){
-				data_fine_string=data_fine_string.substr(0,5)+"0"+data_fine_string.substr(5,4);
-			}
-			if(data_fine_string.length != 10){
-				data_fine_string=data_fine_string.substr(0,8)+"0"+data_fine_string[8];
-			}
-			alert(data_fine_string);
-			var _url = 'http://api.football-data.org/v1/fixtures/?timeFrameStart='+data_inizio_string+'&timeFrameEnd='+data_fine_string;
-			
-			var partite = [];
-			$.ajax({
-				headers : {
-					'X-Auth-Token' : '9c8c10fb6ee545a5a46161e402d73dee'
-				},
-				url : _url,
-				dataType : 'json',
-				type : 'GET',
-				async : false,
-			}).done(function(response) {
-				
-				$.each(response, function(index, item) {
-					if(index == "fixtures"){
-						$.each(item, function(index2,item2){
-							var str = item2._links.competition.href;
-							partite.push(str.substr(str.length-3,str.length)+"£"+item2.homeTeamName+"£"+item2.awayTeamName+"£"+item2.result.goalsHomeTeam+"£"+item2.result.goalsAwayTeam+"£"+item2.status+"£"+item2.date);
-						});
-					}
-				});
-			
-			});
-			var result="";
-			$.each(partite,function(i,item){
-				result=result.concat(item);
-				result=result.concat(";");
-			});
-			alert(result);
-			$(".updatePartite").append("<input type=\"text\" style=\" display:none\" class=\"partite\" name=\"partite\" value=\""+result+"\">");
-		}
-	}
-	</script>
+<script src="js/gestisciPartite.js"></script>
 
 </head>
 <body>
@@ -319,10 +147,8 @@
 											<h3>Aggiornamento dati</h3>
 											<p>Ti permette di ricevere gli ultimi aggiornamenti sulle
 												partite attualmente disponibili</p>
-											<form class="updatePartite" action="aggiornaDati" method="post">
-												<input type="submit" class="btn btn-primary" name="aggiorna"
-													onmouseover="getPartite();" value="Aggiorna Partite">
-											</form>
+												<input type="button" class="btn btn-primary" name="aggiorna"
+													onclick="getPartite();" value="Aggiorna Partite">
 											<br> <br> <br>
 										</div>
 									</div>
@@ -350,10 +176,8 @@
 											<h3>Aggiorna Campionati e Squadre</h3>
 											<p>Ti permette di ricevere gli ultimi aggiornamenti sulle
 												squadre e i campionati attualmente disponibili</p>
-											<form class="updateDati" action="aggiornaDati" method="post">
-												<input type="submit" class="btn btn-primary" name="aggiorna"
-													onmouseover="getSquadre();" value="Aggiorna">
-											</form>
+												<input type="button" class="btn btn-primary" name="aggiorna"
+													onclick="getSquadre();" value="Aggiorna">
 											<br> <br>
 										</div>
 									</div>
@@ -437,23 +261,16 @@
 	</div>
 	<!-- END fh5co-wrapper -->
 
-	<!-- jQuery -->
 
 
 	<script src="js/jquery.min.js"></script>
-	<!-- jQuery Easing -->
 	<script src="js/jquery.easing.1.3.js"></script>
-	<!-- Bootstrap -->
 	<script src="js/bootstrap.min.js"></script>
-	<!-- Waypoints -->
 	<script src="js/jquery.waypoints.min.js"></script>
-	<!-- Stellar -->
 	<script src="js/jquery.stellar.min.js"></script>
-	<!-- Superfish -->
 	<script src="js/hoverIntent.js"></script>
 	<script src="js/superfish.js"></script>
 
-	<!-- Main JS (Do not remove) -->
 	<script src="js/main.js"></script>
 
 </body>

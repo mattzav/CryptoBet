@@ -29,11 +29,12 @@ public class PartitaDaoJDBC implements PartitaDao {
 
 		Connection connection = PostgresDAOFactory.dataSource.getConnection();
 		try {
+			Long codice = findExistingMatch(partita);
 
-			System.out.println(partita.getCodice());
-			if (findExistingMatch(partita)) {
+			if (codice != null) {
+				System.out.println(codice);
+				partita.setCodice(codice);
 				update(partita);
-				System.out.println("update");
 				return;
 			}
 
@@ -103,61 +104,60 @@ public class PartitaDaoJDBC implements PartitaDao {
 			statement.setLong(11, partita.getCampionato().getCodice());
 			statement.executeUpdate();
 			String[] esiti;
-			if(partita.isFinita()) {
-				
-				if(partita.getGoal_casa()>partita.getGoal_ospite()) {
-					update = "update esitopartita SET stato=? where partita=? and (esito=? or esito=? or esito=?)";
-					esiti= new String[]{"1","1X","12"};
+			if (partita.isFinita()) {
+				if (partita.getGoal_casa() > partita.getGoal_ospite()) {
+					update = "update esitopartita SET stato=? where partita=?  and (esito=? or esito=? or esito=?)";
+					esiti = new String[] { "1", "1X", "12" };
 				}
-				
-				else if(partita.getGoal_casa()<partita.getGoal_ospite()) {
+
+				else if (partita.getGoal_casa() < partita.getGoal_ospite()) {
 					update = "update esitopartita SET stato=? where partita=? and (esito=? or esito=? or esito=?)";
-					esiti= new String[]{"2","2X","12"};
+					esiti = new String[] { "2", "X2", "12" };
 				}
-				
+
 				else {
 					update = "update esitopartita SET stato=? where partita=? and (esito=? or esito=? or esito=?)";
-					esiti= new String[]{"X","1X","2X"};
+					esiti = new String[] { "X", "1X", "X2" };
 				}
 				statement = connection.prepareStatement(update);
 				statement.setString(1, "indovinato");
 				statement.setLong(2, partita.getCodice());
-				int i=3;
-				for(String s:esiti) {
-					statement.setString(i,s);
+				int i = 3;
+				for (String s : esiti) {
+					statement.setString(i, s);
 					i++;
 				}
 				statement.executeUpdate();
-				
-				esiti=null;
-				if(partita.getGoal_casa()+partita.getGoal_ospite()>=3) {
+
+				esiti = null;
+				if (partita.getGoal_casa() + partita.getGoal_ospite() >= 3) {
 					update = "update esitopartita SET stato=? where partita=? and esito=?";
-					esiti=new String[] {"O"};
-				}
-				else { 
+					esiti = new String[] { "O" };
+				} else {
 					update = "update esitopartita SET stato=? where partita=? and esito=?";
-					esiti=new String[] {"U"};
-				}
-				statement = connection.prepareStatement(update);
-				statement.setString(1, "indovinato");
-				statement.setLong(2, partita.getCodice());
-				statement.setString(3,esiti[0]);
-				statement.executeUpdate();
-				
-				if(partita.getGoal_casa()!=0 && partita.getGoal_ospite()!=0) {
-					update = "update esitopartita SET stato=? where partita=? and esito=?";
-					esiti[0]= "GG";
-				}
-				else {
-					update = "update esitopartita SET stato=? where partita=? and esito=?";
-					esiti[0]= "NG";
+					esiti = new String[] { "U" };
 				}
 				statement = connection.prepareStatement(update);
 				statement.setString(1, "indovinato");
 				statement.setLong(2, partita.getCodice());
-				statement.setString(3,esiti[0]);
+				statement.setString(3, esiti[0]);
 				statement.executeUpdate();
-				
+			
+
+				if (partita.getGoal_casa() > 0 && partita.getGoal_ospite() > 0) {
+					update = "update esitopartita SET stato=? where partita=? and esito=?";
+					esiti[0] = "GG";
+				} else {
+					update = "update esitopartita SET stato=? where partita=? and esito=?";
+					esiti[0] = "NG";
+				}
+				statement = connection.prepareStatement(update);
+				statement.setString(1, "indovinato");
+				statement.setLong(2, partita.getCodice());
+				statement.setString(3, esiti[0]);
+				statement.executeUpdate();
+			
+
 				update = "update esitopartita SET stato=? where partita=? and stato=?";
 				statement = connection.prepareStatement(update);
 				statement.setString(1, "sbagliato");
@@ -165,8 +165,7 @@ public class PartitaDaoJDBC implements PartitaDao {
 				statement.setString(3, "non verificato");
 				statement.executeUpdate();
 			}
-			
-			
+
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
 		} finally {
@@ -179,18 +178,20 @@ public class PartitaDaoJDBC implements PartitaDao {
 	}
 
 	@Override
-	public boolean findExistingMatch(Partita p) {
+	public Long findExistingMatch(Partita p) {
 		Connection connection = PostgresDAOFactory.dataSource.getConnection();
 		try {
 			PreparedStatement statement;
-			String query = "select * from partita as p where p.squadracasa=? and p.squadraospite=? and p.campionato=? ";
+			String query = "select p.codice from partita as p where p.squadracasa=? and p.squadraospite=? and p.campionato=? ";
 			statement = connection.prepareStatement(query);
 			statement.setString(1, p.getSquadra_casa().getNome());
 			statement.setString(2, p.getSquadra_ospite().getNome());
 			java.sql.Date date = new java.sql.Date(p.getData_ora().getTime());
 			statement.setLong(3, p.getCampionato().getCodice());
 			ResultSet result = statement.executeQuery();
-			return result.next();
+			if (result.next())
+				return result.getLong(1);
+			return null;
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
 		} finally {
@@ -238,7 +239,6 @@ public class PartitaDaoJDBC implements PartitaDao {
 
 	@Override
 	public float[] getPuntiSquadre(long codice) {
-		System.out.println(codice);
 		Connection connection = PostgresDAOFactory.dataSource.getConnection();
 		float media_punti_squadre[] = new float[2];
 
@@ -334,12 +334,12 @@ public class PartitaDaoJDBC implements PartitaDao {
 			statement.setLong(1, codicePartita);
 			result = statement.executeQuery();
 			result.next();
-			
-			if(result.getInt(1) != 0)
+
+			if (result.getInt(1) != 0)
 				media_partite_a_segno_casa = num_partite_a_segno_casa / result.getInt(1);
 			else
 				media_partite_a_segno_casa = 0.5f;
-			
+
 			query = "select count(*) from partita as p, partita as p1 where p.codice=? and ((p.squadraospite=p1.squadracasa and p1.goalCasa>0) or (p.squadraospite=p1.squadraospite and p1.goalOspite>0)) ";
 			statement = connection.prepareStatement(query);
 			statement.setLong(1, codicePartita);
@@ -352,7 +352,7 @@ public class PartitaDaoJDBC implements PartitaDao {
 			statement.setLong(1, codicePartita);
 			result = statement.executeQuery();
 			result.next();
-			if(result.getInt(1) != 0)
+			if (result.getInt(1) != 0)
 				media_partite_a_segno_ospite = num_partite_a_segno_ospite / result.getInt(1);
 			else
 				media_partite_a_segno_ospite = 0.5f;
@@ -404,7 +404,7 @@ public class PartitaDaoJDBC implements PartitaDao {
 			result.next();
 
 			// media ottenuta dai goal divisi per le partite disputate
-			if(result.getInt(1) != 0)
+			if (result.getInt(1) != 0)
 				media_goal_casa = num_goal_casa / result.getInt(1);
 			else
 				media_goal_casa = 1.5f;
@@ -433,7 +433,7 @@ public class PartitaDaoJDBC implements PartitaDao {
 			result.next();
 
 			// media ottenuta dai goal divisi per le partite disputate
-			if(result.getInt(1) != 0)
+			if (result.getInt(1) != 0)
 				media_goal_ospite = num_goal_ospite / result.getInt(1);
 			else
 				media_goal_ospite = 1.5f;

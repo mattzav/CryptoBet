@@ -39,9 +39,7 @@ public class AggiornaDati extends HttpServlet {
 		// TODO Auto-generated method stub
 		if (req.getParameter("aggiorna").equals("Aggiorna")) {
 			String squadre = req.getParameter("squadre");
-			System.out.println(squadre);
 			String campionati = req.getParameter("campionati");
-			System.out.println(campionati + "ciao");
 			SquadraDao squadraDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getSquadraDAO();
 			CampionatoDao campionatoDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCampionatoDao();
 
@@ -61,14 +59,12 @@ public class AggiornaDati extends HttpServlet {
 		else if (req.getParameter("aggiorna").equals("Aggiorna Partite")) {
 			PartitaDao partitaDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getPartitaDao();
 			String partite = req.getParameter("partite");
-			System.out.println(partite);
 			for(String p: partite.split(";")){
 				String partita[] = p.split("£");
 				if(partita[5].equals("CANCELED") || partita[0].equals("466"))
 					continue;
 				boolean finish = partita[5].equals("FINISHED");
 				String data=partita[6].substring(0, 10)+" "+partita[6].substring(11,19);
-				System.out.println(data);
 				java.sql.Date d = null;
 				SimpleDateFormat localDateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
 				try {
@@ -79,9 +75,7 @@ public class AggiornaDati extends HttpServlet {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				for(String s: partita) {
-					System.out.println(s+" ");
-				}
+		
 				Partita a = null;
 				Partita match=new Partita(new Squadra(partita[1]),new Squadra(partita[2]), -1, -1, new Campionato(Long.valueOf(partita[0]),null), new java.util.Date(d.getTime()), finish);
 				if(!partita[3].equals("null") && !partita[4].equals("null")) {
