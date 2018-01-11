@@ -26,7 +26,7 @@
 
 </head>
 <body>
-	<jsp:useBean id = "esito" class = "model.Esito" /> 
+	<jsp:useBean id="esito" class="model.Esito" />
 	<div id="fh5co-wrapper">
 		<div id="fh5co-page">
 			<div id="fh5co-header">
@@ -83,10 +83,7 @@
 								</c:if>
 								<c:if test="${loggato==null}">
 									<div>
-										<br> 
-										<br>
-										<br> 
-										<br>
+										<br> <br> <br> <br>
 										<div class="col-sm-6">
 											<h1>Aggiorna Il Tuo Sito</h1>
 										</div>
@@ -147,9 +144,10 @@
 											<h3>Aggiornamento dati</h3>
 											<p>Ti permette di ricevere gli ultimi aggiornamenti sulle
 												partite attualmente disponibili</p>
-												<input type="button" class="btn btn-primary" name="aggiorna"
-													onclick="getPartite();" value="Aggiorna Partite">
-											<br> <br> <br>
+											
+											<input type="button" class="btn btn-primary" name="aggiorna"
+												onclick="getPartite();" value="Aggiorna Partite"> <br>
+											<br> <br>
 										</div>
 									</div>
 								</div>
@@ -162,8 +160,8 @@
 											<h3>Modifica le tue quote</h3>
 											<p>Ti permette di abilitare, disabilitare o modificare le
 												tue quote</p>
-												<a class="btn btn-primary" href="aggiornaQuote"> Aggiorna Quote </a>
-											<br> <br> <br> <br>
+											<a class="btn btn-primary" href="aggiornaQuote"> Aggiorna
+												Quote </a> <br> <br> <br> <br>
 										</div>
 									</div>
 								</div>
@@ -176,9 +174,9 @@
 											<h3>Aggiorna Campionati e Squadre</h3>
 											<p>Ti permette di ricevere gli ultimi aggiornamenti sulle
 												squadre e i campionati attualmente disponibili</p>
-												<input type="button" class="btn btn-primary" name="aggiorna"
-													onclick="getSquadre();" value="Aggiorna">
-											<br> <br>
+											<input type="button" class="btn btn-primary" name="aggiorna"
+												onclick="getSquadre();" value="Aggiorna"> <br>
+											<br>
 										</div>
 									</div>
 								</div>
