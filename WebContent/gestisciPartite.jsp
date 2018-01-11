@@ -144,11 +144,13 @@
 			var data = new Date();
 			var data_inizio = new Date(data.getTime()-1000*60*60*24*7);
 			var data_inizio_string = data_inizio.getFullYear()+"-"+(data_inizio.getMonth()+1)+"-"+data_inizio.getDate();
+			alert(data_inizio_string);
 			if(data_inizio_string[7] != '-'){
 				data_inizio_string=data_inizio_string.substr(0,5)+"0"+data_inizio_string.substr(5,4);
 			}
+			alert(data_inizio_string);
 			if(data_inizio_string.length != 10){
-				data_inizio_string=data_inizio_string.substr(0,7)+"0"+data_inizio_string[8];
+				data_inizio_string=data_inizio_string.substr(0,8)+"0"+data_inizio_string[8];
 			}
 			alert(data_inizio_string);
 			var data_fine = new Date(data.getTime()+1000*60*60*24*7);
@@ -172,18 +174,16 @@
 				type : 'GET',
 				async : false,
 			}).done(function(response) {
+				
 				$.each(response, function(index, item) {
 					if(index == "fixtures"){
 						$.each(item, function(index2,item2){
 							var str = item2._links.competition.href;
 							partite.push(str.substr(str.length-3,str.length)+"£"+item2.homeTeamName+"£"+item2.awayTeamName+"£"+item2.result.goalsHomeTeam+"£"+item2.result.goalsAwayTeam+"£"+item2.status+"£"+item2.date);
 						});
-					
 					}
-					
-					
 				});
-
+			
 			});
 			var result="";
 			$.each(partite,function(i,item){

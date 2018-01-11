@@ -174,7 +174,7 @@
 									</div>
 								</div>
 								<div class="col-md-3 col-sm-6">
-									<div class="program program-schedule">
+									<div class="program program-schedule" onclick="effettuaPrelievo()">
 										<img src="images/Preleva.png" alt="">
 										<h3>Effettua Prelievo</h3>
 									</div>
@@ -194,17 +194,6 @@
 							</div>
 							<!-- END sched-content -->
 						</div>
-					</div>
-				</div>
-				<div id="fh5co-schedule-section" class="fh5co-lightgray-section">
-					<div class="container">
-						<div class="row">
-							<div class="col-md-8 col-md-offset-2">
-								<div id="operazione"
-									class="heading-section text-center animate-box"></div>
-							</div>
-						</div>
-						<div id="risultatoGestione"></div>
 					</div>
 				</div>
 			</div>

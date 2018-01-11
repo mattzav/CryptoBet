@@ -3,10 +3,8 @@
  */
 
 function mostraUltimeScommesse(){
-		 if($("table").length){
-			  $("#nomeOperazione").remove();
-			  $("table").remove();
-			  
+		 if($("#operazione").length){
+			  $("#operazione").remove();  
 		  }
 		 else{
 			$.ajax({
@@ -14,8 +12,8 @@ function mostraUltimeScommesse(){
 			  url: 'mostraScommesse',
 			  success: function(data){
 		 
-			  $("#operazione").append("<h2 id=\"nomeOperazione\"> ECCO LE TUE SCOMMESSE: </h1>");
-    		  $("#risultatoGestione").append("<table class=\"col-sm-12\">");
+			  $("#operazioni").append("<div id=\"operazione\"><h2 id=\"nomeOperazione\"> ECCO LE TUE SCOMMESSE: </h1></div>");
+    		  $("#operazione").append("<table class=\"col-sm-12\">");
 			  var firstRow = "<th > codici scommessa </th>"+
 							"<th > data di emissione </th>"+
 							"<th > importo scommessa </th>"+
@@ -23,7 +21,7 @@ function mostraUltimeScommesse(){
 							"<th > vincita potenziale </th>"+
 							"<th > stato </th>"+
 							"<th > verifica </th>";
-		      $("#risultatoGestione>table").append(firstRow);
+		      $("#operazione>table").append(firstRow);
 			  var scommesse = data.split(";");
 			  for(var i = 0; i<scommesse.length-1; i++){
 				 var dati = scommesse[i].split(":");
@@ -46,7 +44,7 @@ function mostraUltimeScommesse(){
 							'</tr>');	
 					
 					}
-				 $("#risultatoGestione>table").append(row);
+				 $("#operazione>table").append(row);
 			 }
 		  },
 		 });
@@ -67,7 +65,38 @@ function mostraUltimeScommesse(){
 			  }
 		 });
 	}
-	
+function effettuaPrelievo(){
+	$("#operazione").remove();
+	$("#operazioni").append(
+			"<div id=\"operazione\">" +
+				"<div class=\"col-sm-4\"></div>"+
+				"<div class=\"col-sm-8\">" +
+					"<div>" +
+						"<h3> EFFETTUA IL TUO PRELIEVO </h3>"+
+					"</div>" +
+					"<div>" +
+						"<span> Inserisci l'importo da prelevare :</span> <br>" +
+						"<input class=\"btn btn-default\" id=\"importoDaPrelevare\" type=\"text\"> <br>" +
+					"</div>" +
+					"<div>" +
+						"<input class=\"btn btn-primary\" type=\"button\" value=\"Preleva\" onclick=\"preleva()\">"+
+					"</div>" +
+				"</div>" +
+			"</div>");
+}
+function preleva(){
+	$.ajax({
+		url:'prelievoConto',
+		data: 'importo='+$("#importoDaPrelevare").val()+'',
+		type:'POST',
+        cache:false,
+        error:function(){alert('error');}
+	}).done(function(response){
+		if(response!="" && response!=null){
+			alert("response");
+		}
+	});
+}
 function effettuaVersamento(){
 	
 	$("#operazione").remove();
@@ -87,7 +116,6 @@ function effettuaVersamento(){
 					"</div>" +
 				"</div>" +
 			"</div>");
-			alert("ciao");
 }
 function versa(){
 	$.ajax({
@@ -110,6 +138,79 @@ function getListaMovimenti(){
         cache:false,
         error:function(){alert('error');}
 	}).done(function(response){
-		alert(response);
+		$("#operazione").remove();
+		$("#operazioni").append(
+				"<div id=\"operazione\">" +
+					"<h3> ECCO I TUOI MOVIMENTI </h3>"+
+					"<table id=\"tableMovimenti\" class=\"table\">" +
+						"<thead>" +
+							"<tr>" +
+								"<th> Descrizione </th>" +
+								"<th> Codice transazione</th>" +
+								"<th> Importo </th>" +
+								"<th> Tipo </th>" +
+								"<th> Scommessa </th>" +
+							"</tr>" +
+						"</thead>" +
+						"<tbody id=\"lista\">" +
+						"</tbody>" +
+					"</table>" +
+				"</div>");
+		var rows=response.split("\n");
+		$.each(rows,function(i,item){
+			if(item!=""){
+				var dati=item.split(";");
+				if(dati.length==3){
+					var tipo="VERSAMENTO";
+					var classe="success";
+					if(dati[2]==1){
+						tipo="PRELIEVO";
+						classe="danger"
+					}
+					$("#lista").append(
+						"<tr class=\""+classe+"\">" +
+							"<td>" +
+								"Transazione dalla Carta" +
+							"</td>"+
+							"<td>"+
+								dati[0]+
+							"</td>" +
+							"<td>"+
+								dati[1]+
+							"</td>" +
+							"<td>"+
+								tipo+
+							"</td>" +
+							"<td>"+
+								" / "+
+							"</td>" +
+						"</tr>");
+				}
+				else{
+					var classe="success";
+					if(dati[2]=="PRELIEVO"){
+						classe="danger";
+					}
+					$("#lista").append(
+						"<tr class=\""+classe+"\">" +
+							"<td>" +
+								"Transazione dal conto" +
+							"</td>"+
+							"<td>"+
+								dati[0]+
+							"</td>" +
+							"<td>"+
+								dati[1]+
+							"</td>" +
+							"<td>"+
+								dati[2]+
+							"</td>" +
+							"<td>"+
+								dati[3]+
+							"</td>" +
+						"</tr>");
+				}
+			}
+		});
 	});
 }

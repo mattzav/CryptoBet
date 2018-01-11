@@ -61,6 +61,7 @@ public class AggiornaDati extends HttpServlet {
 		else if (req.getParameter("aggiorna").equals("Aggiorna Partite")) {
 			PartitaDao partitaDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getPartitaDao();
 			String partite = req.getParameter("partite");
+			System.out.println(partite);
 			for(String p: partite.split(";")){
 				String partita[] = p.split("£");
 				if(partita[5].equals("CANCELED") || partita[0].equals("466"))
