@@ -37,6 +37,5 @@ public class VersamentoSuConto extends HttpServlet{
 		else {
 			resp.getWriter().print("importo non disponibile");
 		}
-		
 	}
 }

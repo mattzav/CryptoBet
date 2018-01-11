@@ -1,54 +1,70 @@
 /**
  * 
  */
-
+function checkImporto(){
+	var value=$(".importo").val();
+	$(".importo").addClass("btn-default");
+	$(".importo").removeClass("btn-danger");
+	$(".effettuaMovimento").prop('disabled', false);
+	var importoErrato="false";
+	if(!($.isNumeric( value ))){
+		$(".importo").removeClass("btn-default");
+		$(".importo").addClass("btn-danger");
+		$(".effettuaMovimento").prop('disabled', true);
+		impotoErrato="true";
+	}
+}
 function mostraUltimeScommesse(){
-		 if($("#operazione").length){
-			  $("#operazione").remove();  
-		  }
-		 else{
+			$("#operazione").remove();  
+			$("#operazioni").append(
+					"<div id=\"operazione\">" +
+					"<h3 id=\"nomeOperazione\"> " +
+						"ECCO LE TUE SCOMMESSE:" +
+					"</h3>" +
+			"</div>");
+			$("#operazione").append("<table class=\"table\"></table>");
+			var firstRow = "<tr>"+"<th> codici scommessa </th>"+
+			"<th > data di emissione </th>"+
+			"<th > importo scommessa </th>"+
+			"<th > numero esiti </th>"+
+			"<th > vincita potenziale </th>"+
+			"<th > stato </th>"+
+			"<th > verifica </th>"+"</tr>";
+			$("#operazione>table").append(firstRow);
 			$.ajax({
 			  type: 'GET',
 			  url: 'mostraScommesse',
 			  success: function(data){
-		 
-			  $("#operazioni").append("<div id=\"operazione\"><h2 id=\"nomeOperazione\"> ECCO LE TUE SCOMMESSE: </h1></div>");
-    		  $("#operazione").append("<table class=\"col-sm-12\">");
-			  var firstRow = "<th > codici scommessa </th>"+
-							"<th > data di emissione </th>"+
-							"<th > importo scommessa </th>"+
-							"<th > numero esiti </th>"+
-							"<th > vincita potenziale </th>"+
-							"<th > stato </th>"+
-							"<th > verifica </th>";
-		      $("#operazione>table").append(firstRow);
 			  var scommesse = data.split(";");
 			  for(var i = 0; i<scommesse.length-1; i++){
 				 var dati = scommesse[i].split(":");
+				 var classe="warning";
 				 for(var j=0; j<dati.length; j++){
 					var verifica="";
 					 if(!(dati[5] == "vinta" || dati[5] == "persa")){
 					 	verifica='<td class=\"verificata\"><button class=\"glyphicon glyphicon-ok\"  onclick=\"verificaScommessa('+dati[0]+');\"></td>';
 					 }
 					 else{
+						 if(dati[5]=="vinta")
+							 classe="success";
+						 else classe="danger"; 
 						 verifica='<td> Già verificata</td>';
 					 }
-					 var row = $("<tr id= "+dati[0]+" class=\"success\">"+
-							'<td>'+dati[0]+'</td>'+
-							'<td >'+dati[1]+'</td>'+
-							'<td >'+dati[2]+'</td>'+
-							'<td >'+dati[3]+'</td>'+
-							'<td >'+dati[4]+'</td>'+
-							'<td class=\"stato\">'+dati[5]+'</td>'+
-							verifica+
-							'</tr>');	
 					
-					}
-				 $("#operazione>table").append(row);
+				 }
+				 $("#operazione>table").append(
+				 		"<tr class=\""+classe+"\">" +
+				 				"<td>"+dati[0]+"</td>"+
+				 				"<td>"+dati[1]+"</td>"+
+				 				"<td>"+dati[2]+"</td>"+
+				 				"<td>"+dati[3]+"</td>"+
+				 				"<td>"+dati[4]+"</td>"+
+								"<td class=\"stato\">"+dati[5]+"</td>"+
+								verifica+
+						"</tr>");
 			 }
 		  },
 		 });
-	  }
 	}
 	
 	function verificaScommessa(codice){
@@ -76,10 +92,10 @@ function effettuaPrelievo(){
 					"</div>" +
 					"<div>" +
 						"<span> Inserisci l'importo da prelevare :</span> <br>" +
-						"<input class=\"btn btn-default\" id=\"importoDaPrelevare\" type=\"text\"> <br>" +
+						"<input class=\"btn btn-default importo\" id=\"importoDaPrelevare\" type=\"text\" onkeyup=\"checkImporto()\"> <br>" +
 					"</div>" +
 					"<div>" +
-						"<input class=\"btn btn-primary\" type=\"button\" value=\"Preleva\" onclick=\"preleva()\">"+
+						"<input class=\"btn btn-primary effettuaMovimento\" type=\"button\" value=\"Preleva\" onclick=\"preleva()\" disabled=\"true\">"+
 					"</div>" +
 				"</div>" +
 			"</div>");
@@ -109,10 +125,10 @@ function effettuaVersamento(){
 					"</div>" +
 					"<div>" +
 						"<span> Inserisci l'importo da versare :</span> <br>" +
-						"<input class=\"btn btn-default\" id=\"importoDaVersare\" type=\"text\"> <br>" +
+						"<input class=\"btn btn-default importo\" id=\"importoDaVersare\" type=\"text\" onkeyup=\"checkImporto()\"> <br>" +
 					"</div>" +
 					"<div>" +
-						"<input class=\"btn btn-primary\" type=\"button\" value=\"Versa\" onclick=\"versa()\">"+
+						"<input class=\"btn btn-primary effettuaMovimento\" type=\"button\" value=\"Versa\" onclick=\"versa()\" disabled=\"true\">"+
 					"</div>" +
 				"</div>" +
 			"</div>");
@@ -214,3 +230,4 @@ function getListaMovimenti(){
 		});
 	});
 }
+
