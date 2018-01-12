@@ -1,10 +1,12 @@
 /**
  * 
  */
-		function error(errore,nome){
+		function error(errore, nome){
 			$.ajax({
-				url:'sendData',
-				data: nome+"="+errore,
+				url : 'sendData',
+				data : {
+					nome:value
+				},
 	            type:'POST',
 	            cache:false,
 	            error:function(){alert('error');}
@@ -13,10 +15,10 @@
 		}
 		
 		function checkName(){
-		
+			
 			var value=$("#name").val();
 			var errore= value.match(/\d+/g);
-			if (errore != null) {
+			if (errore != null || value=="") {
 				$("#nameError").css('display','block');
 				error("true","erroreName");
 			}
@@ -31,7 +33,7 @@
 			
 			var value=$("#surname").val();
 			var errore= value.match(/\d+/g);
-			if (errore != null) {
+			if (errore != null || value=="") {
 				$("#surnameError").css('display','block');
 				error("true","erroreSurname");
 			}
@@ -43,7 +45,7 @@
 		
 		function checkCreditCard(){
 			var value=$("#creditCard").val();
-			var format=/[0-9][0-9][0-9][0-9]\s[0-9][0-9][0-9][0-9]\s[0-9][0-9][0-9][0-9]\s[0-9][0-9][0-9][0-9]/;
+			var format=/^\d{4}\s\d{4}\s\d{4}\s\d{4}$/;
 			var result= format.test(value);
 			if(result==false){
 				$("#creditCardError").css('display','block');
@@ -60,8 +62,10 @@
 				}).done(function(response){
 					if(response!="ok"){
 						$("#creditCardError").css('display','block');
+						error("true","erroreCreditCard");
 					}else{
 						$("#creditCardError").css('display','none');
+						error("false","erroreCreditCard");
 					}
 				});
 			}
@@ -78,10 +82,24 @@
 			}).done(function(response){
 				if(response!="ok"){
 					$("#usernameError").css('display','block');
+					error("true","erroreUsername");
 				}else{
 					$("#usernameError").css('display','none');
+					error("false","erroreUsername");
 				}
 			});
+		}
+		
+		function checkPassword(){
+			var pwd=$("#password").val();
+			if (pwd=="") {
+				$("#passwordError").css('display', 'block');
+				error("true","errorePassword");
+			}
+			else{
+				$("#passwordError").css('display', 'none');
+				error("false","errorePassword");
+			}
 		}
 		
 		function checkCheckPwd(){
@@ -89,10 +107,10 @@
 			var pwd=$("#password").val();
 			if (confPwd != pwd) {
 				$("#checkPwdError").css('display', 'block');
-				error("true","erroreCheckPwd");
+				error("true","erroreCheckPassword");
 			}
 			else{
 				$("#checkPwdError").css('display', 'none');
-				error("false","erroreCheckPwd");
+				error("false","erroreCheckPassword");
 			}
 		}

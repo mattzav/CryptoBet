@@ -1,8 +1,10 @@
 package model;
 
+import java.io.Serializable;
+
 import persistence.IdBroker;
 
-public class MovimentoScommessa {
+public class MovimentoScommessa implements Serializable {
 
 	private Long codice_transazione;
 	private float importo;

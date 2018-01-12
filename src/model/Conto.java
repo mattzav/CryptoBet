@@ -1,12 +1,13 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import persistence.IdBroker;
 import persistence.PostgresDAOFactory;
 import persistence.UtilDao;
 
-public class Conto {
+public class Conto implements Serializable{
 	
 	private Long codice;
 	private float saldo;

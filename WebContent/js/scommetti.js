@@ -41,7 +41,7 @@ function checkValue(){
 				if(e1.length){
 					if($('.'+res[0]+' > .'+res[1]).length){
 						e1.remove();
-						elemento.removeClass("btn-danger");
+						elemento.removeClass("btn-primary");
 		    			elemento.addClass("btn-info");
 					}
 					else alert("Hai già selezionato un esito per questa partita");
@@ -51,7 +51,7 @@ function checkValue(){
 						$(".scommessa").append('<tr class="'+res[0]+' info"><td colspan="2">'+dati[0]+' vs '+dati[1]+'</td><td>'+dati[2]+'</td><td class="'+res[1]+'">'+res[1]+'</td></tr>');
 					}
 					elemento.removeClass("btn-info");
-	    			elemento.addClass("btn-danger");
+	    			elemento.addClass("btn-primary");
 				}
 				$(".quotaTotale").text("Quota totale : "+dati[3]);
 				$(".bonus").text("Bonus : "+dati[4]);
@@ -97,14 +97,14 @@ function checkValue(){
 		$(".quotaTotale").text("Quota totale :");
 		$(".bonus").text("Bonus :");
 		$(".vincita").text("Vincita :");
-		$('.btn-danger').addClass("btn-info");
-		$('.btn-danger').removeClass("btn-danger");
+		$('.btn-primary.esitoAttivo').addClass("btn-info");
+		$('.btn-primary.esitoAttivo').removeClass("btn-primary");
 	}
 	
 	function pulisciScommessa(){
 		$.ajax({
 			url:'scommetti',
-			data: 'svuota = null',
+			data: 'svuota',
 			type:'POST',
             cache:false,
             error:function(){alert('error');}

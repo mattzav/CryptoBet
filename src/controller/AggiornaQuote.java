@@ -32,11 +32,11 @@ public class AggiornaQuote extends HttpServlet {
 
 		CampionatoDao campionatoDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCampionatoDao();
 		req.getSession().setAttribute("campionati", campionatoDao.findAll());
-		req.getSession().setAttribute("esiti", new String[]{"1","X","2","1X","12","X2","U","O","GG","NG"});
 		req.getSession().removeAttribute("esitiAttivi");
 		req.getSession().removeAttribute("partiteAttive");
 		req.getSession().removeAttribute("campionatiAttivi");
 		req.getSession().removeAttribute("esiti");
+		req.getSession().setAttribute("esiti", new String[]{"1","X","2","1X","12","X2","U","O","GG","NG"});
 		req.getSession().removeAttribute("modificaQuota");
 		RequestDispatcher dispatcher = req.getRequestDispatcher("gestisciEsiti.jsp");
 		dispatcher.forward(req, resp);

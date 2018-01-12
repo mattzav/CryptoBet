@@ -1,6 +1,8 @@
 package model;
 
-public class Squadra {
+import java.io.Serializable;
+
+public class Squadra implements Serializable{
 
 	private String nome;
 	

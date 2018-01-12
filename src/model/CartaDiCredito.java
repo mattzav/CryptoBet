@@ -1,8 +1,9 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class CartaDiCredito {
+public class CartaDiCredito implements Serializable {
 
 	private String codiceCarta;
 	private Date scadenza;

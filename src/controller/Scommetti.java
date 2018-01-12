@@ -91,7 +91,8 @@ public class Scommetti extends HttpServlet{
 							for(EsitoPartita esitoGiocato:schemaDiScommessa.getEsiti_giocati()) {
 								if(esito.getPartita().getCodice().equals(esitoGiocato.getPartita().getCodice()) && esito.getEsito().getDescrizione().equals(esitoGiocato.getEsito().getDescrizione()) )
 								{
-									esito.setDisponibile(false);
+									System.out.println("giocato");
+									esito.setGiocato(true);
 									break;
 								}
 							}
@@ -130,6 +131,7 @@ public class Scommetti extends HttpServlet{
 			}
 			else {
 				String btn=req.getParameterNames().nextElement();
+				System.out.println(btn+"nnnn");
 				if(btn.contains(";")) {
 					
 					String[] datiEsitoSelezionato=btn.split(";");
@@ -142,12 +144,12 @@ public class Scommetti extends HttpServlet{
 								if(esito.isDisponibile()) {	
 									System.out.println("aggiunto");
 									schemaDiScommessa.addEsito(esito);
-									esito.setDisponibile(false);
+									esito.setGiocato(true);
 								}
 								else {
 									System.out.println("rimosso");
 									schemaDiScommessa.removeEsito(esito);
-									esito.setDisponibile(true);
+									esito.setGiocato(false);
 								}
 							}
 							else {
@@ -178,7 +180,7 @@ public class Scommetti extends HttpServlet{
 							contoDao.update(contoUtente);
 							
 							for(EsitoPartita e:schemaDiScommessa.getEsiti_giocati()) {
-								e.setDisponibile(true);
+								e.setGiocato(false);
 							}
 							
 							resp.getWriter().print("ok");
@@ -196,7 +198,7 @@ public class Scommetti extends HttpServlet{
 				else if(btn.equals("svuota")) {
 					session.removeAttribute("schema");
 					for(EsitoPartita e:schemaDiScommessa.getEsiti_giocati()) {
-						e.setDisponibile(true);
+						e.setGiocato(false);
 					}
 				}
 			}

@@ -1,10 +1,11 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import persistence.IdBroker;
 
-public class Scommessa {
+public class Scommessa implements Serializable{
 	
 	private String stato;
 	private Long codice;

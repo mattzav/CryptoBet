@@ -1,10 +1,11 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import persistence.IdBroker;
 
-public class MovimentoCarta {
+public class MovimentoCarta implements Serializable{
 
 	private Long codice;
 	private Date dataEffettuazione;

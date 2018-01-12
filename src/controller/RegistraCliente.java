@@ -26,16 +26,19 @@ public class RegistraCliente extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		HttpSession session=req.getSession();
-		session.setAttribute("erroreName", "true");
-		session.setAttribute("erroreSurname", "true");
-		session.setAttribute("erroreCreditCard", "true");
-		session.setAttribute("erroreUsername", "true");
-		session.setAttribute("erroreCheckPwd", "true");
-		Enumeration<String> occursErrors = session.getAttributeNames();
-		while (occursErrors.hasMoreElements()) {
-			String string = (String) occursErrors.nextElement();
-			System.out.println(string);
-		}
+//		session.removeAttribute("erroreName");
+//		session.removeAttribute("erroreSurname");
+//		session.removeAttribute("erroreCreditCard");
+//		session.removeAttribute("erroreUsername");
+//		session.removeAttribute("errorePassword");
+//		session.removeAttribute("erroreCheckPassword");
+		session.setAttribute("erroreName", true);
+		session.setAttribute("erroreSurname", true);
+		session.setAttribute("erroreCreditCard", true);
+		session.setAttribute("erroreUsername", true);
+		session.setAttribute("errorePassword", true);
+		session.setAttribute("erroreCheckPassword", true);
+		System.out.println("inizio"+session.getAttribute("erroreName"));
 		RequestDispatcher dispatcher=req.getRequestDispatcher("Registrati.html");
 		dispatcher.forward(req, resp);
 	}
@@ -52,38 +55,42 @@ public class RegistraCliente extends HttpServlet {
 		if(req.getParameter("checkUsername")!=null) {
 			if(PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCredenzialiDAO().findByPrimaryKey(username)!=null) {
 				resp.getWriter().print("errore");
-				session.setAttribute("erroreUsername", "true");
+				session.setAttribute("erroreUsername", true);
 			}
 			else {
 				resp.getWriter().print("ok");
-				session.setAttribute("erroreUsername", "false");
+				session.setAttribute("erroreUsername", false);
 			}
 			return;
 		}
 		if(req.getParameter("checkCreditCard")!=null) {
 			if(PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCartaDiCreditoDAO().findByPrimaryKey(codCarta)!=null) {
-				System.out.println("ciao");
-				session.setAttribute("erroreCreditCard", "true");
+				session.setAttribute("erroreCreditCard", true);
 				resp.getWriter().print("errore");
 			}
 			else {
-				session.setAttribute("erroreCreditCard", "false");
+				session.setAttribute("erroreCreditCard", false);
 				resp.getWriter().print("ok");
 			}
 			return;
 		}
 		String error = req.getParameterNames().nextElement();
-		if(error.length()>6 && error.substring(0,6).equals("errore")) {
-			System.out.println(error);
-			session.setAttribute(error, req.getParameter(error));
+		if(error.contains("errore")) {
+			boolean value=false;
+			if(req.getParameter(error).equals("true")) {
+				value=true;
+			}
+			session.setAttribute(error, value);
 		}
 			
 		boolean existError=false;
 		Enumeration<String> occursErrors = session.getAttributeNames();
-		while (occursErrors.hasMoreElements() && !existError) {
+		while (occursErrors.hasMoreElements()) {
 			String string = (String) occursErrors.nextElement();
-			if(string.length()>6 && string.substring(0,6).equals("errore")) {
-				if(session.getAttribute(string).equals("true")) {
+			if(string.contains("errore")) {
+				boolean value=(boolean) session.getAttribute(string);
+				if(value) {
+					System.out.println(string);
 					existError=true;
 				}
 			}

@@ -1,9 +1,11 @@
 package model;
 
+import java.io.Serializable;
+
 import persistence.DataSource;
 import persistence.IdBroker;
 
-public class Campionato {
+public class Campionato implements Serializable{
 
 	private Long codice;
 	private String nome;

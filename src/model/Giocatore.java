@@ -1,8 +1,10 @@
 package model;
 
+import java.io.Serializable;
+
 import persistence.IdBroker;
 
-public class Giocatore{
+public class Giocatore implements Serializable{
 
 	private Long codice;
 	private String nome;

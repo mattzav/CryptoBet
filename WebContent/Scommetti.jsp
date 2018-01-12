@@ -208,7 +208,8 @@
 							</table>
 						</div>
 					</div>
-					<div class="col-sm-8">
+					<div class="col-sm-1"></div>
+					<div class="col-sm-7">
 						<c:forEach items="${campionatiAttivi}" var="campionato">
 							<div class="scroll-table">
 								<table class="table" id="esitiasd">
@@ -228,13 +229,17 @@
 													<c:forEach items="${esitiAttivi}" var="esito">
 														<c:if test="${esito.esito.descrizione==esitoPossibile.descrizione && partita.codice==esito.partita.codice}">
 															<td>
-																<c:if test="${esito.disponibile}">
-																	<input class="btn btn-info btn-xs" id="${partita.codice};${esito.esito.descrizione}" type="button" name="${partita.codice};${esito.esito.descrizione}" value="${esito.quota}" 
+																<c:if test="${esito.disponibile && !esito.giocato}">
+																	<input class="btn btn-info esitoAttivo btn-xs" id="${partita.codice};${esito.esito.descrizione}" type="button" name="${partita.codice};${esito.esito.descrizione}" value="${esito.quota}" 
+																	onclick="esitoSelezionato('${partita.codice};${esito.esito.descrizione}')">
+																</c:if>
+																<c:if test="${esito.disponibile && esito.giocato}">
+																	<input class="btn btn-primary esitoAttivo btn-xs" id="${partita.codice};${esito.esito.descrizione}" type="button" name="${partita.codice};${esito.esito.descrizione}" value="${esito.quota}" 
 																	onclick="esitoSelezionato('${partita.codice};${esito.esito.descrizione}')">
 																</c:if>
 																<c:if test="${not esito.disponibile}">
-																	<input class="btn btn-danger btn-xs" id="${partita.codice};${esito.esito.descrizione}" type="button" name="${partita.codice};${esito.esito.descrizione}" value="${esito.quota}" 
-																	onclick="esitoSelezionato('${partita.codice};${esito.esito.descrizione}')">
+																	<input class="btn btn-basic btn-xs" id="${partita.codice};${esito.esito.descrizione}" type="button" name="${partita.codice};${esito.esito.descrizione}" value="${esito.quota}" 
+																	disabled="disabled">
 																</c:if>
 															</td>
 														</c:if>		

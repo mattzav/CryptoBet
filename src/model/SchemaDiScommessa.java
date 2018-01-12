@@ -1,8 +1,9 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class SchemaDiScommessa {
+public class SchemaDiScommessa implements Serializable{
 
 	private float importo_giocato;
 	private float quota_totale;

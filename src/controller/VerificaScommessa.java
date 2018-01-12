@@ -18,6 +18,7 @@ public class VerificaScommessa extends HttpServlet {
 		
 		// prendo dalla richiesta il codice della scommessa e la verifico prendendomi l'esito
 		String esito = scommessa.verificaScommessa(Long.valueOf(req.getParameter("codiceScommessa")));
+		System.out.println(esito);
 		
 		// restituisco l'esito al client
 		resp.getWriter().write(esito);

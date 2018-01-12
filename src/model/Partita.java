@@ -1,10 +1,11 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import persistence.IdBroker;
 
-public class Partita {
+public class Partita implements Serializable {
 
 	private Long codice;
 	private Campionato campionato;
@@ -112,6 +113,6 @@ public class Partita {
 	@Override
 	public boolean equals(Object arg0) {
 		Partita partita=(Partita)(arg0);
-		return partita.codice == codice;
+		return partita.getSquadra_casa().getNome().equals(getSquadra_casa().getNome()) && partita.getSquadra_ospite().getNome().equals(getSquadra_ospite().getNome()) && partita.getCampionato().getCodice().equals(getCampionato().getCodice());
 	}
 }
