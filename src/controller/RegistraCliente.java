@@ -115,11 +115,35 @@ public class RegistraCliente extends HttpServlet {
 			session.setAttribute("username", username);
 			session.setAttribute("mex", "Bevenuto "+username);
 			session.setAttribute("loggato", nuovoGiocatore);
+			
 			RequestDispatcher dispatcher=req.getRequestDispatcher("index.jsp");
 			dispatcher.forward(req, resp);
-		
+			rispristinaSessione(session,true);
+		}
+		else if(existError && req.getParameter("button")!=null) {
+			System.out.println("rispistino con errori");
+			rispristinaSessione(session,false);
 		}
 		RequestDispatcher dispatcher=req.getRequestDispatcher("Registrati.html");
 		dispatcher.forward(req, resp);
+	}
+
+	private void rispristinaSessione(HttpSession session,boolean checked) {
+		if(!checked) {
+			session.setAttribute("erroreName", true);
+			session.setAttribute("erroreSurname", true);
+			session.setAttribute("erroreCreditCard", true);
+			session.setAttribute("erroreUsername", true);
+			session.setAttribute("errorePassword", true);
+			session.setAttribute("erroreCheckPassword", true);
+			return;
+		}
+		session.removeAttribute("erroreName");
+		session.removeAttribute("erroreSurname");
+		session.removeAttribute("erroreCreditCard");
+		session.removeAttribute("erroreUsername");
+		session.removeAttribute("errorePassword");
+		session.removeAttribute("erroreCheckPassword");
+
 	}
 }
