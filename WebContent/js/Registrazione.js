@@ -4,13 +4,11 @@
 		function error(errore, nome){
 			$.ajax({
 				url : 'sendData',
-				data : {
-					nome:value
-				},
-	            type:'POST',
+				type:'POST',
+				data : nome+"="+errore,
 	            cache:false,
-	            error:function(){alert('error');}
-				
+	            error:function(){alert('error');},
+				async:false
 			});
 		}
 		
@@ -57,7 +55,8 @@
 					data:"creditCard=" +$("#creditCard").val()+ "&checkCreditCard=check",
 		            type:'POST',
 		            cache:false,
-		            error:function(){alert('error');}
+		            error:function(){alert('error');},
+					async:false
 					
 				}).done(function(response){
 					if(response!="ok"){
@@ -77,7 +76,8 @@
 				data:"usr=" +$("#username").val()+ "&checkUsername=check",
 	            type:'POST',
 	            cache:false,
-	            error:function(){alert('error');}
+	            error:function(){alert('error');},
+				async:false
 				
 			}).done(function(response){
 				if(response!="ok"){
@@ -100,6 +100,7 @@
 				$("#passwordError").css('display', 'none');
 				error("false","errorePassword");
 			}
+			checkCheckPwd();
 		}
 		
 		function checkCheckPwd(){
