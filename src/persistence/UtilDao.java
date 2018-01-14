@@ -81,9 +81,9 @@ public class UtilDao {
 		//u.createDatabase();
 		//u.addTable("scommessa", new String[]{"codice bigint primary key, data_emissione date, conto_associato bigint references conto(\"codice\"), importo_giocato float, quota_totale float,bonus float,numero_esiti int,vincita_potenziale float"});
 		//u.addTable("scommessa_esitopartita", new String[]{"scommessa bigint not null references scommessa(\"codice\"), esito varchar(255) not null, partita bigint not null, primary key(scommessa,esito,partita),FOREIGN KEY  (esito, partita) REFERENCES esitopartita (esito, partita)"});
-		u.addTable("movimentoScommessa", new String[]{"codice bigint primary key, importo float, tipo varchar(255), scommessa bigint references scommessa(\"codice\")"});
+	//	u.addTable("movimentoScommessa", new String[]{"codice bigint primary key, importo float, tipo varchar(255), scommessa bigint references scommessa(\"codice\")"});
 		//u.addTable("esito", new String[] {"descrizione varchar(255) primary key"});
-//		u.addTable("movimentoCarta", new String[]{"codice bigint primary key,data date,ora time,tipo varchar(255),importo float,conto bigint REFERENCES conto(\"codice\")"});
+		u.addTable("movimentoCarta", new String[]{"codice bigint primary key,data date,ora time,tipo varchar(255),importo float,conto bigint REFERENCES conto(\"codice\")"});
 		//u.addTable("esitopartita", new String[] {"esito varchar(255) not null REFERENCES esito(\"descrizione\"),partita bigint not null REFERENCES partita(\"codice\"), quota float,disponibile boolean, primary key(esito,partita)"});
 //		
 //		CampionatoDao campionatoDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCampionatoDao();
