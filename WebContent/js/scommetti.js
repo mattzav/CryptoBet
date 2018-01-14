@@ -38,24 +38,30 @@ function checkValue(){
 	    		var elemento=$('[name="'+ esito +'"]');
 	    		var res = esito.split(";");
 	    		var e1=$("."+res[0]);
-				if(e1.length){
-					if($('.'+res[0]+' > .'+res[1]).length){
-						e1.remove();
-						elemento.removeClass("btn-primary");
-		    			elemento.addClass("btn-info");
-					}
-					else alert("Hai già selezionato un esito per questa partita");
+	    		var format=/^Errore/;
+	    		if(format.test(response)){
+					alert(response);
 				}
 				else{
-					if($(".scommessa").length){
-						$(".scommessa").append('<tr class="'+res[0]+' info"><td colspan="2">'+dati[0]+' vs '+dati[1]+'</td><td>'+dati[2]+'</td><td class="'+res[1]+'">'+res[1]+'</td></tr>');
+					if(e1.length){
+						if($('.'+res[0]+' > .'+res[1]).length){
+							e1.remove();
+							elemento.removeClass("btn-primary");
+							elemento.addClass("btn-info");
+						}
+						else alert("Hai già selezionato un esito per questa partita");
 					}
-					elemento.removeClass("btn-info");
-	    			elemento.addClass("btn-primary");
+					else{
+						if($(".scommessa").length){
+							$(".scommessa").append('<tr class="'+res[0]+' info"><td colspan="2">'+dati[0]+' vs '+dati[1]+'</td><td>'+dati[2]+'</td><td class="'+res[1]+'">'+res[1]+'</td></tr>');
+						}
+						elemento.removeClass("btn-info");
+						elemento.addClass("btn-primary");
+					}
+					$(".quotaTotale").text("Quota totale : "+dati[3]);
+					$(".bonus").text("Bonus : "+dati[4]);
+					$(".vincita").text("Vincita : "+dati[5]);
 				}
-				$(".quotaTotale").text("Quota totale : "+dati[3]);
-				$(".bonus").text("Bonus : "+dati[4]);
-				$(".vincita").text("Vincita : "+dati[5]);
 				
 	    	});
 	}
@@ -71,16 +77,14 @@ function checkValue(){
 	            cache:false,
 	            error:function(){alert('error');}
 			}).done(function(response){
-				alert(response);
-				if(response=="utente non loggato"){
-					$("#welcomeMessage").css({'display' : 'none'});
-					$("#login").css({'display' : 'block'});
-					alert("errore login");
-				}else if(response=="credito non sufficente"){
+				var format=/^Errore/;
+	    		if(format.test(response)){
 					alert(response);
-				}else if(response=="utente loggato come admin"){
-					alert(response+" : effettua il logout ed accedi come user")
-				}
+					if(response=="Errore : Utente non loggato"){
+						$("#welcomeMessage").css({'display' : 'none'});
+						$("#login").css({'display' : 'block'});
+					}
+	    		}
 				else{
 					svuotaScommessa();
 					alert("scommessa registrata con successo");

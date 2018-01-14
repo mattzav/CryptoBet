@@ -131,9 +131,7 @@ public class Scommetti extends HttpServlet{
 			}
 			else {
 				String btn=req.getParameterNames().nextElement();
-				System.out.println(btn+"nnnn");
 				if(btn.contains(";")) {
-					
 					String[] datiEsitoSelezionato=btn.split(";");
 					Long codicePartita=Long.valueOf(datiEsitoSelezionato[0]);
 					String esitoSelezionato=datiEsitoSelezionato[1];
@@ -141,7 +139,11 @@ public class Scommetti extends HttpServlet{
 						String desc=esito.getEsito().getDescrizione()+" ";
 						if(esito.getPartita().getCodice().equals(codicePartita) && desc.equals(esitoSelezionato)) {
 							if(schemaDiScommessa.canAdd(esito)) {
-								if(esito.isDisponibile()) {	
+								if(!esito.isGiocato()) {
+									if(schemaDiScommessa.getNumero_esiti()>=20) {
+										resp.getWriter().print("Errore: Hai raggiunto il limite massimo");
+										return;
+									}
 									System.out.println("aggiunto");
 									schemaDiScommessa.addEsito(esito);
 									esito.setGiocato(true);
@@ -167,7 +169,11 @@ public class Scommetti extends HttpServlet{
 					System.out.println("gioca scommessa");
 					if(session.getAttribute("utente")==null) {
 						System.out.println("nessun utente");
-						resp.getWriter().print("utente non loggato");
+						resp.getWriter().print("Errore : Utente non loggato");
+						return;
+					}
+					else if(schemaDiScommessa.getNumero_esiti()==0) {
+						resp.getWriter().print("Errore : Non è possibile giocare una scommessa vuota");
 						return;
 					}
 					else if(session.getAttribute("utente").equals("USER")) {
@@ -186,12 +192,12 @@ public class Scommetti extends HttpServlet{
 							resp.getWriter().print("ok");
 						}
 						else {
-							resp.getWriter().print("credito non sufficente");
+							resp.getWriter().print("Errore : credito non sufficente");
 						}
 						return;
 					}else{
 						System.out.println("ADMIN");
-						resp.getWriter().print("utente loggato come admin");
+						resp.getWriter().print("Errore : utente loggato come admin");
 						return;
 					}
 				}
