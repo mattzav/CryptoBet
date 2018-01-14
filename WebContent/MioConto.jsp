@@ -26,13 +26,23 @@
 		<div id="fh5co-page">
 		<div id="fh5co-header">
 			<header id="fh5co-header-section">
-				<c:if test="${utente!=null}">
+				<c:if test="${loggato!=null}">
 					<div>
-						<span class="col-sm-8"></span>
-						<span class="col-sm-4"> 
-							${mex}
-							<a href="login"><input type="button" class="btn btn-primary"value=LOG-OUT onclick="<c:set var="page" value="MioConto.jsp" scope="session"  />"></a>
+						<span class="col-sm-4">
 						</span>
+						<span class="col-sm-4">
+							<c:if test="${utente==\"USER\"}">
+								<h2><a href="MioConto.jsp" class="btn">Saldo conto : ${loggato.conto.saldo}</a></h2>
+							</c:if>
+						</span> 
+						<div class="col-sm-4">
+							<span id="messaggio" class="btn col-sm-6">
+								${mex}
+								</span> 
+							<span class="col-sm-6">
+								<a href="login"><input type="button" class="btn btn-primary" value=LOG-OUT onclick="<c:set var="page" value="index.jsp" scope="session"  />"></a>
+							</span>
+						</div>
 					</div>
 				</c:if>
 				<div class="container">
@@ -82,16 +92,16 @@
 									<div class="col-sm-6">
 										<form method="post" action="login">
 											<div class="form-group">
-												<label for="user"> Username: </label>
+												<label for="user" class="label"> Username: </label>
 												<input type="text" class="form-control" name="user">
 											</div>
 											<div class="form-group">
-												<label for="pwd"> Password: </label>
+												<label for="pwd" class="label"> Password: </label>
 												<input type="password" class="form-control" name="pwd">
 											</div>
 											<div class="form-group">
 												<input class="btn btn-primary" type="submit" name="accesso" value="Accedi" onclick="<c:set var="page" value="MioConto.jsp" scope="session"/>"/>
-												<a class="btn btn-primary" href="Registrati.html">Registrati</a>
+												<a class="btn btn-primary" href="Registrati.html" onclick="<c:set var="page" value="MioConto.jsp" scope="session"/>">Registrati</a>
 											</div>
 										</form>
 									</div>

@@ -5,71 +5,86 @@ function checkValue(){
 		var value=$(".importo").val();
 		$(".importo").addClass("btn-default");
 		$(".importo").removeClass("btn-danger");
-		if(!($.isNumeric( value ))){
+		$("#scommetti").prop('disabled',false);
+		if(!($.isNumeric( value )) || value==""){
 			$(".importo").removeClass("btn-default");
 			$(".importo").addClass("btn-danger");
-		}
-		else{
-			$.ajax(
-	   			{
-		            url:'scommetti',
-		            data:'importo='+value,
-		            type:'POST',
-		            cache:false,
-		            error:function(){alert('error');}
-	        	}
-	    	).done(function(response){
-				$(".vincita").text("Vincita : "+response);
-	    	});
+			$("#scommetti").prop('disabled',true);
+			addMessage("danger","Importo non valido");
+			return false;
+		}else{
+			$("#messageDivision").remove();
+			$.ajax({
+				url:'scommetti',
+				type:'post',
+				data:{
+					importo:value
+				},
+				error:function(){alert("Errore Richiesta");}
+			}).done(function(response){
+				var dati=response.split(";");
+				$(".bonus").text("Bonus : "+dati[1]);
+				$(".vincita").text("Vincita : "+dati[0]);
+			});
+			return true;
 		}
 	}
+	function addMessage(type,message){
+		$("#messageDivision").remove();
+		var titleMessage = "Errore : ";
+		if(type=="success"){
+			titleMessage= "Congratulazioni : ";
+		}
+		$("#response").append(
+				"<div id=\"messageDivision\" class=\"alert alert-"+type+" alert-dismissable\">" +
+					"<a class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">x</a>"+
+					"<strong>"+titleMessage+"</strong>"+message+
+				"</div>");
+	}
 	function esitoSelezionato(esito){
-		$.ajax(
-	   			{
-		            url:'scommetti',
-		            data: esito+" = null",
-		            type:'POST',
-		            cache:false,
-		            error:function(){alert('error');}
-	        	}
-	    	).done(function(response){
-	    		
-	    		var dati=response.split(";");
-	    		var elemento=$('[name="'+ esito +'"]');
-	    		var res = esito.split(";");
-	    		var e1=$("."+res[0]);
-	    		var format=/^Errore/;
-	    		if(format.test(response)){
-					alert(response);
-				}
-				else{
-					if(e1.length){
-						if($('.'+res[0]+' > .'+res[1]).length){
-							e1.remove();
-							elemento.removeClass("btn-primary");
-							elemento.addClass("btn-info");
-						}
-						else alert("Hai già selezionato un esito per questa partita");
+			$.ajax(
+					{
+						url:'scommetti',
+						data: esito+" = null",
+						type:'POST',
+						cache:false,
+						error:function(){alert('error');}
+					}
+			).done(function(response){
+				
+				var dati=response.split(";");
+				var elemento=$('[name="'+ esito +'"]');
+				var res = esito.split(";");
+				var e1=$("."+res[0]);
+				var format=/^Errore/;
+				if(e1.length){
+					if($('.'+res[0]+' > .'+res[1]).length){
+						e1.remove();
+						$("#messageDivision").remove();
+						elemento.removeClass("btn-primary");
+						elemento.addClass("btn-info");
 					}
 					else{
-						if($(".scommessa").length){
-							$(".scommessa").append('<tr class="'+res[0]+' info"><td colspan="2">'+dati[0]+' vs '+dati[1]+'</td><td>'+dati[2]+'</td><td class="'+res[1]+'">'+res[1]+'</td></tr>');
-						}
-						elemento.removeClass("btn-info");
-						elemento.addClass("btn-primary");
+						addMessage("danger"," Hai già selezionato un esito per questa partita.");
 					}
+				}else if(format.test(response)){
+					addMessage("danger",response.substr(8,response.length));
+				}
+				else{
+					$("#messageDivision").remove();
+					if($(".scommessa").length){
+						$(".scommessa").append('<tr class="'+res[0]+' info"><td colspan="2">'+dati[0]+' vs '+dati[1]+'</td><td>'+dati[2]+'</td><td class="'+res[1]+'">'+res[1]+'</td></tr>');
+					}
+					elemento.removeClass("btn-info");
+					elemento.addClass("btn-primary");
 					$(".quotaTotale").text("Quota totale : "+dati[3]);
 					$(".bonus").text("Bonus : "+dati[4]);
 					$(".vincita").text("Vincita : "+dati[5]);
 				}
-				
-	    	});
+			});
 	}
 	function giocaScommessa(){
-		if($(".importo").hasClass("btn-danger")){
-			alert("Inserisci un importo valido");
-		}
-		else{
+		if(checkValue()){
 			$.ajax({
 				url:'scommetti',
 				data: 'giocaScommessa=null',
@@ -79,15 +94,17 @@ function checkValue(){
 			}).done(function(response){
 				var format=/^Errore/;
 	    		if(format.test(response)){
-					alert(response);
 					if(response=="Errore : Utente non loggato"){
 						$("#welcomeMessage").css({'display' : 'none'});
 						$("#login").css({'display' : 'block'});
 					}
+					else{
+						addMessage("danger",response.substr(8,response.length));
+					}
 	    		}
 				else{
 					svuotaScommessa();
-					alert("scommessa registrata con successo");
+					addMessage("success"," scommessa registrata con successo");
 				}
 				
 			});

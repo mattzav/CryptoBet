@@ -126,7 +126,7 @@ public class Scommetti extends HttpServlet{
 				session.setAttribute("importo", Float.valueOf(importo));
 				schemaDiScommessa.setImporto_giocato(Float.valueOf(importo));
 				PrintWriter pw =resp.getWriter();
-				pw.print(schemaDiScommessa.getVincita_potenziale());
+				pw.print(schemaDiScommessa.getVincita_potenziale()+";"+schemaDiScommessa.getBonus());
 				return;
 			}
 			else {
@@ -140,7 +140,8 @@ public class Scommetti extends HttpServlet{
 						if(esito.getPartita().getCodice().equals(codicePartita) && desc.equals(esitoSelezionato)) {
 							if(schemaDiScommessa.canAdd(esito)) {
 								if(!esito.isGiocato()) {
-									if(schemaDiScommessa.getNumero_esiti()>=3) {
+									if(schemaDiScommessa.getNumero_esiti()>=8) {
+										System.out.println(schemaDiScommessa.getNumero_esiti()+" "+schemaDiScommessa.getQuota_totale()+" "+schemaDiScommessa.getImporto_giocato());
 										resp.getWriter().print("Errore: Hai raggiunto il limite massimo");
 										return;
 									}
@@ -173,7 +174,7 @@ public class Scommetti extends HttpServlet{
 						return;
 					}
 					else if(schemaDiScommessa.getNumero_esiti()==0) {
-						resp.getWriter().print("Errore : Non è possibile giocare una scommessa vuota");
+						resp.getWriter().print("Errore : Non e' possibile giocare una scommessa vuota");
 						return;
 					}
 					else if(session.getAttribute("utente").equals("USER")) {
@@ -214,15 +215,4 @@ public class Scommetti extends HttpServlet{
 		
 	}
 
-	private Partita getPartitaSelezionata(ArrayList<Partita> partiteAttive, String substring) {
-		// TODO Auto-generated method stub
-		System.out.println(Long.valueOf(substring));
-		for(Partita p:partiteAttive) {
-			System.out.println(substring+" "+p.getCodice()+" "+p.getSquadra_casa().getNome()+" "+p.getSquadra_ospite().getNome());
-			if(p.getCodice().equals(Long.valueOf(substring)))
-				return p;
-		}
-		System.out.println("non trovato");
-		return null;
-	}
 }

@@ -767,7 +767,6 @@ figure {
   opacity: 0;
   background: rgba(0, 0, 0, 0.5);
   -webkit-transition: 0.6s;
-  -o-transition: 0.6s;
   transition: 0.6s;
 }
 .team-section-grid .overlay-section h3 {

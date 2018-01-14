@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="css/icomoon.css">
 <link rel="stylesheet" href="css/bootstrap.css">
 <link rel="stylesheet" href="css/superfish.css">
+<link href="css/utility.css" rel="stylesheet" type="text/css"/>
 
 <link rel="stylesheet" href="css/style.css">
 
@@ -33,11 +34,21 @@
 				<header id="fh5co-header-section">
 					<c:if test="${loggato!=null}">
 						<div>
-							<span class="col-sm-8"></span> <span class="col-sm-4">
-								${mex} <a href="login"><input type="button"
-									class="btn btn-primary" value=LOG-OUT
-									onclick="<c:set var="page" value="gestisciPartite.jsp" scope="session"  />"></a>
+							<span class="col-sm-4">
 							</span>
+							<span class="col-sm-4">
+								<c:if test="${utente==\"USER\"}">
+									<h2><a href="MioConto.jsp" class="btn">Saldo conto : ${loggato.conto.saldo}</a></h2>
+								</c:if>
+							</span> 
+							<div class="col-sm-4">
+								<span id="messaggio" class="btn col-sm-6">
+									${mex}
+ 								</span> 
+								<span class="col-sm-6">
+									<a href="login"><input type="button" class="btn btn-primary" value=LOG-OUT onclick="<c:set var="page" value="index.jsp" scope="session"  />"></a>
+								</span>
+							</div>
 						</div>
 					</c:if>
 					<div class="container">
@@ -140,15 +151,17 @@
 								<div class="team-section-grid animate-box"
 									style="background-image: url(images/trainer-1.jpg);">
 									<div class="overlay-section">
-										<div class="desc">
-											<h3>Aggiornamento dati</h3>
-											<p>Ti permette di ricevere gli ultimi aggiornamenti sulle
-												partite attualmente disponibili</p>
-											
-											<input type="button" class="btn btn-primary" name="aggiorna"
-												onclick="getPartite();" value="Aggiorna Partite"> <br>
-											<br> <br>
-										</div>
+										<div id="aggiornaPartite">
+											<div class="desc">
+												<h3>Aggiornamento dati</h3>
+												<p>Ti permette di ricevere gli ultimi aggiornamenti sulle
+													partite attualmente disponibili</p>
+												
+												<input type="button" class="btn btn-primary" id="partite" name="aggiorna"
+													onclick="getPartite();" value="Aggiorna Partite"> <br>
+												<br> <br>
+											</div>
+										</div>	
 									</div>
 								</div>
 							</div>
@@ -170,13 +183,15 @@
 								<div class="team-section-grid animate-box"
 									style="background-image: url(images/trainer-3.jpg);">
 									<div class="overlay-section">
-										<div class="desc">
-											<h3>Aggiorna Campionati e Squadre</h3>
-											<p>Ti permette di ricevere gli ultimi aggiornamenti sulle
-												squadre e i campionati attualmente disponibili</p>
-											<input type="button" class="btn btn-primary" name="aggiorna"
-												onclick="getSquadre();" value="Aggiorna"> <br>
-											<br>
+										<div id="aggiornaSquadre">
+											<div class="desc">
+												<h3>Aggiorna Campionati e Squadre</h3>
+												<p>Ti permette di ricevere gli ultimi aggiornamenti sulle
+													squadre e i campionati attualmente disponibili</p>
+												<input type="button" class="btn btn-primary" id="squadre" name="aggiorna"
+													onclick="getSquadre();" value="Aggiorna"> <br>
+												<br>
+											</div>
 										</div>
 									</div>
 								</div>

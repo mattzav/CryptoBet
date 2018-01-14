@@ -28,8 +28,10 @@ public class SchemaDiScommessa implements Serializable{
 	}
 	
 	public void setImporto_giocato(float importo_giocato) {
-		vincita_potenziale=(quota_totale*importo_giocato)+bonus;
 		this.importo_giocato = importo_giocato;
+		updateBonus();
+		vincita_potenziale=(quota_totale*importo_giocato)+bonus;
+		
 	}
 	
 	public float getQuota_totale() {
@@ -75,7 +77,7 @@ public class SchemaDiScommessa implements Serializable{
 	public void addEsito(EsitoPartita esitoSelezionato) {
 		quota_totale*=esitoSelezionato.getQuota();
 		numero_esiti++;
-		//calcolo del bonus
+		updateBonus();
 		vincita_potenziale=(quota_totale*importo_giocato)+bonus;
 		esiti_giocati.add(esitoSelezionato);
 	}
@@ -85,7 +87,7 @@ public class SchemaDiScommessa implements Serializable{
 		quota_totale/=esito.getQuota();
 		System.out.println(quota_totale);
 		numero_esiti--;
-		//calcolo del bonus
+		updateBonus();
 		vincita_potenziale=(quota_totale*importo_giocato)+bonus;
 		for(EsitoPartita e: esiti_giocati) {
 			if(e.getPartita().getCodice().equals(esito.getPartita().getCodice()) && e.getEsito().getDescrizione().equals(esito.getEsito().getDescrizione())) {
@@ -103,6 +105,14 @@ public class SchemaDiScommessa implements Serializable{
 					return false;
 		}
 		return true;
+	}
+
+	
+
+	public void updateBonus() {
+		if(numero_esiti>=5) {
+			bonus=(float) ((((numero_esiti/5.0)*20)*quota_totale*importo_giocato)/100);
+		}
 	}
 	
 }

@@ -112,11 +112,13 @@ public class RegistraCliente extends HttpServlet {
 			Giocatore nuovoGiocatore=new Giocatore(nome,cognome,nuovaCredenziale,conto);
 			
 			PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getGiocatoreDAO().save(nuovoGiocatore);
+			String messaggio="Benvenuto "+username+"  ";
 			session.setAttribute("username", username);
-			session.setAttribute("mex", "Bevenuto "+username);
+			session.setAttribute("mex", messaggio);
 			session.setAttribute("loggato", nuovoGiocatore);
-			
-			RequestDispatcher dispatcher=req.getRequestDispatcher("index.jsp");
+			session.setAttribute("utente", TipoCredenziali.USER);
+			String page=(String) session.getAttribute("page");
+			RequestDispatcher dispatcher=req.getRequestDispatcher(page);
 			dispatcher.forward(req, resp);
 			rispristinaSessione(session,true);
 		}

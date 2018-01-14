@@ -2,7 +2,8 @@
  * 
  */
 function getSquadre() {
-	$("#fh5co-team-section").append("<div class=\"loader\"></div>");
+	$("#aggiornaSquadre").append("<div id=\"loadingSquadre\" class=\"loader\"></div>");
+	$("#squadre").prop("disabled",true);
 	var squadre = [];
 	var campionati = [];
 	$.ajax({
@@ -61,13 +62,17 @@ function getSquadre() {
 		},
 		error : function() {
 			alert("error");
+		},
+		success:function(){
+			$("#loadingSquadre").remove();
+			$("#squadre").prop("disabled",false);
 		}
 	});
-
 }
 
 function getPartite() {
-	
+	$("#aggiornaPartite").append("<div id=\"loadingPartite\" class=\"loader\"></div>");
+	$("#partite").prop("disabled",true);
 	var data = new Date();
 	var data_inizio = new Date(data.getTime() - 1000 * 60 * 60 * 24 * 7);
 	var data_inizio_string = data_inizio.getFullYear() + "-"
@@ -126,9 +131,6 @@ function getPartite() {
 		result = result.concat(item);
 		result = result.concat(";");
 	});
-
-	alert(result);
-
 	$.ajax({
 		url : 'aggiornaDati',
 		type : 'POST',
@@ -138,6 +140,10 @@ function getPartite() {
 		},
 		error : function() {
 			alert("error");
+		},
+		success:function(){
+			$("#loadingPartite").remove();
+			$("#partite").prop("disabled",false);
 		}
 	});
 }

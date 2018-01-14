@@ -23,9 +23,7 @@
 
 
 <script src="js/modernizr-2.6.2.min.js"></script>
-
 <script src="js/scommetti.js"></script>
-
 </head>
 <body>
 	<div id="fh5co-wrapper">
@@ -34,10 +32,21 @@
 				<header id="fh5co-header-section">
 					<c:if test="${loggato!=null}">
 						<div>
-							<span class="col-sm-8"></span> 
 							<span class="col-sm-4">
-								${mex} <a href="login"><input type="button" class="btn btn-primary" value=LOG-OUT onclick="<c:set var="page" value="Scommetti.jsp" scope="session"  />"></a>
 							</span>
+							<span class="col-sm-4">
+								<c:if test="${utente==\"USER\"}">
+									<h2><a href="MioConto.jsp" class="btn">Saldo conto : ${loggato.conto.saldo}</a></h2>
+								</c:if>
+							</span> 
+							<div class="col-sm-4">
+								<span id="messaggio" class="btn col-sm-6">
+									${mex}
+ 								</span> 
+								<span class="col-sm-6">
+									<a href="login"><input type="button" class="btn btn-primary" value=LOG-OUT onclick="<c:set var="page" value="index.jsp" scope="session"  />"></a>
+								</span>
+							</div>
 						</div>
 					</c:if>
 					<div class="container">
@@ -93,16 +102,16 @@
 										<div class="col-sm-6">
 											<form method="post" action="login">
 												<div class="form-group">
-													<label for="user"> Username: </label>
+													<label for="user" class="label"> Username: </label>
 													<input type="text" class="form-control" name="user">
 												</div>
 												<div class="form-group">
-													<label for="pwd"> Password: </label>
+													<label for="pwd" class="label"> Password: </label>
 													<input type="password" class="form-control" name="pwd">
 												</div>
 												<div class="form-group">
 													<input class="btn btn-primary" type="submit" name="accesso" value="Accedi" onclick="<c:set var="page" value="Scommetti.jsp" scope="session"/>"/>
-													<a class="btn btn-primary" href="sendData">Registrati</a>
+													<a class="btn btn-primary" href="sendData" onclick='<c:set var="page" value="Scommetti.jsp" scope="session"/>'>Registrati</a>
 												</div>
 											</form>
 										</div>
@@ -124,6 +133,14 @@
 			<!-- 
 			 -->
 			<div class="container">
+				<div class="row">
+					<div class="col-sm-2">
+					</div>
+					<div class="col-sm-8" id="response">
+					</div>
+					<div class="col-sm-2">
+					</div>
+				</div>
 				<div class="row">
 					<div>
 						<table class="table table-responsive">
@@ -174,7 +191,7 @@
 												<span class="col-sm-4 vincita">
 													Vincita : ${schema.vincita_potenziale}
 												</span>
-												<input class="col-sm-4 btn btn-primary btn-xs" type="button" name="gioca" value="Scommetti" onclick="giocaScommessa()">
+												<input class="col-sm-4 btn btn-primary btn-xs" type="button" id="scommetti" name="gioca" value="Scommetti" onclick="giocaScommessa()">
 											</div>
 										</form>
 									</td>
