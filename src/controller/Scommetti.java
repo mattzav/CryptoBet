@@ -140,7 +140,7 @@ public class Scommetti extends HttpServlet{
 						if(esito.getPartita().getCodice().equals(codicePartita) && desc.equals(esitoSelezionato)) {
 							if(schemaDiScommessa.canAdd(esito)) {
 								if(!esito.isGiocato()) {
-									if(schemaDiScommessa.getNumero_esiti()>=20) {
+									if(schemaDiScommessa.getNumero_esiti()>=3) {
 										resp.getWriter().print("Errore: Hai raggiunto il limite massimo");
 										return;
 									}
