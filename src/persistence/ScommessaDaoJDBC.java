@@ -8,15 +8,15 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import model.Conto;
-import model.EsitoPartita;
-import model.Giocatore;
-import model.MovimentoScommessa;
-import model.Partita;
-import model.SchemaDiScommessa;
-import model.Scommessa;
-import model.Squadra;
-import model.TipoMovimento;
+import model.betting.MovimentoScommessa;
+import model.betting.SchemaDiScommessa;
+import model.betting.Scommessa;
+import model.footballdata.EsitoPartita;
+import model.footballdata.Partita;
+import model.footballdata.Squadra;
+import model.users.Conto;
+import model.users.Giocatore;
+import model.users.TipoMovimento;
 import persistence.dao.MovimentoScommessaDao;
 import persistence.dao.ScommessaDao;
 
@@ -83,7 +83,7 @@ public class ScommessaDaoJDBC implements ScommessaDao {
 				statement.setLong(1, codice);
 				ResultSet result2 = statement.executeQuery();
 				while (result2.next()) {
-					EsitoPartita corrente = new EsitoPartita(true, new model.Esito(result.getString(1)),
+					EsitoPartita corrente = new EsitoPartita(true, new model.footballdata.Esito(result.getString(1)),
 							result.getFloat(2),
 							new Partita(result.getLong(3), new Squadra(result.getString(4)),
 									new Squadra(result.getString(5)), -1, -1, null, result.getDate(6).getTime(), false),

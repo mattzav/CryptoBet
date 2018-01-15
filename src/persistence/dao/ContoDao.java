@@ -2,7 +2,7 @@ package persistence.dao;
 
 import java.util.List;
 
-import model.Conto;
+import model.users.Conto;
 
 public interface ContoDao {
 

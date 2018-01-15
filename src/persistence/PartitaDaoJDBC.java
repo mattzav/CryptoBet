@@ -10,11 +10,11 @@ import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
 
-import model.Campionato;
-import model.Esito;
-import model.EsitoPartita;
-import model.Partita;
-import model.Squadra;
+import model.footballdata.Campionato;
+import model.footballdata.Esito;
+import model.footballdata.EsitoPartita;
+import model.footballdata.Partita;
+import model.footballdata.Squadra;
 import persistence.dao.EsitoDao;
 import persistence.dao.PartitaDao;
 import sun.java2d.pipe.SpanShapeRenderer.Simple;

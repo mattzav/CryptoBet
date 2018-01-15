@@ -2,8 +2,8 @@ package persistence.dao;
 
 import java.util.List;
 
-import model.Conto;
-import model.MovimentoCarta;
+import model.users.Conto;
+import model.users.MovimentoCarta;
 
 public interface MovimentoCartaDao {
 

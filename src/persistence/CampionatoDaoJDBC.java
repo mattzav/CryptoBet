@@ -7,8 +7,8 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
-import model.Campionato;
-import model.Squadra;
+import model.footballdata.Campionato;
+import model.footballdata.Squadra;
 import persistence.dao.CampionatoDao;
 
 public class CampionatoDaoJDBC implements CampionatoDao {

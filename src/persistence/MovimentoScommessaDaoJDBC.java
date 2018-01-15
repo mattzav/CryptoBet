@@ -7,12 +7,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Conto;
-import model.EsitoPartita;
-import model.MovimentoCarta;
-import model.MovimentoScommessa;
-import model.Scommessa;
-import model.TipoMovimento;
+import model.betting.MovimentoScommessa;
+import model.betting.Scommessa;
+import model.footballdata.EsitoPartita;
+import model.users.Conto;
+import model.users.MovimentoCarta;
+import model.users.TipoMovimento;
 import persistence.dao.MovimentoScommessaDao;
 
 public class MovimentoScommessaDaoJDBC implements MovimentoScommessaDao {

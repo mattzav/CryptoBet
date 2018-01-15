@@ -2,7 +2,7 @@ package persistence.dao;
 
 import java.util.List;
 
-import model.Campionato;
+import model.footballdata.Campionato;
 
 public interface CampionatoDao {
 

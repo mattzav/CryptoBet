@@ -2,9 +2,9 @@ package persistence.dao;
 
 import java.util.List;
 
-import model.Amministratore;
-import model.Credenziali;
-import model.Giocatore;
+import model.users.Amministratore;
+import model.users.Credenziali;
+import model.users.Giocatore;
 
 
 public interface AmministratoreDao {

@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import model.Esito;
-import model.Squadra;
+import model.footballdata.Esito;
+import model.footballdata.Squadra;
 import persistence.dao.EsitoDao;
 
 public class EsitoDaoJDBC implements EsitoDao {

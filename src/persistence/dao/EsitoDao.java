@@ -2,7 +2,7 @@ package persistence.dao;
 
 import java.util.List;
 
-import model.Esito;
+import model.footballdata.Esito;
 
 
 public interface EsitoDao {
