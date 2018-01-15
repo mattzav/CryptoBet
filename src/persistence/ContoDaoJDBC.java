@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Conto;
+import model.users.Conto;
 import persistence.dao.ContoDao;
 
 public class ContoDaoJDBC implements ContoDao {

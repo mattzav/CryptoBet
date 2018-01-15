@@ -2,8 +2,8 @@ package persistence.dao;
 
 import java.util.List;
 
-import model.Credenziali;
-import model.Giocatore;
+import model.users.Credenziali;
+import model.users.Giocatore;
 
 public interface CredenzialiDao {
 	public void save(Credenziali credenziali);  // Create

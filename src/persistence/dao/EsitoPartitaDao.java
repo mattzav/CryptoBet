@@ -2,10 +2,10 @@ package persistence.dao;
 
 import java.util.List;
 
-import model.Conto;
-import model.Esito;
-import model.EsitoPartita;
-import model.Partita;
+import model.footballdata.Esito;
+import model.footballdata.EsitoPartita;
+import model.footballdata.Partita;
+import model.users.Conto;
 
 public interface EsitoPartitaDao {
 

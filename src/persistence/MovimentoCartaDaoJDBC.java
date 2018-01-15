@@ -10,11 +10,11 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import model.Campionato;
-import model.Conto;
-import model.MovimentoCarta;
-import model.Partita;
-import model.Squadra;
+import model.footballdata.Campionato;
+import model.footballdata.Partita;
+import model.footballdata.Squadra;
+import model.users.Conto;
+import model.users.MovimentoCarta;
 import persistence.dao.MovimentoCartaDao;
 
 public class MovimentoCartaDaoJDBC implements MovimentoCartaDao{

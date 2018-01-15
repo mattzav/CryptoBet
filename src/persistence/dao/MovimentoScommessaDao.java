@@ -2,8 +2,8 @@ package persistence.dao;
 
 import java.util.List;
 
-import model.Conto;
-import model.MovimentoScommessa;
+import model.betting.MovimentoScommessa;
+import model.users.Conto;
 
 public interface MovimentoScommessaDao {
 

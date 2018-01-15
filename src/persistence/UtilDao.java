@@ -9,12 +9,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javafx.geometry.Pos;
-import model.Campionato;
-import model.Conto;
-import model.MovimentoCarta;
-import model.Partita;
-import model.Squadra;
-import model.TipoMovimento;
+import model.footballdata.Campionato;
+import model.footballdata.Partita;
+import model.footballdata.Squadra;
+import model.users.Conto;
+import model.users.MovimentoCarta;
+import model.users.TipoMovimento;
 import persistence.dao.CampionatoDao;
 import persistence.dao.MovimentoCartaDao;
 import persistence.dao.PartitaDao;

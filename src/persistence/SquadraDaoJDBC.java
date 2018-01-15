@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
-import model.Squadra;
+import model.footballdata.Squadra;
 import persistence.dao.SquadraDao;
 
 public class SquadraDaoJDBC implements SquadraDao{

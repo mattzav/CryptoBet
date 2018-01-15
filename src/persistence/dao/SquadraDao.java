@@ -2,7 +2,7 @@ package persistence.dao;
 
 import java.util.List;
 
-import model.Squadra;
+import model.footballdata.Squadra;
 
 public interface SquadraDao {
 

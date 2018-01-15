@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import model.Esito;
-import model.EsitoPartita;
-import model.Partita;
+import model.footballdata.Esito;
+import model.footballdata.EsitoPartita;
+import model.footballdata.Partita;
 import persistence.dao.EsitoPartitaDao;
 
 public class EsitoPartitaDaoJDBC implements EsitoPartitaDao {
@@ -106,7 +106,7 @@ public class EsitoPartitaDaoJDBC implements EsitoPartitaDao {
 			ResultSet result = statement.executeQuery();
 
 			while (result.next()) {
-				EsitoPartita corrente = new EsitoPartita(result.getBoolean(3),new model.Esito(result.getString(1)), result.getFloat(2), partita,result.getString(4));
+				EsitoPartita corrente = new EsitoPartita(result.getBoolean(3),new model.footballdata.Esito(result.getString(1)), result.getFloat(2), partita,result.getString(4));
 				esiti_partita.add(corrente);
 			}
 

@@ -2,8 +2,8 @@ package persistence.dao;
 
 import java.util.List;
 
-import model.CartaDiCredito;
-import model.Conto;
+import model.users.CartaDiCredito;
+import model.users.Conto;
 
 public interface CartaDiCreditoDao {
 	public void save(CartaDiCredito carta);  // Create

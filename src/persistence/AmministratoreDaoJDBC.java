@@ -6,11 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import model.Amministratore;
-import model.Conto;
-import model.Credenziali;
-import model.Giocatore;
-import model.TipoCredenziali;
+import model.users.Amministratore;
+import model.users.Conto;
+import model.users.Credenziali;
+import model.users.Giocatore;
+import model.users.TipoCredenziali;
 import persistence.dao.AmministratoreDao;
 
 public class AmministratoreDaoJDBC implements AmministratoreDao {

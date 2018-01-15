@@ -9,13 +9,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.CartaDiCredito;
-import model.Conto;
-import model.EsitoPartita;
-import model.Partita;
-import model.SchemaDiScommessa;
-import model.Scommessa;
-import model.Squadra;
+import model.betting.SchemaDiScommessa;
+import model.betting.Scommessa;
+import model.footballdata.EsitoPartita;
+import model.footballdata.Partita;
+import model.footballdata.Squadra;
+import model.users.CartaDiCredito;
+import model.users.Conto;
 import persistence.dao.CartaDiCreditoDao;
 
 

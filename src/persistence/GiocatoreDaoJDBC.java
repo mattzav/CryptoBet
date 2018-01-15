@@ -6,11 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import model.CartaDiCredito;
-import model.Conto;
-import model.Credenziali;
-import model.Giocatore;
-import model.TipoCredenziali;
+import model.users.CartaDiCredito;
+import model.users.Conto;
+import model.users.Credenziali;
+import model.users.Giocatore;
+import model.users.TipoCredenziali;
 import persistence.dao.GiocatoreDao;
 
 public class GiocatoreDaoJDBC implements GiocatoreDao {
