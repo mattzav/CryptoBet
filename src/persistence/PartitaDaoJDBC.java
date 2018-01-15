@@ -21,7 +21,6 @@ import sun.java2d.pipe.SpanShapeRenderer.Simple;
 
 public class PartitaDaoJDBC implements PartitaDao {
 
-
 	@Override
 	public void save(Partita partita) {
 
@@ -54,7 +53,9 @@ public class PartitaDaoJDBC implements PartitaDao {
 			statement.executeUpdate();
 
 			EsitoDao esitoDao = PostgresDAOFactory.getDAOFactory(PostgresDAOFactory.POSTGRESQL).getEsitoDao();
+			PartitaDao partitaDao = PostgresDAOFactory.getDAOFactory(PostgresDAOFactory.POSTGRESQL).getPartitaDao();
 			for (Esito e : esitoDao.findAll()) {
+				float quota = partitaDao.getQuota(partita.getCodice(), e.getDescrizione());
 				insert = "insert into esitopartita(esito,partita,quota,disponibile,stato) values (?,?,?,?,?)";
 				statement = connection.prepareStatement(insert);
 				statement.setString(1, e.getDescrizione());
@@ -139,7 +140,6 @@ public class PartitaDaoJDBC implements PartitaDao {
 				statement.setLong(2, partita.getCodice());
 				statement.setString(3, esiti[0]);
 				statement.executeUpdate();
-			
 
 				if (partita.getGoal_casa() > 0 && partita.getGoal_ospite() > 0) {
 					update = "update esitopartita SET stato=? where partita=? and esito=?";
@@ -153,7 +153,6 @@ public class PartitaDaoJDBC implements PartitaDao {
 				statement.setLong(2, partita.getCodice());
 				statement.setString(3, esiti[0]);
 				statement.executeUpdate();
-			
 
 				update = "update esitopartita SET stato=? where partita=? and stato=?";
 				statement = connection.prepareStatement(update);
@@ -450,4 +449,119 @@ public class PartitaDaoJDBC implements PartitaDao {
 		return media_gol;
 	}
 
+	public float getQuota(long codicePartita, String esito) {
+		String tipo_esito = "";
+
+		// controllo riguardo tipo dell' esito per cui il client ha chiesto il
+		// suggerimento
+		if (esito.contains("1") || esito.contains("2") || esito.contains("X"))
+			tipo_esito += "classico";
+		else if (esito.contains("G"))
+			tipo_esito += "goal";
+		else
+			tipo_esito += "numerogoal";
+
+		PartitaDao partitaDao = PostgresDAOFactory.getDAOFactory(PostgresDAOFactory.POSTGRESQL).getPartitaDao();
+		if (tipo_esito.equals("classico")) {
+
+			// se ha chiesto un suggerimento riguardo gli esiti classici, chiedo al db la
+			// media punti delle due squadre
+			float punti[] = partitaDao.getPuntiSquadre(codicePartita);
+
+			float probabilita_eventi[] = new float[3];
+
+			// se le due squadre hanno media punti pari a 0, inizializzo le probabilita
+			if (punti[0] == 0 && punti[1] == 0) {
+				probabilita_eventi[0] = 0.5f;
+				probabilita_eventi[2] = 0.5f;
+				probabilita_eventi[1] = 1 / 2.5f;
+			}
+			// altrimenti le calcolo come proporzioni delle due medie punti
+			else {
+				probabilita_eventi[0] = (float) (punti[0] / (punti[0] + punti[1]));
+				probabilita_eventi[1] = (float) (1 / (3.0f + (Math.abs(punti[0] - punti[1]))));
+				probabilita_eventi[2] = (float) (punti[1] / (punti[0] + punti[1]));
+			}
+
+			float probabilita = 0;
+
+			// calcolo la probabilità dell'esito come somma delle probabilità degli esiti
+			// giocati
+			if (esito.contains("1"))
+				probabilita += probabilita_eventi[0];
+			if (esito.contains("X"))
+				probabilita += probabilita_eventi[1];
+			if (esito.contains("2"))
+				probabilita += probabilita_eventi[2];
+
+			// evito di avere una probabilita pari a 0 che originirebbe quota infinita o una
+			// probabilita pari a 1 che originirebbe una quota pari a 1
+			if (probabilita == 0)
+				probabilita = 0.1f;
+			else if (probabilita >= 1)
+				probabilita = 0.9f;
+
+			// calcolo il valore atteso (quota finale)
+			float valore_atteso = (1 / probabilita);
+
+			// la restituisco
+			return valore_atteso;
+		} else if (tipo_esito.equals("goal")) {
+
+			// se ha chiesto un suggerimento riguardo gli esiti (GG o NG), chiedo al db la
+			// media delle partite in cui le due squadre hanno segnato almeno un goal
+			float media_partite_a_segno[] = partitaDao.getMediaPartiteASegno(codicePartita);
+
+			float probabilita = 0;
+
+			// calcolo la probabilita del GG come il prodotto delle medie delle partite in
+			// cui entrambi hanno segnato
+			if (esito.equals("GG"))
+				probabilita = media_partite_a_segno[0] * media_partite_a_segno[1];
+			// calcolo la probabilita del NG come (1-P(GG))
+			else if (esito.equals("NG"))
+				probabilita = (1 - (media_partite_a_segno[0] * media_partite_a_segno[1]));
+
+			// evito probabilita pari a 0 o maggiori di 1
+			if (probabilita == 0)
+				probabilita = 0.1f;
+			else if (probabilita >= 1)
+				probabilita = 0.9f;
+
+			float valore_atteso = (1 / probabilita);
+
+			return valore_atteso;
+		} else if (tipo_esito.equals("numerogoal")) {
+
+			// se ha chiesto un suggerimento riguardo gli esiti (U o O), chiedo al db la
+			// media goal delle due squadre
+			float media_goal_a_partita[] = partitaDao.getMediaGoal(codicePartita);
+
+			float probabilita = 0;
+
+			// calcolo la probabilita dell'under
+			if (esito.equals("U")) {
+				probabilita = 0.5f + ((3 - (media_goal_a_partita[0] + media_goal_a_partita[1])) / 10);
+			}
+			// altrimenti quella dell'over
+			else {
+				probabilita = 0.5f + (((media_goal_a_partita[0] + media_goal_a_partita[1]) - 3) / 10);
+			}
+
+			// evito probabilita pari a 0 o maggiori di 1
+			if (probabilita == 0)
+				probabilita = 0.1f;
+			else if (probabilita >= 1)
+				probabilita = 0.9f;
+
+			// calcolo il valore atteso che sarebbe la quota finale
+			float valore_atteso = (1 / probabilita);
+
+			// restituisco la quota
+			return valore_atteso;
+
+		}
+		return 1.0f;
+
+	}
 }

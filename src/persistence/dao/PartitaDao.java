@@ -14,5 +14,5 @@ public interface PartitaDao {
 	public float[] getPuntiSquadre(long codice);
 	public float[] getMediaPartiteASegno(long codicePartita);
 	public float[] getMediaGoal(long codicePartita);
-
+	public float getQuota(long codice,String esito);
 }
