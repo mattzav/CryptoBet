@@ -70,4 +70,8 @@ public class Conto implements Serializable{
 	public void versa(Float importo) {
 		saldo+=importo;
 	}
+	
+	public void setSaldo(float saldo) {
+		this.saldo = saldo;
+	}
 }

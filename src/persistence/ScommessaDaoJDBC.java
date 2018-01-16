@@ -17,6 +17,7 @@ import model.footballdata.Squadra;
 import model.users.Conto;
 import model.users.Giocatore;
 import model.users.TipoMovimento;
+import persistence.dao.ContoDao;
 import persistence.dao.MovimentoScommessaDao;
 import persistence.dao.ScommessaDao;
 
@@ -175,6 +176,17 @@ public class ScommessaDaoJDBC implements ScommessaDao {
 			statement.setString(1, esito_scommessa);
 			statement.setLong(2, codiceScommessa);
 			statement.executeUpdate();
+			
+			ContoDao contoDao = PostgresDAOFactory.getDAOFactory(PostgresDAOFactory.POSTGRESQL).getContoDAO();
+			ScommessaDao scommessaDao =PostgresDAOFactory.getDAOFactory(PostgresDAOFactory.POSTGRESQL).getScommessaDao();
+			Scommessa scommessa = scommessaDao.findByPrimaryKey(codiceScommessa);
+			Conto contoAssociato = scommessa.getConto_associato();
+			contoAssociato.setSaldo(contoAssociato.getSaldo()+scommessa.getSchema_scommessa().getVincita_potenziale());
+			
+			if(esito_scommessa.equals("vinta")) {
+				MovimentoScommessaDao movimentoScommessa = PostgresDAOFactory.getDAOFactory(PostgresDAOFactory.POSTGRESQL).getMovimentoScommessaDAO();
+				movimentoScommessa.save(new MovimentoScommessa(scommessa.getSchema_scommessa().getVincita_potenziale(), TipoMovimento.VERSAMENTO, scommessa));
+			}
 
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());

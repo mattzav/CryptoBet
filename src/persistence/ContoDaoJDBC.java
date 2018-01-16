@@ -10,6 +10,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.footballdata.EsitoPartita;
+import model.users.CartaDiCredito;
 import model.users.Conto;
 import persistence.dao.ContoDao;
 
@@ -39,9 +41,27 @@ public class ContoDaoJDBC implements ContoDao {
 	}
 
 	@Override
-	public Conto findByPrimaryKey(String matricola) {
-		// TODO Auto-generated method stub
-		return null;
+	public Conto findByPrimaryKey(Long codice) {
+		Connection connection = PostgresDAOFactory.dataSource.getConnection();
+		Conto conto= null;
+		try {
+			PreparedStatement statement;
+			String query = "select c.saldo,c.data_apertura,c.codice_carta from conto as c where c.codice = ?"; 
+			statement = connection.prepareStatement(query);
+			statement.setLong(1, codice);
+			ResultSet result = statement.executeQuery();
+			if (result.next()) 
+				conto=new Conto(codice, result.getFloat(1), result.getDate(2), new CartaDiCredito(result.getString(3)));
+		} catch (SQLException e) {
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}	
+		return conto;
 	}
 
 	@Override
