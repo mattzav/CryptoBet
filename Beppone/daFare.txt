@@ -1,0 +1,4 @@
+Aggiustare benvenuto admin
+Aggiustare aggiornamento conto nella session
+aggiustare il loader che rimane
+aggiustare visualizzazione quota quando elimino un risultato.
