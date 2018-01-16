@@ -7,7 +7,7 @@
   
   <servlet>
     <servlet-name>Login</servlet-name>
-    <servlet-class>controller.EffettuaLogin</servlet-class>
+    <servlet-class>controller.handleaccounting.EffettuaLogin</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>Login</servlet-name>
@@ -15,7 +15,7 @@
   </servlet-mapping>  
   <servlet>
     <servlet-name>Registra</servlet-name>
-    <servlet-class>controller.RegistraCliente</servlet-class>
+    <servlet-class>controller.handleaccounting.RegistraCliente</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>Registra</servlet-name>
@@ -24,7 +24,7 @@
   
    <servlet>
     <servlet-name>AggiornaDati</servlet-name>
-    <servlet-class>controller.AggiornaDati</servlet-class>
+    <servlet-class>controller.handlematches.AggiornaDati</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>AggiornaDati</servlet-name>
@@ -33,7 +33,7 @@
   
    <servlet>
     <servlet-name>AggiornaQuote</servlet-name>
-    <servlet-class>controller.AggiornaQuote</servlet-class>
+    <servlet-class>controller.handlematches.AggiornaQuote</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>AggiornaQuote</servlet-name>
@@ -42,7 +42,7 @@
   
    <servlet>
     <servlet-name>ModificaQuota</servlet-name>
-    <servlet-class>controller.ModificaQuota</servlet-class>
+    <servlet-class>controller.handlematches.ModificaQuota</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>ModificaQuota</servlet-name>
@@ -51,7 +51,7 @@
   
     <servlet>
     <servlet-name>Scommetti</servlet-name>
-    <servlet-class>controller.Scommetti</servlet-class>
+    <servlet-class>controller.handlebetting.Scommetti</servlet-class>
  	 </servlet>
   <servlet-mapping>
     <servlet-name>Scommetti</servlet-name>
@@ -60,7 +60,7 @@
   
    <servlet>
     <servlet-name>MostraScommesse</servlet-name>
-    <servlet-class>controller.MostraUltimeScommesse</servlet-class>
+    <servlet-class>controller.handleaccounting.MostraUltimeScommesse</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>MostraScommesse</servlet-name>
@@ -69,7 +69,7 @@
   
   <servlet>
     <servlet-name>ListaMovimenti</servlet-name>
-    <servlet-class>controller.ListaMovimenti</servlet-class>
+    <servlet-class>controller.handleaccounting.ListaMovimenti</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>ListaMovimenti</servlet-name>
@@ -78,7 +78,7 @@
 
   <servlet>
     <servlet-name>VerificaScommessa</servlet-name>
-    <servlet-class>controller.VerificaScommessa</servlet-class>
+    <servlet-class>controller.handleaccounting.VerificaScommessa</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>VerificaScommessa</servlet-name>
@@ -87,7 +87,7 @@
 
   <servlet>
     <servlet-name>Versamento</servlet-name>
-    <servlet-class>controller.VersamentoSuConto</servlet-class>
+    <servlet-class>controller.handleaccounting.VersamentoSuConto</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>Versamento</servlet-name>
@@ -95,7 +95,7 @@
   </servlet-mapping>  
   <servlet>
     <servlet-name>Prelievo</servlet-name>
-    <servlet-class>controller.PrelievoSuConto</servlet-class>
+    <servlet-class>controller.handleaccounting.PrelievoSuConto</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>Prelievo</servlet-name>

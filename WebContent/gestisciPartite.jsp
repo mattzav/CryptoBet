@@ -27,7 +27,6 @@
 
 </head>
 <body>
-	<jsp:useBean id="esito" class="model.Esito" />
 	<div id="fh5co-wrapper">
 		<div id="fh5co-page">
 			<div id="fh5co-header">

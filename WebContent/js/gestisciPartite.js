@@ -139,7 +139,7 @@ function getPartite() {
 			partite : result
 		},
 		error : function() {
-			alert("error");
+			alert("error partite");
 		},
 		success:function(){
 			$("#loadingPartite").remove();

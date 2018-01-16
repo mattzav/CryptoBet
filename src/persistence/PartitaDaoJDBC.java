@@ -60,7 +60,7 @@ public class PartitaDaoJDBC implements PartitaDao {
 				statement = connection.prepareStatement(insert);
 				statement.setString(1, e.getDescrizione());
 				statement.setLong(2, partita.getCodice());
-				statement.setFloat(3, 1.0f);
+				statement.setFloat(3, quota);
 				statement.setBoolean(4, true);
 				statement.setString(5, "non verificato");
 				statement.executeUpdate();
@@ -505,7 +505,8 @@ public class PartitaDaoJDBC implements PartitaDao {
 			float valore_atteso = (1 / probabilita);
 
 			// la restituisco
-			return valore_atteso;
+			String val=String.valueOf(valore_atteso);
+			return Float.valueOf(val.substring(0, Math.min(4, val.length())));
 		} else if (tipo_esito.equals("goal")) {
 
 			// se ha chiesto un suggerimento riguardo gli esiti (GG o NG), chiedo al db la
@@ -529,8 +530,8 @@ public class PartitaDaoJDBC implements PartitaDao {
 				probabilita = 0.9f;
 
 			float valore_atteso = (1 / probabilita);
-
-			return valore_atteso;
+			String val=String.valueOf(valore_atteso);
+			return Float.valueOf(val.substring(0, Math.min(4, val.length())));
 		} else if (tipo_esito.equals("numerogoal")) {
 
 			// se ha chiesto un suggerimento riguardo gli esiti (U o O), chiedo al db la
@@ -558,7 +559,8 @@ public class PartitaDaoJDBC implements PartitaDao {
 			float valore_atteso = (1 / probabilita);
 
 			// restituisco la quota
-			return valore_atteso;
+			String val=String.valueOf(valore_atteso);
+			return Float.valueOf(val.substring(0, Math.min(4, val.length())));
 
 		}
 		return 1.0f;
