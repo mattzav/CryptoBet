@@ -6,6 +6,7 @@ function getSquadre() {
 	$("#squadre").prop("disabled",true);
 	var squadre = [];
 	var campionati = [];
+	var scudetti = [];
 	$.ajax({
 		headers : {
 			'X-Auth-Token' : '9c8c10fb6ee545a5a46161e402d73dee'
@@ -36,10 +37,33 @@ function getSquadre() {
 					}
 				});
 			});
+			_url="http://api.football-data.org/v1/competitions/"+item.id+"/teams";
+			$.ajax({
+				headers : {
+					'X-Auth-Token' : '9c8c10fb6ee545a5a46161e402d73dee'
+				},
+				url : _url,
+				dataType : 'json',
+				type : 'GET',
+				async : false,
+			}).done(function(_response) {
+				
+				$.each(_response, function(i, _item) {
+					if (i == "teams") {
+						$.each(_item, function(_i, item2) {
+							if(item2.crestUrl != null){
+								scudetti.push(item2.name+"endScudetto"+item2.crestUrl+"endSquadra");
+							}
+						});
+					}
+				});
+			});
+			
 		});
 	});
 	var result_squadre = "";
 	var result_campionati = "";
+	var result_scudetti="";
 	$.each(squadre, function(i, item) {
 		result_squadre = result_squadre.concat(item);
 		result_squadre = result_squadre.concat(";");
@@ -52,12 +76,18 @@ function getSquadre() {
 		else
 			result_campionati = result_campionati.concat(";");
 	});
+	
+	$.each(scudetti, function(i, item) {
+		result_scudetti+=item;
+	});
+	
 	$.ajax({
 		url : 'aggiornaDati',
 		type : 'POST',
 		data : {
 			squadre : result_squadre,
 			campionati : result_campionati,
+			scudetti : result_scudetti,
 			aggiorna : "Aggiorna"
 		},
 		error : function() {
