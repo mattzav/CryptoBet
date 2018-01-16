@@ -71,7 +71,7 @@ public class ScommessaDaoJDBC implements ScommessaDao {
 		Scommessa scommessa = null;
 		try {
 			PreparedStatement statement;
-			String query = "select s.dataemissione, s.contoassociato, s.importo_giocato,s.quota_totale,s.bonus,s.numero_esiti,"
+			String query = "select s.data_emissione, s.conto_associato, s.importo_giocato,s.quota_totale,s.bonus,s.numero_esiti,"
 					+ "s.vincita_potenziale,s.stato from scommessa as s where s.codice=? ";
 			statement = connection.prepareStatement(query);
 			statement.setLong(1, codice);
@@ -84,16 +84,18 @@ public class ScommessaDaoJDBC implements ScommessaDao {
 				statement.setLong(1, codice);
 				ResultSet result2 = statement.executeQuery();
 				while (result2.next()) {
-					EsitoPartita corrente = new EsitoPartita(true, new model.footballdata.Esito(result.getString(1)),
-							result.getFloat(2),
-							new Partita(result.getLong(3), new Squadra(result.getString(4)),
-									new Squadra(result.getString(5)), -1, -1, null, result.getDate(6).getTime(), false),
+					
+					EsitoPartita corrente = new EsitoPartita(true, new model.footballdata.Esito(result2.getString(1)),
+							result2.getFloat(2),
+							new Partita(result2.getLong(3), new Squadra(result2.getString(4)),
+									new Squadra(result2.getString(5)), -1, -1, null, result2.getDate(6).getTime(), false),
 							result2.getString(7));
 					esiti_giocati.add(corrente);
 				}
 				SchemaDiScommessa schema_scommessa = new SchemaDiScommessa(result.getFloat(3), result.getFloat(4),
 						result.getFloat(5), result.getInt(6), result.getFloat(7), esiti_giocati);
-				scommessa = new Scommessa(codice, result.getDate(1), new Conto(result.getLong(2), 0.0f, null, null),
+				ContoDao contoDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getContoDAO();
+				scommessa = new Scommessa(codice, new java.util.Date(result.getDate(1).getTime()), contoDao.findByPrimaryKey(result.getLong(2)),
 						schema_scommessa, result.getString(8));
 			}
 		} catch (SQLException e) {
