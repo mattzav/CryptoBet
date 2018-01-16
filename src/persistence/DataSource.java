@@ -21,6 +21,8 @@ public class DataSource {
 		try {
 		    connection = DriverManager.getConnection(dbURI,userName, password);
 		} catch(SQLException e) {
+			
+			System.out.println("eccezione");
 			throw new PersistenceException(e.getMessage());
 		}
 		return connection;
