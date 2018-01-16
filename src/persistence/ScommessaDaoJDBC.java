@@ -182,6 +182,7 @@ public class ScommessaDaoJDBC implements ScommessaDao {
 			Scommessa scommessa = scommessaDao.findByPrimaryKey(codiceScommessa);
 			Conto contoAssociato = scommessa.getConto_associato();
 			contoAssociato.setSaldo(contoAssociato.getSaldo()+scommessa.getSchema_scommessa().getVincita_potenziale());
+			contoDao.update(contoAssociato);
 			
 			if(esito_scommessa.equals("vinta")) {
 				MovimentoScommessaDao movimentoScommessa = PostgresDAOFactory.getDAOFactory(PostgresDAOFactory.POSTGRESQL).getMovimentoScommessaDAO();
