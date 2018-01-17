@@ -4,7 +4,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -46,16 +48,19 @@ public class AggiornaDati extends HttpServlet {
 			SquadraDao squadraDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getSquadraDAO();
 			CampionatoDao campionatoDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCampionatoDao();
 
+			Connection connection = PostgresDAOFactory.dataSource.getConnection();
+
 			for (String s : squadre.split(";")) {
-				squadraDao.save(new Squadra(s));
+				squadraDao.save(new Squadra(s),connection);
 			}
 			
 			for(String s:scudetti.split("endSquadra")) {
 				System.out.println(s);
 				String squadra_scudetto[] = s.split("endScudetto");
 				Squadra squadra_con_scudetto = new Squadra(squadra_scudetto[0]);
+				System.out.println(squadra_scudetto[0]);
 				squadra_con_scudetto.setScudetto(squadra_scudetto[1]);
-				squadraDao.update(squadra_con_scudetto);
+				squadraDao.update(squadra_con_scudetto, connection);
 			}
 
 			
@@ -67,7 +72,13 @@ public class AggiornaDati extends HttpServlet {
 				if (id.equals("466"))
 					continue;
 				String caption = s.substring(index + 1, s.length());
-				campionatoDao.save(new Campionato(Long.valueOf(id), caption));
+				campionatoDao.save(new Campionato(Long.valueOf(id), caption),connection);
+			}
+			
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
 		}
 		// se invece il parametro aggiorna ha valore AggiornaPartite significa che

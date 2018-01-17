@@ -15,8 +15,7 @@ public class CampionatoDaoJDBC implements CampionatoDao {
 
 	
 	@Override
-	public void save(Campionato campionato) {
-		Connection connection = PostgresDAOFactory.dataSource.getConnection();
+	public void save(Campionato campionato, Connection connection) {
 		try {
 			
 			Campionato esistente = findByPrimaryKey(campionato.getCodice());
@@ -30,13 +29,7 @@ public class CampionatoDaoJDBC implements CampionatoDao {
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				throw new PersistenceException(e.getMessage());
-			}
-		}		
+		} 
 	}
 
 	@Override

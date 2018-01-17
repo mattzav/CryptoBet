@@ -14,28 +14,22 @@ import persistence.dao.SquadraDao;
 public class SquadraDaoJDBC implements SquadraDao {
 
 	@Override
-	public void save(Squadra squadra) {
-		Connection connection = PostgresDAOFactory.dataSource.getConnection();
-		try {
-
+	public void save(Squadra squadra, Connection connection) {
 			Squadra esistente = findByPrimaryKey(squadra.getNome());
 			if (esistente != null)
 				return;
 
 			String insert = "insert into squadra(nome,scudetto) values (?,?)";
-			PreparedStatement statement = connection.prepareStatement(insert);
-			statement.setString(1, squadra.getNome());
-			statement.setString(2, squadra.getScudetto());
-			statement.executeUpdate();
-		} catch (SQLException e) {
-			throw new PersistenceException(e.getMessage());
-		} finally {
 			try {
-				connection.close();
+				PreparedStatement statement = connection.prepareStatement(insert);
+				statement.setString(1, squadra.getNome());
+				statement.setString(2, squadra.getScudetto());
+				statement.executeUpdate();
 			} catch (SQLException e) {
-				throw new PersistenceException(e.getMessage());
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		}
+		
 	}
 
 	@Override
@@ -46,7 +40,6 @@ public class SquadraDaoJDBC implements SquadraDao {
 			PreparedStatement statement;
 			String query = "select nome,scudetto from squadra where nome = ?";
 			statement = connection.prepareStatement(query);
-			System.out.println(nome);
 			statement.setString(1, nome);
 			ResultSet result = statement.executeQuery();
 			if (result.next()) {
@@ -97,9 +90,8 @@ public class SquadraDaoJDBC implements SquadraDao {
 	}
 
 	@Override
-	public void update(Squadra squadra) {
+	public void update(Squadra squadra, Connection connection) {
 
-		Connection connection = PostgresDAOFactory.dataSource.getConnection();
 		try {
 			String insert = "update squadra SET scudetto = ? where nome=?";
 			PreparedStatement statement = connection.prepareStatement(insert);
@@ -108,13 +100,7 @@ public class SquadraDaoJDBC implements SquadraDao {
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				throw new PersistenceException(e.getMessage());
-			}
-		}
+		} 
 
 	}
 
