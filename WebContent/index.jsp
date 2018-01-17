@@ -32,18 +32,18 @@
 			<div id="fh5co-header">
 				<header id="fh5co-header-section"> 
 					<c:if test="${loggato!=null}">
-						<div>
-							<span class="col-sm-4">
-							</span>
-							<span class="col-sm-4">
+						<div class="info">
+							<div class="col-sm-5">
+								<span id="messaggio" class="btn col-sm-6">
+									${mex}
+ 								</span> 
+							</div>
+							<span class="col-sm-5">
 								<c:if test="${utente==\"USER\"}">
 									<h2><a href="MioConto.jsp" class="btn">Saldo conto : ${loggato.conto.saldo}</a></h2>
 								</c:if>
 							</span> 
-							<div class="col-sm-4">
-								<span id="messaggio" class="btn col-sm-6">
-									${mex}
- 								</span> 
+							<div class="col-sm-2">
 								<span class="col-sm-6">
 									<a href="login"><input type="button" class="btn btn-primary" value=LOG-OUT onclick="<c:set var="page" value="index.jsp" scope="session"  />"></a>
 								</span>
