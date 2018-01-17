@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class Squadra implements Serializable{
 
 	private String nome;
+	private String scudetto;
 	
 	
 	public Squadra(String nome) {
@@ -19,5 +20,12 @@ public class Squadra implements Serializable{
 		this.nome = nome;
 	}
 	
+	public void setScudetto(String scudetto) {
+		this.scudetto = scudetto;
+	}
+	
+	public String getScudetto() {
+		return scudetto;
+	}
 	
 }

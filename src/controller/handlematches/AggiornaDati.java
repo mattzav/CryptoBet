@@ -46,13 +46,23 @@ public class AggiornaDati extends HttpServlet {
 			
 			String squadre = req.getParameter("squadre");
 			String campionati = req.getParameter("campionati");
+			String scudetti = req.getParameter("scudetti");
 			SquadraDao squadraDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getSquadraDAO();
 			CampionatoDao campionatoDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCampionatoDao();
 
 			for (String s : squadre.split(";")) {
 				squadraDao.save(new Squadra(s));
 			}
+			
+			for(String s:scudetti.split("endSquadra")) {
+				System.out.println(s);
+				String squadra_scudetto[] = s.split("endScudetto");
+				Squadra squadra_con_scudetto = new Squadra(squadra_scudetto[0]);
+				squadra_con_scudetto.setScudetto(squadra_scudetto[1]);
+				squadraDao.update(squadra_con_scudetto);
+			}
 
+			
 			for (String s : campionati.split(";")) {
 				int index = s.indexOf(":");
 				String id = s.substring(0, index);
@@ -86,7 +96,6 @@ public class AggiornaDati extends HttpServlet {
 				}
 
 				Partita a = null;
-				System.out.println(partita[0]);
 				Partita match = new Partita(new Squadra(partita[1]), new Squadra(partita[2]), -1, -1,
 						new Campionato(Long.valueOf(partita[0]), null), new java.util.Date(d.getTime()), finish);
 				if (!partita[3].equals("null") && !partita[4].equals("null")) {
