@@ -158,6 +158,7 @@ public class Scommetti extends HttpServlet{
 							else {
 								System.out.println("esito già presente per questa partita");
 							}
+							System.out.println(schemaDiScommessa.getQuota_totale());
 							resp.getWriter().print(esito.getPartita().getSquadra_casa().getNome()+";"
 													+esito.getPartita().getSquadra_ospite().getNome()+";"
 													+ esito.getQuota()+";"+schemaDiScommessa.getQuota_totale()+";"+
@@ -190,15 +191,16 @@ public class Scommetti extends HttpServlet{
 								e.setGiocato(false);
 							}
 							
-							resp.getWriter().print("ok");
+							resp.getWriter().println("ok");
+							resp.getWriter().println(contoUtente.getSaldo());
 						}
 						else {
-							resp.getWriter().print("Errore : credito non sufficente");
+							resp.getWriter().println("Errore : credito non sufficente");
 						}
 						return;
 					}else{
 						System.out.println("ADMIN");
-						resp.getWriter().print("Errore : utente loggato come admin");
+						resp.getWriter().println("Errore : utente loggato come admin");
 						return;
 					}
 				}

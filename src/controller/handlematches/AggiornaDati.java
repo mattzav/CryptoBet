@@ -16,6 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.HttpJspPage;
 
 import model.footballdata.Campionato;
@@ -39,9 +40,12 @@ public class AggiornaDati extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+		HttpSession session =req.getSession();
+		session.setAttribute("loading", true);
 		// se il parametro aggiorna ha valore Aggiorna significa che l'amministratore ha
 		// richiesto un aggiornamento delle squadre e dei campionati
 		if (req.getParameter("aggiorna").equals("Aggiorna")) {
+			
 			String squadre = req.getParameter("squadre");
 			String campionati = req.getParameter("campionati");
 			String scudetti = req.getParameter("scudetti");
@@ -112,6 +116,7 @@ public class AggiornaDati extends HttpServlet {
 				partitaDao.save(match);
 			}
 		}
+		session.removeAttribute("loading");
 		RequestDispatcher disp = req.getRequestDispatcher("gestisciPartite.jsp");
 		disp.forward(req, resp);
 	}

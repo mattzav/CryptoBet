@@ -74,12 +74,17 @@ function verificaScommessa(codice) {
 		success : function(data) {
 			alert(data);
 			if (data != "non conclusa") {
-				$("#" + codice + " .stato").text(data);
+				var stato=data.split(";")[0];
+				if(data.contains(";")){
+					var saldo=data.split(";")[1];
+				}
+				$("#" + codice + " .stato").text(stato);
 				$("#" + codice + " .verificata").remove();
 				$("#" + codice).append('<td> Gia\' verificata</td>');
-				if(data == "vinta"){
+				if(stato == "vinta"){
 					$("#" + codice).removeClass("warning");
 					$("#" + codice).addClass("success");
+					$("#saldoConto").text("Saldo conto : "+saldo);
 				}
 				else{
 					$("#" + codice).addClass("danger");

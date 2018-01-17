@@ -159,6 +159,7 @@
 												<input type="button" class="btn btn-primary" id="partite" name="aggiorna"
 													onclick="getPartite();" value="Aggiorna Partite"> <br>
 												<br> <br>
+												<div id="loadingPartite" class="loader"></div>
 											</div>
 										</div>	
 									</div>
@@ -191,6 +192,9 @@
 													onclick="getSquadre();" value="Aggiorna"> <br>
 												<br>
 											</div>
+											<c:if test="${loading!=null}">
+												<div id="loadingSquadre" class="loader"></div>
+											</c:if>
 										</div>
 									</div>
 								</div>
