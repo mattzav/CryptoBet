@@ -93,6 +93,7 @@
     <servlet-name>Versamento</servlet-name>
     <url-pattern>/versamentoConto</url-pattern>
   </servlet-mapping>  
+  
   <servlet>
     <servlet-name>Prelievo</servlet-name>
     <servlet-class>controller.handleaccounting.PrelievoSuConto</servlet-class>
@@ -101,4 +102,14 @@
     <servlet-name>Prelievo</servlet-name>
     <url-pattern>/prelievoConto</url-pattern>
   </servlet-mapping>    
+
+   <servlet>
+    <servlet-name>MostraPartiteEScudetti</servlet-name>
+    <servlet-class>controller.handlematches.MostraPartiteEScudetti</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MostraPartiteEScudetti</servlet-name>
+    <url-pattern>/partiteEScudetti</url-pattern>
+  </servlet-mapping>  
+
 </web-app>

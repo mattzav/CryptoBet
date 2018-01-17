@@ -63,7 +63,7 @@
 								<li><a href="scommetti">Scommesse</a></li>
 								<li><a href="MioConto.jsp">Il Mio Conto</a></li>
 								<li><a href="gestisciPartite.jsp"> Gestisci Partite</a></li>
-								<li><a href="about.html">About</a></li>
+								<li><a href="partiteEScudetti">Tutte le squadre</a></li>
 								<li><a href="contact.html">Contact</a></li>
 							</ul>
 							</nav>
