@@ -16,21 +16,21 @@ public class SquadraDaoJDBC implements SquadraDao {
 
 	@Override
 	public void save(Squadra squadra, Connection connection) {
-			Squadra esistente = findByPrimaryKey(squadra.getNome());
-			if (esistente != null)
-				return;
+		Squadra esistente = findByPrimaryKey(squadra.getNome());
+		if (esistente != null)
+			return;
 
-			String insert = "insert into squadra(nome,scudetto) values (?,?)";
-			try {
-				PreparedStatement statement = connection.prepareStatement(insert);
-				statement.setString(1, squadra.getNome());
-				statement.setString(2, squadra.getScudetto());
-				statement.executeUpdate();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		
+		String insert = "insert into squadra(nome,scudetto) values (?,?)";
+		try {
+			PreparedStatement statement = connection.prepareStatement(insert);
+			statement.setString(1, squadra.getNome());
+			statement.setString(2, squadra.getScudetto());
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	@Override
@@ -101,7 +101,40 @@ public class SquadraDaoJDBC implements SquadraDao {
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
-		} 
+		}
+
+	}
+
+	@Override
+	public ArrayList<Squadra> findAllWithTitle() {
+		Connection connection = PostgresDAOFactory.dataSource.getConnection();
+		ArrayList<Squadra> squadre = new ArrayList<>();
+		try {
+
+			PreparedStatement statement;
+			String query = "select * from squadra";
+			statement = connection.prepareStatement(query);
+			ResultSet result = statement.executeQuery();
+
+			while (result.next()) {
+				if(result.getString(2) == null)
+					continue;
+				String nome = result.getString(1);
+				Squadra squadra = new Squadra(nome);
+				squadra.setScudetto(result.getString(2));
+				squadre.add(squadra);
+			}
+
+		} catch (SQLException e) {
+			throw new PersistenceException(e.getMessage());
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new PersistenceException(e.getMessage());
+			}
+		}
+		return squadre;
 
 	}
 

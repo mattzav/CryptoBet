@@ -65,6 +65,7 @@
 
 <!-- Modernizr JS -->
 <script src="js/modernizr-2.6.2.min.js"></script>
+<script src="js/SquadreCampionati.js"></script>
 <!-- FOR IE9 below -->
 <!--[if lt IE 9]>
 	<script src="js/respond.min.js"></script>
@@ -139,8 +140,7 @@
 								<h1 class="text-center">
 									<strong>CryptoBet</strong> è la novità!!
 								</h1>
-								<br>
-								<br>
+								<br> <br>
 								<p>
 									Qui troverai tutte le squadre disponibili sul nuovo sito di
 									scommesse fatto apposta per <strong>TE</strong>
@@ -155,6 +155,15 @@
 			<div id="fh5co-team-section">
 				<div class="container">
 					<div>
+						<nav aria-label="Page navigation example">
+							<ul class="pagination pagination-sm">
+								<li class="page-item previousButton disabled"><a onclick="cambiaPagina(false);" class="page-link"
+									href="#" tabindex="-1" >Previous</a></li>
+								<li class="page-item valuePage"><a  class="page-link" href="#">1</a></li>
+								<li class="page-item nextButton"><a onclick="cambiaPagina(true);"class="page-link" href="#">Next</a>
+								</li>
+							</ul>
+						</nav>
 						<table class="table">
 							<tr>
 								<th>Squadra:</th>
@@ -164,7 +173,7 @@
 								<c:forEach items="${squadreVisibili}" var="squadra">
 									<tr>
 										<td>${squadra.nome}</td>
-										<td>${squadra.scudetto}</td>
+										<td><img src=${squadra.scudetto } height="50" width="50"></td>
 									</tr>
 								</c:forEach>
 							</tbody>
