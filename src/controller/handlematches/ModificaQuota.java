@@ -1,6 +1,8 @@
 package controller.handlematches;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
@@ -53,7 +55,14 @@ public class ModificaQuota extends HttpServlet {
 			String esito = req.getParameter("esitoScelto");
 			long codicePartita = Long.valueOf(req.getParameter("suggerimento"));
 			PartitaDao partitaDao = PostgresDAOFactory.getDAOFactory(PostgresDAOFactory.POSTGRESQL).getPartitaDao();
-			float quota = partitaDao.getQuota(codicePartita, esito);
+			Connection connection=PostgresDAOFactory.dataSource.getConnection();
+			float quota = partitaDao.getQuota(codicePartita, esito,connection);
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			resp.getWriter().write(String.valueOf(quota));
 		}
 	}
