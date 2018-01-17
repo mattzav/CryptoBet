@@ -32,20 +32,20 @@
 			<div id="fh5co-header">
 				<header id="fh5co-header-section">
 					<c:if test="${loggato!=null}">
-						<div>
-							<span class="col-sm-4">
-							</span>
-							<span class="col-sm-4">
+						<div class="info">
+							<div class="col-sm-5">
+								<span id="messaggio" class="btn col-sm-6">
+									${mex}
+ 								</span> 
+							</div>
+							<span class="col-sm-5">
 								<c:if test="${utente==\"USER\"}">
 									<h2><a href="MioConto.jsp" class="btn">Saldo conto : ${loggato.conto.saldo}</a></h2>
 								</c:if>
 							</span> 
-							<div class="col-sm-4">
-								<span id="messaggio" class="btn col-sm-6">
-									${mex}
- 								</span> 
+							<div class="col-sm-2">
 								<span class="col-sm-6">
-									<a href="login"><input type="button" class="btn btn-primary" value=LOG-OUT onclick="<c:set var="page" value="index.jsp" scope="session"  />"></a>
+									<a href="login"><input type="button" class="btn btn-primary" value=LOG-OUT onclick="<c:set var="page" value="gestisciPartite.jsp" scope="session"  />"></a>
 								</span>
 							</div>
 						</div>
@@ -60,10 +60,7 @@
 							<nav id="fh5co-menu-wrap" role="navigation">
 							<ul class="sf-menu" id="fh5co-primary-menu">
 								<li><a href="index.jsp">Home</a></li>
-								<li><a class="fh5co-sub-ddown" href="scommetti">Scommesse</a>
-									<ul class="fh5co-sub-menu campionati">
-	
-									</ul></li>
+								<li><a href="scommetti">Scommesse</a></li>
 								<li><a href="MioConto.jsp">Il Mio Conto</a></li>
 								<li><a href="gestisciPartite.jsp"> Gestisci Partite</a></li>
 								<li><a href="partiteEScudetti">Tutte le squadre</a></li>
@@ -115,7 +112,7 @@
 													<input class="btn btn-primary" type="submit" name="accesso"
 														value="Accedi"
 														onclick="<c:set var="page" value="gestisciPartite.jsp" scope="session"/>" />
-													<a class="btn btn-primary" href="Registrati.html">Registrati</a>
+													<a class="btn btn-primary" href="Registrati.html" onclick="<c:set var="page" value="gestisciPartite.jsp" scope="session"/>">Registrati</a>
 												</div>
 											</form>
 										</div>
@@ -123,7 +120,7 @@
 								</c:if>
 								<c:if test="${utente==\"USER\"}">
 									<div>
-										<span class="btn btn-danger"> Errore: Effuttua il login
+										<span class="btn btn-danger"> Errore: Effettua il login
 											come amministratore</span>
 									</div>
 								</c:if>
@@ -155,12 +152,19 @@
 												<h3>Aggiornamento dati</h3>
 												<p>Ti permette di ricevere gli ultimi aggiornamenti sulle
 													partite attualmente disponibili</p>
-												
-												<input type="button" class="btn btn-primary" id="partite" name="aggiorna"
-													onclick="getPartite();" value="Aggiorna Partite"> <br>
+												<c:if test="${loadingPartite==null}">
+													<input type="button" class="btn btn-primary" id="partite" name="aggiorna"
+														onclick="getPartite();" value="Aggiorna Partite"> <br>
+												</c:if>
+												<c:if test="${loadingPartite!=null}">
+													<input type="button" class="btn btn-primary" id="partite" name="aggiorna"
+														onclick="getPartite();" value="Aggiorna Partite" disabled="disabled"> <br>
+												</c:if>
 												<br> <br>
-												<div id="loadingPartite" class="loader"></div>
 											</div>
+											<c:if test="${loadingPartite!=null}">
+												<div id="loadingPartite" class="loader"></div>
+											</c:if>
 										</div>	
 									</div>
 								</div>
@@ -188,12 +192,19 @@
 												<h3>Aggiorna Campionati e Squadre</h3>
 												<p>Ti permette di ricevere gli ultimi aggiornamenti sulle
 													squadre e i campionati attualmente disponibili</p>
-												<input type="button" class="btn btn-primary" id="squadre" name="aggiorna"
-													onclick="getSquadre();" value="Aggiorna"> <br>
+												<c:if test="${loadingSquadre==null}">
+													<input type="button" class="btn btn-primary" id="squadre" name="aggiorna"
+														onclick="getSquadre();" value="Aggiorna"> <br>
+												</c:if>
+												<c:if test="${loadingSquadre!=null}">
+													<input type="button" class="btn btn-primary" id="squadre" name="aggiorna"
+														onclick="getSquadre();" value="Aggiorna" disabled="disabled"> <br>
+												</c:if>
 												<br>
 											</div>
-											<c:if test="${loading!=null}">
-												<div id="loadingSquadre" class="loader"></div>
+											<c:if test="${loadingSquadre!=null}">
+												<div id="loadingSquadre" class="loader">
+												</div>
 											</c:if>
 										</div>
 									</div>

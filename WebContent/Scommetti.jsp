@@ -31,20 +31,20 @@
 			<div id="fh5co-header">
 				<header id="fh5co-header-section">
 					<c:if test="${loggato!=null}">
-						<div>
-							<span class="col-sm-4">
-							</span>
-							<span class="col-sm-4">
-								<c:if test="${utente==\"USER\"}">
-									<h2><a href="MioConto.jsp" class="btn" id="saldoConto">Saldo conto : ${loggato.conto.saldo}</a></h2>
-								</c:if>
-							</span> 
-							<div class="col-sm-4">
+						<div class="info">
+							<div class="col-sm-5">
 								<span id="messaggio" class="btn col-sm-6">
 									${mex}
  								</span> 
+							</div>
+							<span class="col-sm-5">
+								<c:if test="${utente==\"USER\"}">
+									<h2><a href="MioConto.jsp" class="btn">Saldo conto : ${loggato.conto.saldo}</a></h2>
+								</c:if>
+							</span> 
+							<div class="col-sm-2">
 								<span class="col-sm-6">
-									<a href="login"><input type="button" class="btn btn-primary" value=LOG-OUT onclick="<c:set var="page" value="index.jsp" scope="session"  />"></a>
+									<a href="login"><input type="button" class="btn btn-primary" value=LOG-OUT onclick="<c:set var="page" value="Scommetti.jsp" scope="session"  />"></a>
 								</span>
 							</div>
 						</div>
@@ -59,10 +59,7 @@
 							<nav id="fh5co-menu-wrap" role="navigation">
 							<ul class="sf-menu" id="fh5co-primary-menu">
 								<li><a href="index.jsp">Home</a></li>
-								<li><a class="fh5co-sub-ddown" href="scommetti">Scommesse</a>
-									<ul class="fh5co-sub-menu campionati">
-	
-									</ul></li>
+								<li><a href="scommetti">Scommesse</a></li>
 								<li><a href="MioConto.jsp">Il Mio Conto</a></li>
 								<li><a href="gestisciPartite.jsp"> Gestisci Partite</a></li>
 								<li><a href="about.html">About</a></li>
@@ -119,7 +116,7 @@
 								</c:if>
 								<c:if test="${utente==\"ADMIN\"}">
 									<div>
-										<span class="btn btn-danger"> Errore: Effuttua il login come USER</span>
+										<span class="btn btn-danger"> Errore: Effettua il login come USER</span>
 									</div>
 								</c:if>
 							</div>
@@ -249,12 +246,14 @@
 																	onclick="esitoSelezionato('${partita.codice};${esito.esito.descrizione}')">
 																</c:if>
 																<c:if test="${esito.disponibile && esito.giocato}">
+																	<a href="#response">
 																	<input class="btn btn-primary esitoAttivo btn-xs" id="${partita.codice};${esito.esito.descrizione}" type="button" name="${partita.codice};${esito.esito.descrizione}" value="${esito.quota}" 
 																	onclick="esitoSelezionato('${partita.codice};${esito.esito.descrizione}')">
+																	</a>
 																</c:if>
 																<c:if test="${not esito.disponibile}">
 																	<input class="btn btn-basic btn-xs" id="${partita.codice};${esito.esito.descrizione}" type="button" name="${partita.codice};${esito.esito.descrizione}" value="${esito.quota}" 
-																	disabled="disabled">
+																		disabled="disabled">
 																</c:if>
 															</td>
 														</c:if>		

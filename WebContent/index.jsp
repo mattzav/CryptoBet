@@ -60,12 +60,9 @@
 						<nav id="fh5co-menu-wrap" role="navigation">
 						<ul class="sf-menu" id="fh5co-primary-menu">
 							<li><a href="index.jsp">Home</a></li>
-							<li><a class="fh5co-sub-ddown" href="scommetti">Scommesse</a>
-								<ul class="fh5co-sub-menu campionati">
-
-								</ul></li>
+							<li><a href="scommetti">Scommesse</a></li>
 							<li><a href="MioConto.jsp">Il Mio Conto</a></li>
-							<li><a href="gestisciPartite.jsp"> Gestisci Partite</a></li>
+							<li><a href="aggiornaDati"> Gestisci Partite</a></li>
 							<li><a href="about.html">About</a></li>
 							<li><a href="contact.html">Contact</a></li>
 						</ul>
@@ -84,7 +81,7 @@
 								</div>
 								<div class="col-sm-6">
 									<h2>
-										<a href="scommesse.html">Bet &amp; Win</a><br> <b>Unisciti
+										<a href="scommetti">Bet &amp; Win</a><br> <b>Unisciti
 											a CryptoBet</b>
 									</h2>
 								</div>
@@ -106,7 +103,7 @@
 											</div>
 											<div class="form-group">
 												<span class="col-sm-6"><input class="btn btn-primary" type="submit" name="accesso" value="Accedi" onclick="<c:set var="page" value="index.jsp" scope="session"/>" /></span> 
-												<span class="col-sm-6"> <a class="btn btn-primary" href="sendData"> Registrati</a></span>
+												<span class="col-sm-6"> <a class="btn btn-primary" href="sendData" onclick="<c:set var="page" value="index.jsp" scope="session"/>">Registrati</a></span>
 											</div>
 										</form>
 									</c:if>

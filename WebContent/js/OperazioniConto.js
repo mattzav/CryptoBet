@@ -112,6 +112,7 @@ function effettuaPrelievo() {
 							+ "</div>" + "</div>" + "</div>");
 }
 function preleva() {
+	
 	$.ajax({
 		url : 'prelievoConto',
 		data : 'importo=' + $("#importoDaPrelevare").val() + '',
@@ -121,8 +122,14 @@ function preleva() {
 			alert('error');
 		}
 	}).done(function(response) {
-		if (response != "" && response != null) {
-			alert("response");
+		var format=/^Errore/;
+		if (format.test(response)) {
+			addResponse("danger",response.substr(8,response.length));
+		}
+		else{
+			var dati=response.split(";");
+			addResponse("success",dati[0].substr(16,response.length));
+			$("#saldoConto").text("Saldo conto : "+dati[1]);
 		}
 	});
 }
@@ -155,15 +162,20 @@ function versa() {
 			alert('error');
 		}
 	}).done(function(response) {
-		if (response != "" && response != null) {
-			alert(response);
+		var format=/^Errore/;
+		if (format.test(response)) {
+			addResponse("danger",response.substr(8,response.length));
+		}
+		else{
+			var dati=response.split(";");
+			addResponse("success",dati[0].substr(16,response.length));
+			$("#saldoConto").text("Saldo conto : "+dati[1]);
 		}
 	});
 }
 function getListaMovimenti() {
 
-	$
-			.ajax({
+	$.ajax({
 				url : 'listaMovimenti',
 				type : 'get',
 				cache : false,
@@ -231,4 +243,16 @@ function getListaMovimenti() {
 							}
 						});
 					});
+}
+function addResponse(type,message){
+	$("#messageDivision").remove();
+	var titleMessage = "Errore : ";
+	if(type=="success"){
+		titleMessage= "Congratulazioni : ";
+	}
+	$("#response").append(
+			"<div id=\"messageDivision\" class=\"alert alert-"+type+" alert-dismissable\">" +
+				"<a class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">x</a>"+
+				"<strong>"+titleMessage+"</strong>"+message+
+			"</div>");
 }

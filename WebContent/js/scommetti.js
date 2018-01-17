@@ -63,12 +63,18 @@ function checkValue(){
 						$("#messageDivision").remove();
 						elemento.removeClass("btn-primary");
 						elemento.addClass("btn-info");
+						$(".quotaTotale").text("Quota totale : "+dati[3]);
+						$(".bonus").text("Bonus : "+dati[4]);
+						$(".vincita").text("Vincita : "+dati[5]);
 					}
 					else{
 						addMessage("danger"," Hai già selezionato un esito per questa partita.");
+						window.location.href = "#response";
 					}
 				}else if(format.test(response)){
 					addMessage("danger",response.substr(8,response.length));
+					window.location.href = "#response";
+					
 				}
 				else{
 					$("#messageDivision").remove();
@@ -97,14 +103,18 @@ function checkValue(){
 					if(response=="Errore : Utente non loggato"){
 						$("#welcomeMessage").css({'display' : 'none'});
 						$("#login").css({'display' : 'block'});
+						addMessage("danger",response.substr(8,response.length));
+						window.location.href = "#response";
 					}
 					else{
 						addMessage("danger",response.substr(8,response.length));
+						window.location.href = "#response";
 					}
 	    		}
 				else{
 					svuotaScommessa();
 					addMessage("success"," scommessa registrata con successo");
+					window.location.href = "#response";
 					var arrayResponse=response.split('\n');
 					$("#saldoConto").text("Saldo conto : "+arrayResponse[1]);
 				}

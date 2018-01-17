@@ -29,14 +29,14 @@ public class PrelievoSuConto extends HttpServlet{
 		Float importo=Float.valueOf(importoStr);
 		if(contoUtente.preleva(importo)) {
 			carta.versa(importo);
-			System.out.println("prelevato");
+			resp.getWriter().print("Congratulazioni: prelievo effettuato con successo;"+contoUtente.getSaldo());
 			PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCartaDiCreditoDAO().update(carta);
 			PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getContoDAO().update(contoUtente);
 			MovimentoCarta movimento=new MovimentoCarta(new java.util.Date(), TipoMovimento.PRELIEVO, Float.valueOf(importo), contoUtente);
 			PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getMovimentoCartaDAO().save(movimento);
 		}
 		else {
-			resp.getWriter().print("importo non disponibile");
+			resp.getWriter().print("Errore: importo non disponibile");
 		}
 	}
 }

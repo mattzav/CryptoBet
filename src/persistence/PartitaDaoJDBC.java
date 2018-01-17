@@ -22,64 +22,57 @@ import sun.java2d.pipe.SpanShapeRenderer.Simple;
 public class PartitaDaoJDBC implements PartitaDao {
 
 	@Override
-	public void save(Partita partita) {
+	public void save(Partita partita, Connection connection) {
 
-		Connection connection = PostgresDAOFactory.dataSource.getConnection();
-		try {
-			Long codice = findExistingMatch(partita);
+		Long codice = findExistingMatch(partita,connection);
 
-			if (codice != null) {
-				partita.setCodice(codice);
-				update(partita);
-				return;
-			}
-
+		if (codice != null) {
+			partita.setCodice(codice);
+			update(partita, connection);
+		} else {
 			String insert = "insert into partita(codice,squadraCasa,squadraOspite,campionato,data,ora,finita,goalCasa,goalOspite) values (?,?,?,?,?,?,?,?,?)";
-			PreparedStatement statement = connection.prepareStatement(insert);
-			statement.setLong(1, partita.getCodice());
-			statement.setString(2, partita.getSquadra_casa().getNome());
-			statement.setString(3, partita.getSquadra_ospite().getNome());
-			statement.setLong(4, partita.getCampionato().getCodice());
-			statement.setDate(5, new java.sql.Date(partita.getData_ora().getTime()));
-			SimpleDateFormat localDateFormat = new SimpleDateFormat("hh:mm:ss aa");
-			String time = localDateFormat.format(partita.getData_ora());
 			try {
-				statement.setTime(6, new java.sql.Time(localDateFormat.parse(time).getTime()));
-			} catch (ParseException e) {
-			}
-			statement.setBoolean(7, partita.isFinita());
-			statement.setInt(8, partita.getGoal_casa());
-			statement.setInt(9, partita.getGoal_ospite());
-			statement.executeUpdate();
-
-			EsitoDao esitoDao = PostgresDAOFactory.getDAOFactory(PostgresDAOFactory.POSTGRESQL).getEsitoDao();
-			PartitaDao partitaDao = PostgresDAOFactory.getDAOFactory(PostgresDAOFactory.POSTGRESQL).getPartitaDao();
-			for (Esito e : esitoDao.findAll()) {
-				float quota = partitaDao.getQuota(partita.getCodice(), e.getDescrizione());
-				insert = "insert into esitopartita(esito,partita,quota,disponibile,stato) values (?,?,?,?,?)";
-				statement = connection.prepareStatement(insert);
-				statement.setString(1, e.getDescrizione());
-				statement.setLong(2, partita.getCodice());
-				statement.setFloat(3, quota);
-				statement.setBoolean(4, true);
-				statement.setString(5, "non verificato");
+				PreparedStatement statement = connection.prepareStatement(insert);
+				statement.setLong(1, partita.getCodice());
+				statement.setString(2, partita.getSquadra_casa().getNome());
+				statement.setString(3, partita.getSquadra_ospite().getNome());
+				statement.setLong(4, partita.getCampionato().getCodice());
+				statement.setDate(5, new java.sql.Date(partita.getData_ora().getTime()));
+				SimpleDateFormat localDateFormat = new SimpleDateFormat("hh:mm:ss aa");
+				String time = localDateFormat.format(partita.getData_ora());
+				try {
+					statement.setTime(6, new java.sql.Time(localDateFormat.parse(time).getTime()));
+				} catch (ParseException e) {
+				}
+				statement.setBoolean(7, partita.isFinita());
+				statement.setInt(8, partita.getGoal_casa());
+				statement.setInt(9, partita.getGoal_ospite());
 				statement.executeUpdate();
-			}
-		} catch (SQLException e) {
-			throw new PersistenceException(e.getMessage());
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				throw new PersistenceException(e.getMessage());
+
+				EsitoDao esitoDao = PostgresDAOFactory.getDAOFactory(PostgresDAOFactory.POSTGRESQL).getEsitoDao();
+				PartitaDao partitaDao = PostgresDAOFactory.getDAOFactory(PostgresDAOFactory.POSTGRESQL).getPartitaDao();
+				for (Esito e : esitoDao.findAll()) {
+					float quota = partitaDao.getQuota(partita.getCodice(), e.getDescrizione(),connection);
+					insert = "insert into esitopartita(esito,partita,quota,disponibile,stato) values (?,?,?,?,?)";
+					statement = connection.prepareStatement(insert);
+					statement.setString(1, e.getDescrizione());
+					statement.setLong(2, partita.getCodice());
+					statement.setFloat(3, quota);
+					statement.setBoolean(4, true);
+					statement.setString(5, "non verificato");
+					statement.executeUpdate();
+				}
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 		}
+
 	}
 
 	@Override
-	public void update(Partita partita) {
+	public void update(Partita partita, Connection connection) {
 
-		Connection connection = PostgresDAOFactory.dataSource.getConnection();
 		try {
 			String update = "update partita SET squadracasa = ?, squadraospite = ?, data = ?,ora = ?, campionato = ?, goalcasa=?, goalospite=?, finita=? where squadracasa=? and squadraospite=? and campionato=? ";
 			PreparedStatement statement = connection.prepareStatement(update);
@@ -164,18 +157,11 @@ public class PartitaDaoJDBC implements PartitaDao {
 
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				throw new PersistenceException(e.getMessage());
-			}
 		}
 	}
 
 	@Override
-	public Long findExistingMatch(Partita p) {
-		Connection connection = PostgresDAOFactory.dataSource.getConnection();
+	public Long findExistingMatch(Partita p, Connection connection) {
 		try {
 			PreparedStatement statement;
 			String query = "select p.codice from partita as p where p.squadracasa=? and p.squadraospite=? and p.campionato=? ";
@@ -190,12 +176,6 @@ public class PartitaDaoJDBC implements PartitaDao {
 			return null;
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				throw new PersistenceException(e.getMessage());
-			}
 		}
 	}
 
@@ -234,8 +214,7 @@ public class PartitaDaoJDBC implements PartitaDao {
 	}
 
 	@Override
-	public float[] getPuntiSquadre(long codice) {
-		Connection connection = PostgresDAOFactory.dataSource.getConnection();
+	public float[] getPuntiSquadre(long codice,Connection connection) {
 		float media_punti_squadre[] = new float[2];
 
 		try {
@@ -300,19 +279,12 @@ public class PartitaDaoJDBC implements PartitaDao {
 
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				throw new PersistenceException(e.getMessage());
-			}
 		}
 		return media_punti_squadre;
 	}
 
 	@Override
-	public float[] getMediaPartiteASegno(long codicePartita) {
-		Connection connection = PostgresDAOFactory.dataSource.getConnection();
+	public float[] getMediaPartiteASegno(long codicePartita,Connection connection) {
 		float media_partite_a_segno_casa;
 		float media_partite_a_segno_ospite;
 		try {
@@ -354,12 +326,6 @@ public class PartitaDaoJDBC implements PartitaDao {
 				media_partite_a_segno_ospite = 0.5f;
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				throw new PersistenceException(e.getMessage());
-			}
 		}
 
 		float media_partite_a_segno[] = new float[2];
@@ -369,8 +335,7 @@ public class PartitaDaoJDBC implements PartitaDao {
 	}
 
 	@Override
-	public float[] getMediaGoal(long codicePartita) {
-		Connection connection = PostgresDAOFactory.dataSource.getConnection();
+	public float[] getMediaGoal(long codicePartita,Connection connection) {
 		float media_goal_casa;
 		float media_goal_ospite;
 		try {
@@ -435,12 +400,6 @@ public class PartitaDaoJDBC implements PartitaDao {
 				media_goal_ospite = 1.5f;
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				throw new PersistenceException(e.getMessage());
-			}
 		}
 
 		float media_gol[] = new float[2];
@@ -449,7 +408,7 @@ public class PartitaDaoJDBC implements PartitaDao {
 		return media_gol;
 	}
 
-	public float getQuota(long codicePartita, String esito) {
+	public float getQuota(long codicePartita, String esito,Connection connection) {
 		String tipo_esito = "";
 
 		// controllo riguardo tipo dell' esito per cui il client ha chiesto il
@@ -466,7 +425,7 @@ public class PartitaDaoJDBC implements PartitaDao {
 
 			// se ha chiesto un suggerimento riguardo gli esiti classici, chiedo al db la
 			// media punti delle due squadre
-			float punti[] = partitaDao.getPuntiSquadre(codicePartita);
+			float punti[] = partitaDao.getPuntiSquadre(codicePartita,connection);
 
 			float probabilita_eventi[] = new float[3];
 
@@ -505,13 +464,13 @@ public class PartitaDaoJDBC implements PartitaDao {
 			float valore_atteso = (1 / probabilita);
 
 			// la restituisco
-			String val=String.valueOf(valore_atteso);
+			String val = String.valueOf(valore_atteso);
 			return Float.valueOf(val.substring(0, Math.min(4, val.length())));
 		} else if (tipo_esito.equals("goal")) {
 
 			// se ha chiesto un suggerimento riguardo gli esiti (GG o NG), chiedo al db la
 			// media delle partite in cui le due squadre hanno segnato almeno un goal
-			float media_partite_a_segno[] = partitaDao.getMediaPartiteASegno(codicePartita);
+			float media_partite_a_segno[] = partitaDao.getMediaPartiteASegno(codicePartita,connection);
 
 			float probabilita = 0;
 
@@ -530,13 +489,13 @@ public class PartitaDaoJDBC implements PartitaDao {
 				probabilita = 0.9f;
 
 			float valore_atteso = (1 / probabilita);
-			String val=String.valueOf(valore_atteso);
+			String val = String.valueOf(valore_atteso);
 			return Float.valueOf(val.substring(0, Math.min(4, val.length())));
 		} else if (tipo_esito.equals("numerogoal")) {
 
 			// se ha chiesto un suggerimento riguardo gli esiti (U o O), chiedo al db la
 			// media goal delle due squadre
-			float media_goal_a_partita[] = partitaDao.getMediaGoal(codicePartita);
+			float media_goal_a_partita[] = partitaDao.getMediaGoal(codicePartita,connection);
 
 			float probabilita = 0;
 
@@ -559,7 +518,7 @@ public class PartitaDaoJDBC implements PartitaDao {
 			float valore_atteso = (1 / probabilita);
 
 			// restituisco la quota
-			String val=String.valueOf(valore_atteso);
+			String val = String.valueOf(valore_atteso);
 			return Float.valueOf(val.substring(0, Math.min(4, val.length())));
 
 		}

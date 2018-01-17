@@ -93,11 +93,12 @@ function getSquadre() {
 		error : function() {
 			alert("error");
 		},
-		success:function(){
+	}).done(function(){
+			alert("aggiornamento concluso");
 			$("#loadingSquadre").remove();
 			$("#squadre").prop("disabled",false);
-		}
-	});
+		});
+	
 }
 
 function getPartite() {
@@ -171,9 +172,8 @@ function getPartite() {
 		error : function() {
 			alert("error partite");
 		},
-		success:function(){
-			$("#loadingPartite").remove();
-			$("#partite").prop("disabled",false);
-		}
+	}).done(function(){
+		$("#loadingPartite").remove();
+		$("#partite").prop("disabled",false);
 	});
 }

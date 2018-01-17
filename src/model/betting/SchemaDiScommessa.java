@@ -115,6 +115,9 @@ public class SchemaDiScommessa implements Serializable{
 		if(numero_esiti>=5) {
 			bonus=(float) ((((numero_esiti/5.0)*20)*quota_totale*importo_giocato)/100);
 		}
+		else {
+			bonus=0;
+		}
 	}
 	
 }

@@ -16,10 +16,10 @@ import persistence.dao.EsitoPartitaDao;
 public class EsitoPartitaDaoJDBC implements EsitoPartitaDao {
 
 	@Override
-	public void save(EsitoPartita esitoPartita) {
-		Connection connection = PostgresDAOFactory.dataSource.getConnection();
+	public void save(EsitoPartita esitoPartita, Connection connection) {
+		
+		String insert = "insert into esitopartita(esito, partita, quota, disponibile) values (?,?,?)";
 		try {
-			String insert = "insert into esitopartita(esito, partita, quota, disponibile) values (?,?,?)";
 			PreparedStatement statement = connection.prepareStatement(insert);
 			statement.setString(1, esitoPartita.getEsito().getDescrizione());
 			statement.setLong(2, esitoPartita.getPartita().getCodice());
@@ -27,14 +27,9 @@ public class EsitoPartitaDaoJDBC implements EsitoPartitaDao {
 			statement.setBoolean(4, esitoPartita.isDisponibile());
 			statement.executeUpdate();
 		} catch (SQLException e) {
-			throw new PersistenceException(e.getMessage());
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				throw new PersistenceException(e.getMessage());
-			}
-		}		
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override

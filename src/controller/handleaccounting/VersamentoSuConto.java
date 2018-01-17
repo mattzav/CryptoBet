@@ -29,13 +29,14 @@ public class VersamentoSuConto extends HttpServlet{
 		Float importo=Float.valueOf(importoStr);
 		if(carta.preleva(importo)) {
 			contoUtente.versa(importo);
+			resp.getWriter().print("Congratulazioni: versamento effettuato con successo;"+contoUtente.getSaldo());
 			PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCartaDiCreditoDAO().update(carta);
 			PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getContoDAO().update(contoUtente);
 			MovimentoCarta movimento=new MovimentoCarta(new java.util.Date(), TipoMovimento.VERSAMENTO, Float.valueOf(importo), contoUtente);
 			PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getMovimentoCartaDAO().save(movimento);
 		}
 		else {
-			resp.getWriter().print("importo non disponibile");
+			resp.getWriter().print("Errore: importo non disponibile");
 		}
 	}
 }
