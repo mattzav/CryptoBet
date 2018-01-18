@@ -23,30 +23,32 @@ public class VersamentoSuConto extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
-		HttpSession session=req.getSession();
-		String importoStr=req.getParameter("importo");
-		Giocatore user=(Giocatore) session.getAttribute("loggato");
+		HttpSession sessione=req.getSession();
+		
+		String stringImporto=req.getParameter("importo");
+		Giocatore user=(Giocatore) sessione.getAttribute("loggato");
 		Conto contoUtente=user.getConto();
 		CartaDiCredito carta=contoUtente.getCarta();
-		Float importo=Float.valueOf(importoStr);
+		Float importo=Float.valueOf(stringImporto);
+
 		if(carta.preleva(importo)) {
 			contoUtente.versa(importo);
 
 			//prendo una connessione unica
-			Connection connection=PostgresDAOFactory.dataSource.getConnection();
+			Connection connessione=PostgresDAOFactory.dataSource.getConnection();
 			try {
 				
 				//corpo transazione 
-				PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCartaDiCreditoDAO().update(carta,connection);
-				PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getContoDAO().update(contoUtente,connection);
+				PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCartaDiCreditoDAO().update(carta,connessione);
+				PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getContoDAO().update(contoUtente,connessione);
 				MovimentoCarta movimento=new MovimentoCarta(new java.util.Date(), TipoMovimento.VERSAMENTO, Float.valueOf(importo), contoUtente);
-				PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getMovimentoCartaDAO().save(movimento,connection);
+				PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getMovimentoCartaDAO().save(movimento,connessione);
 			
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				if(connection!=null) {
+				if(connessione!=null) {
 					try {
-						connection.rollback();
+						connessione.rollback();
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -56,7 +58,7 @@ public class VersamentoSuConto extends HttpServlet{
 				}
 			}finally {
 				try {
-					connection.close();
+					connessione.close();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
