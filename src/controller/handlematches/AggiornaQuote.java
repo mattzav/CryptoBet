@@ -117,6 +117,7 @@ public class AggiornaQuote extends HttpServlet {
 			esitoPartitaDao.update(esitoPartita);
 
 		}
+		
 		RequestDispatcher dispatcher = req.getRequestDispatcher("gestisciEsiti.jsp");
 		dispatcher.forward(req, resp);
 

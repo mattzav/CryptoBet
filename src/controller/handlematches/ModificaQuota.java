@@ -25,23 +25,25 @@ public class ModificaQuota extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session = req.getSession();
-		// premo sull'icona di modifica
 
-		// controllo se ha premuto su "suggerimento quota"
 		boolean suggerimento = false;
 		Enumeration<String> attributi = req.getParameterNames();
+		
+		// controllo se l'amministratore ha richiesto il suggerimento
 		while (attributi.hasMoreElements()) {
 			if (attributi.nextElement().equals("suggerimento")) {
 				suggerimento = true;
 				break;
 			}
 		}
+		
 		// se non ha premuto su suggerimento quota allora significa che l'amministratore
 		// ha deciso di modificarne una
 		if (!suggerimento) {
 			String esito = req.getParameter("esitoScelto");
 			String quota_ = req.getParameter("nuovaQuota");
 			float nuovaQuota = Float.valueOf(quota_.substring(0, Math.min(4, quota_.length())));
+			
 			EsitoPartitaDao esitoPartitaDao = PostgresDAOFactory.getDAOFactory(PostgresDAOFactory.POSTGRESQL)
 					.getEsitoPartitaDao();
 
@@ -49,9 +51,11 @@ public class ModificaQuota extends HttpServlet {
 			EsitoPartita esitoPartita = esitoPartitaDao.findByPrimaryKey(new Esito(esito),
 					new Partita(Long.valueOf(req.getParameter("partita")), null, null, 0, 0, null, 0, false));
 			esitoPartita.setQuota(nuovaQuota);
-			System.out.println(nuovaQuota);
 			esitoPartitaDao.update(esitoPartita);
-		} else {
+			
+		} 
+		// altrimenti significa che l'amministratore ha richiesto un suggerimento per la quota
+		else {
 			String esito = req.getParameter("esitoScelto");
 			long codicePartita = Long.valueOf(req.getParameter("suggerimento"));
 			PartitaDao partitaDao = PostgresDAOFactory.getDAOFactory(PostgresDAOFactory.POSTGRESQL).getPartitaDao();
@@ -61,9 +65,10 @@ public class ModificaQuota extends HttpServlet {
 				quota = partitaDao.getQuota(codicePartita, esito,connection);
 				connection.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
+			//restituisco al client la quota suggerita
 			resp.getWriter().write(String.valueOf(quota));
 		}
 	}

@@ -1,6 +1,11 @@
 /**
  * 
  */
+
+// questa funzione viene invocata quando l'amminstratore preme su un esito per abilitarlo/disabilitarlo.
+// viene effettuata una chiamata ajax ad una servlet che applicherà la modifica sul db 
+// e poi viene cambiato il colore, tramite jquery, del bottone relativo all'esito selezionato.
+
 function abilitaEsito(esito) {
 	$.ajax({
 		type : 'POST',
@@ -20,6 +25,10 @@ function abilitaEsito(esito) {
 	});
 }
 
+
+// questa funzione viene invocata ogni qual volta l'amministratore compila la form per la modifica di un esito
+// viene effettuato un pattern matching per verificare che l'esito e la quota siano inseriti nel formato corretto.
+// tramite jquery vengono mostrati eventuali errori al client.
 function controllaEsitoEQuota(partita) {
 	var esito = $(
 			"#inputModificaQuota" + partita + " " + '[name="' + "esitoScelto"
@@ -35,16 +44,24 @@ function controllaEsitoEQuota(partita) {
 		errore += "hai inserito un esito non valido ed anche una quota non valida";
 		$("#inputModificaQuota" + partita + " .aggiorna")
 				.prop("disabled", true);
+		$("#inputModificaQuota" + partita + " .suggerimento")
+		.prop("disabled", true);
 	} else if (!pattern_esito.test(esito)) {
 		$("#inputModificaQuota" + partita + " .aggiorna")
 				.prop("disabled", true);
+		$("#inputModificaQuota" + partita + " .suggerimento")
+		.prop("disabled", true);
 		errore += "hai inserito un esito non valido";
 	} else if (!pattern_quota.test(quota)) {
 		$("#inputModificaQuota" + partita + " .aggiorna")
 				.prop("disabled", true);
+		$("#inputModificaQuota" + partita + " .suggerimento").prop("disabled",
+				false);
 		errore += "hai inserito una quota non valida";
 	} else {
 		$("#inputModificaQuota" + partita + " .aggiorna").prop("disabled",
+				false);
+		$("#inputModificaQuota" + partita + " .suggerimento").prop("disabled",
 				false);
 	}
 
@@ -64,6 +81,9 @@ function controllaEsitoEQuota(partita) {
 	}
 }
 
+
+// questa funzione viene invocata quando, dopo aver compilato la form, l'amministratore decide di effettuare la modifica.
+// vengono presi tramite jquery i dati inseriti e viene effettuata una chiamata alla servlet che rendera persistenti le modifiche
 function aggiornaEsito(partita) {
 	var esito = $(
 			"#inputModificaQuota" + partita + " " + '[name="' + "esitoScelto"
@@ -99,6 +119,9 @@ function aggiornaEsito(partita) {
 
 }
 
+
+// questa funzione viene invocata quando l'amministratore decide di effettuare una modifica di un esito per una partita
+// tramite jquery viene fornita all'amministratore la nuova form per compilare i dati relativi alla modifica
 function selezionaPartitaDaModificare(partita, disabilita) {
 	if ($("#inputModificaQuota" + partita).length) {
 		disabilita = true;
@@ -119,14 +142,17 @@ function selezionaPartitaDaModificare(partita, disabilita) {
 								+ partita
 								+ ",true)\" class=\"btn btn-secondary btn-sm\"data-dismiss=\"modal\">Annulla</button><button disabled=\"disabled\" name=\"aggiorna\" onclick=\"aggiornaEsito("
 								+ partita
-								+ ")\" class=\"btn btn-primary btn-sm aggiorna\">Aggiorna Esito</button><button name=\"suggerimento\" onclick=\"richiediSuggerimento("
+								+ ")\" class=\"btn btn-primary btn-sm aggiorna\">Aggiorna Esito</button><button  disabled=\"disabled\" name=\"suggerimento\" onclick=\"richiediSuggerimento("
 								+ partita
-								+ ")\" class=\"btn btn-info btn-sm\"> Richiedi Suggerimento</button></div></div>");
+								+ ")\" class=\"btn btn-info btn-sm suggerimento\"> Richiedi Suggerimento</button></div></div>");
 	} else {
 		$("#inputModificaQuota" + partita).remove();
 	}
 }
 
+
+// questa funzione viene invocata quando l'amministratore decide di richiede il suggerimento di una quota.
+// viene invocata la servlet che si preoccuperà di restituire tale risultato
 function richiediSuggerimento(partita) {
 
 	var esito = $(
@@ -146,8 +172,4 @@ function richiediSuggerimento(partita) {
 
 		}
 	});
-}
-
-function controllaEsito() {
-
 }

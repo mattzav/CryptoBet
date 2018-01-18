@@ -44,44 +44,56 @@ public class MostraPartiteEScudetti extends HttpServlet {
 
 		RequestDispatcher dispatcher = req.getRequestDispatcher("SquadreCampionati.jsp");
 		
-		Enumeration<String> parameter = req.getParameterNames();
-		String method = parameter.nextElement();
+		Enumeration<String> parametri = req.getParameterNames();
+		
+		// prendo il parametro per vedere che metodo è stato invocato
+		String metodo = parametri.nextElement();
 
 		SquadraDao squadraDao = PostgresDAOFactory.getDAOFactory(PostgresDAOFactory.POSTGRESQL).getSquadraDAO();
 		ArrayList<Squadra> squadre = (ArrayList<Squadra>) squadraDao.findAllWithTitle();
-		HttpSession session = req.getSession();
+		HttpSession sessione = req.getSession();
 
-		if (method.equals("next")) {
-			if (session.getAttribute("statoNext").equals("disabled")) {
-				System.out.println("esco");
+		// se metodo è uguale a "next" significa che devo spostare la pagina avanti
+		if (metodo.equals("next")) {
+			// se ho premuto su next e il tasto era disabilitato non eseguo alcuna operazione
+			if (sessione.getAttribute("statoNext").equals("disabled")) {
 				dispatcher.forward(req, resp);
 				return;
 			}
-			session.setAttribute("paginaCorrente", (Integer) session.getAttribute("paginaCorrente") + 1);
-		} else if (method.equals("previous")) {
-			if (session.getAttribute("statoPrevious").equals("disabled")) {
+			// altrimenti aumento la pagina corrente di 1
+			sessione.setAttribute("paginaCorrente", (Integer) sessione.getAttribute("paginaCorrente") + 1);
+		} 
+		// se metodo è uguale a "previous" significa che devo spostare la pagina indietro
+		else if (metodo.equals("previous")) {
+			// se il tasto premuto era disabilitato, non eseguo alcuna operazione
+			if (sessione.getAttribute("statoPrevious").equals("disabled")) {
 				dispatcher.forward(req, resp);
 				return;
 			}
-			session.setAttribute("paginaCorrente", (Integer) session.getAttribute("paginaCorrente") - 1);
+			// altrimenti diminuisco la pagina corrente di 1
+			sessione.setAttribute("paginaCorrente", (Integer) sessione.getAttribute("paginaCorrente") - 1);
 		}
+		
 		List<Squadra> subList = new ArrayList<>();
-		session.setAttribute("squadreVisibili", subList);
+		sessione.setAttribute("squadreVisibili", subList);
 
-		for (int i = 25 * ((Integer) session.getAttribute("paginaCorrente") - 1); i < Math.min(squadre.size(),
-				25 * ((Integer) session.getAttribute("paginaCorrente"))); i++) {
+		// carico la nuova lista delle squadre di cui il client vedrà gli scudetti
+		for (int i = 25 * ((Integer) sessione.getAttribute("paginaCorrente") - 1); i < Math.min(squadre.size(),
+				25 * ((Integer) sessione.getAttribute("paginaCorrente"))); i++) {
 			subList.add(squadre.get(i));
 		}
 
+		// se la nuova lista ha meno di 25 elementi devo disabilitare il tasto "next"
 		if (subList.size() < 25)
-			session.setAttribute("statoNext", "disabled");
+			sessione.setAttribute("statoNext", "disabled");
 		else
-			session.setAttribute("statoNext", "");
+			sessione.setAttribute("statoNext", "");
 
-		if ((Integer) session.getAttribute("paginaCorrente") == 1)
-			session.setAttribute("statoPrevious", "disabled");
+		// se sono arrivato alla prima pagina devo disattivare il tasto "previous"
+		if ((Integer) sessione.getAttribute("paginaCorrente") == 1)
+			sessione.setAttribute("statoPrevious", "disabled");
 		else
-			session.setAttribute("statoPrevious", "");
+			sessione.setAttribute("statoPrevious", "");
 
 		dispatcher.forward(req, resp);
 

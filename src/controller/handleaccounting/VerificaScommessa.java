@@ -23,13 +23,17 @@ public class VerificaScommessa extends HttpServlet {
 		
 		// prendo dalla richiesta il codice della scommessa e la verifico prendendomi l'esito
 		String esito = scommessa.verificaScommessa(Long.valueOf(req.getParameter("codiceScommessa")));
+		
 		String response=esito;
+		
+		// se il cliente ha vinto la scommessa, aggiorno il saldo aggiungendo la nuova vincita
 		if(esito.equals("vinta")) {
 			Giocatore user=(Giocatore) session.getAttribute("loggato");
 			Scommessa scommessaVincente=scommessa.findByPrimaryKey(Long.valueOf(req.getParameter("codiceScommessa")));
 			user.getConto().setSaldo(user.getConto().getSaldo()+scommessaVincente.getSchema_scommessa().getVincita_potenziale());
 			response+=";"+user.getConto().getSaldo();
 		}
+		
 		// restituisco l'esito al client
 		resp.getWriter().write(response);
 	}

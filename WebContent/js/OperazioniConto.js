@@ -72,12 +72,9 @@ function verificaScommessa(codice) {
 			alert("buonasera");
 		},
 		success : function(data) {
-			alert(data);
 			if (data != "non conclusa") {
 				var stato=data.split(";")[0];
-				if(data.contains(";")){
-					var saldo=data.split(";")[1];
-				}
+				var saldo=data.split(";")[1];
 				$("#" + codice + " .stato").text(stato);
 				$("#" + codice + " .verificata").remove();
 				$("#" + codice).append('<td> Gia\' verificata</td>');
