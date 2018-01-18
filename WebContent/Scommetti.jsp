@@ -39,7 +39,7 @@
 							</div>
 							<span class="col-sm-5">
 								<c:if test="${utente==\"USER\"}">
-									<h2><a href="MioConto.jsp" class="btn">Saldo conto : ${loggato.conto.saldo}</a></h2>
+									<h2><a href="MioConto.jsp" class="btn" id="saldoConto">Saldo conto : ${loggato.conto.saldo}</a></h2>
 								</c:if>
 							</span> 
 							<div class="col-sm-2">

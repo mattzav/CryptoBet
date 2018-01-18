@@ -16,24 +16,14 @@ import persistence.dao.CredenzialiDao;
 public class CredenzialiDaoJDBC implements CredenzialiDao {
 
 	@Override
-	public void save(Credenziali credenziali) {
-		Connection connection = PostgresDAOFactory.dataSource.getConnection();
-		try {
-			String insert = "insert into credenziali(username, password, tipo) values (?,?,?)";
-			PreparedStatement statement = connection.prepareStatement(insert);
-			statement.setString(1, credenziali.getUsername());
-			statement.setString(2, credenziali.getPassword());
-			statement.setString(3, credenziali.getTipo());
-			statement.executeUpdate();
-		} catch (SQLException e) {
-			throw new PersistenceException(e.getMessage());
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				throw new PersistenceException(e.getMessage());
-			}
-		}
+	public void save(Credenziali credenziali,Connection connection)throws SQLException {
+
+		String insert = "insert into credenziali(username, password, tipo) values (?,?,?)";
+		PreparedStatement statement = connection.prepareStatement(insert);
+		statement.setString(1, credenziali.getUsername());
+		statement.setString(2, credenziali.getPassword());
+		statement.setString(3, credenziali.getTipo());
+		statement.executeUpdate();
 	}
 
 	@Override

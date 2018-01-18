@@ -1,6 +1,8 @@
 package controller.handleaccounting;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.Iterator;
 
@@ -26,19 +28,7 @@ public class RegistraCliente extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		HttpSession session=req.getSession();
-//		session.removeAttribute("erroreName");
-//		session.removeAttribute("erroreSurname");
-//		session.removeAttribute("erroreCreditCard");
-//		session.removeAttribute("erroreUsername");
-//		session.removeAttribute("errorePassword");
-//		session.removeAttribute("erroreCheckPassword");
-		session.setAttribute("erroreName", true);
-		session.setAttribute("erroreSurname", true);
-		session.setAttribute("erroreCreditCard", true);
-		session.setAttribute("erroreUsername", true);
-		session.setAttribute("errorePassword", true);
-		session.setAttribute("erroreCheckPassword", true);
-		System.out.println("inizio"+session.getAttribute("erroreName"));
+		rispristinaSessione(session,false);
 		RequestDispatcher dispatcher=req.getRequestDispatcher("Registrati.html");
 		dispatcher.forward(req, resp);
 	}
@@ -100,18 +90,46 @@ public class RegistraCliente extends HttpServlet {
 			//creo le credenziali del nuovo giocatore
 			Credenziali nuovaCredenziale=new Credenziali(username,password);
 			nuovaCredenziale.setTipo(TipoCredenziali.USER);
+
 			//creo la carta di credito del nuovo giocatore
 			CartaDiCredito carta=new CartaDiCredito(codCarta);
 			CartaDiCreditoDao cartaDao=PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCartaDiCreditoDAO();
-			cartaDao.save(carta);
+			
 			//creo il conto del nuovo giocatore con la carta di credito appena creata
 			Conto conto=new Conto(5.0f,new java.util.Date(),carta);
-			PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getContoDAO().save(conto);
-			PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCredenzialiDAO().save(nuovaCredenziale);
+			
 			//creo il nuovo giocatore con nome cognome credenziali e conto 
 			Giocatore nuovoGiocatore=new Giocatore(nome,cognome,nuovaCredenziale,conto);
+
+			//prendo la connessione
+			Connection connection=PostgresDAOFactory.dataSource.getConnection();
 			
-			PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getGiocatoreDAO().save(nuovoGiocatore);
+			try {
+				//salvataggio
+				cartaDao.save(carta,connection);
+				PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getContoDAO().save(conto,connection);
+				PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCredenzialiDAO().save(nuovaCredenziale,connection);
+				PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getGiocatoreDAO().save(nuovoGiocatore,connection);
+			}catch (SQLException e) {
+				if(connection!=null) {
+					try {
+						connection.rollback();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					rispristinaSessione(session, false);
+					return;
+				}
+			}finally {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
 			String messaggio="Benvenuto "+username+"  ";
 			session.setAttribute("username", username);
 			session.setAttribute("mex", messaggio);
@@ -126,7 +144,8 @@ public class RegistraCliente extends HttpServlet {
 			System.out.println("rispistino con errori");
 			rispristinaSessione(session,false);
 		}
-		RequestDispatcher dispatcher=req.getRequestDispatcher("Registrati.html");
+		String page=(String) session.getAttribute("page");
+		RequestDispatcher dispatcher=req.getRequestDispatcher(page);
 		dispatcher.forward(req, resp);
 	}
 

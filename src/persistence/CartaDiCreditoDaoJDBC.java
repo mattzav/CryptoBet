@@ -24,24 +24,13 @@ public class CartaDiCreditoDaoJDBC implements CartaDiCreditoDao {
 
 
 	@Override
-	public void save(CartaDiCredito carta) {
-		Connection connection = PostgresDAOFactory.dataSource.getConnection();
-		try {
-			String insert = "insert into cartaDiCredito(codice, data_scadenza, saldo) values (?,?,?)";
-			PreparedStatement statement = connection.prepareStatement(insert);
-			statement.setString(1, carta.getCodiceCarta());
-			statement.setDate(2, null);
-			statement.setFloat(3, carta.getSaldo());
-			statement.executeUpdate();
-		} catch (SQLException e) {
-			throw new PersistenceException(e.getMessage());
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				throw new PersistenceException(e.getMessage());
-			}
-		}
+	public void save(CartaDiCredito carta,Connection connection)throws SQLException {
+		String insert = "insert into cartaDiCredito(codice, data_scadenza, saldo) values (?,?,?)";
+		PreparedStatement statement = connection.prepareStatement(insert);
+		statement.setString(1, carta.getCodiceCarta());
+		statement.setDate(2, null);
+		statement.setFloat(3, carta.getSaldo());
+		statement.executeUpdate();
 	}
 
 	@Override
@@ -71,26 +60,17 @@ public class CartaDiCreditoDaoJDBC implements CartaDiCreditoDao {
 	}
 
 	@Override
-	public void update(CartaDiCredito carta) {
-		Connection connection = PostgresDAOFactory.dataSource.getConnection();
-		try {
-			String update = "update cartaDiCredito SET data_scadenza = ?, saldo= ? where codice=? ";
-			PreparedStatement statement = connection.prepareStatement(update);
-			if(carta.getScadenza()!=null)
-				statement.setDate(1, new java.sql.Date(carta.getScadenza().getTime()));
-			else statement.setDate(1, null);
-			statement.setFloat(2, carta.getSaldo());
-			statement.setString(3, carta.getCodiceCarta());
-			statement.executeUpdate();
-		} catch (SQLException e) {
-			throw new PersistenceException(e.getMessage());
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				throw new PersistenceException(e.getMessage());
-			}
-		}
+	public void update(CartaDiCredito carta, Connection connection)throws SQLException {
+
+		String update = "update cartaDiCredito SET data_scadenza = ?, saldo= ? where codice=? ";
+		PreparedStatement statement = connection.prepareStatement(update);
+		if(carta.getScadenza()!=null)
+			statement.setDate(1, new java.sql.Date(carta.getScadenza().getTime()));
+		else statement.setDate(1, null);
+		statement.setFloat(2, carta.getSaldo());
+		statement.setString(3, carta.getCodiceCarta());
+		statement.executeUpdate();
+			
 	}
 
 	@Override

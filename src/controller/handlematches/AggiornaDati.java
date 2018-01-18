@@ -26,6 +26,7 @@ public class AggiornaDati extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		req.getSession().removeAttribute("loadingPartite");
 		RequestDispatcher disp = req.getRequestDispatcher("gestisciPartite.jsp");
 		disp.forward(req, resp);
 	}
@@ -48,41 +49,56 @@ public class AggiornaDati extends HttpServlet {
 			CampionatoDao campionatoDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCampionatoDao();
 
 			Connection connection = PostgresDAOFactory.dataSource.getConnection();
-
-			for (String s : squadre.split(";")) {
-				squadraDao.save(new Squadra(s),connection);
-			}
-			
-			for(String s:scudetti.split("endSquadra")) {
-				System.out.println(s);
-				String squadra_scudetto[] = s.split("endScudetto");
-				Squadra squadra_con_scudetto = new Squadra(squadra_scudetto[0]);
-				System.out.println(squadra_scudetto[0]);
-				squadra_con_scudetto.setScudetto(squadra_scudetto[1]);
-				squadraDao.update(squadra_con_scudetto, connection);
-			}
-
-			
-			for (String s : campionati.split(";")) {
-				int index = s.indexOf(":");
-				String id = s.substring(0, index);
-
-				// ignoriamo per scelta il campionato con codice 466
-				if (id.equals("466"))
-					continue;
-				String caption = s.substring(index + 1, s.length());
-				campionatoDao.save(new Campionato(Long.valueOf(id), caption),connection);
+			try {
+				
+				for (String s : squadre.split(";")) {
+					squadraDao.save(new Squadra(s),connection);
+				}
+				
+				for(String s:scudetti.split("endSquadra")) {
+					System.out.println(s);
+					String squadra_scudetto[] = s.split("endScudetto");
+					Squadra squadra_con_scudetto = new Squadra(squadra_scudetto[0]);
+					System.out.println(squadra_scudetto[0]);
+					squadra_con_scudetto.setScudetto(squadra_scudetto[1]);
+					squadraDao.update(squadra_con_scudetto, connection);
+				}
+	
+				
+				for (String s : campionati.split(";")) {
+					int index = s.indexOf(":");
+					String id = s.substring(0, index);
+	
+					// ignoriamo per scelta il campionato con codice 466
+					if (id.equals("466"))
+						continue;
+					String caption = s.substring(index + 1, s.length());
+					campionatoDao.save(new Campionato(Long.valueOf(id), caption),connection);
+				}
+			}catch (SQLException e) {
+				if(connection!=null) {
+					try {
+						connection.rollback();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+				throw new RuntimeException("Errore di connessione");
+			}finally {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			session.removeAttribute("loadingSquadre");
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 		}
 		// se invece il parametro aggiorna ha valore AggiornaPartite significa che
 		// l'amministratore ha richiesto un aggiornamento delle partite
 		else if (req.getParameter("aggiorna").equals("Aggiorna Partite")) {
+			
 			Connection connection = PostgresDAOFactory.dataSource.getConnection();
 			try {
 				session.setAttribute("loadingPartite", true);
@@ -112,7 +128,18 @@ public class AggiornaDati extends HttpServlet {
 						match.setGoal_ospite(Integer.valueOf(partita[4]));
 					}
 					System.out.println("partita salvata");
-					partitaDao.save(match,connection);
+					try {
+						partitaDao.save(match,connection);
+					} catch (SQLException e) {
+						if(connection!=null) {
+							try {
+								connection.rollback();
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						}
+					}
 				}
 				session.removeAttribute("loadingPartite");
 			}finally {

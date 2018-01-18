@@ -114,9 +114,10 @@ function checkValue(){
 				else{
 					svuotaScommessa();
 					addMessage("success"," scommessa registrata con successo");
-					window.location.href = "#response";
 					var arrayResponse=response.split('\n');
+					alert("pippo");
 					$("#saldoConto").text("Saldo conto : "+arrayResponse[1]);
+					window.location.href = "#response";
 				}
 				
 			});

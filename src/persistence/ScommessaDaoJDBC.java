@@ -24,9 +24,7 @@ import persistence.dao.ScommessaDao;
 public class ScommessaDaoJDBC implements ScommessaDao {
 
 	@Override
-	public void save(Scommessa scommessa) {
-		Connection connection = PostgresDAOFactory.dataSource.getConnection();
-		try {
+	public void save(Scommessa scommessa,Connection connection)throws SQLException {
 			String insert = "insert into scommessa(codice, data_emissione, conto_associato, importo_giocato,quota_totale,bonus,numero_esiti,vincita_potenziale,stato) values (?,?,?,?,?,?,?,?,?)";
 			PreparedStatement statement = connection.prepareStatement(insert);
 			statement.setLong(1, scommessa.getCodice());
@@ -52,17 +50,8 @@ public class ScommessaDaoJDBC implements ScommessaDao {
 					TipoMovimento.PRELIEVO, scommessa);
 			MovimentoScommessaDao movimentoDao = PostgresDAOFactory.getDAOFactory(PostgresDAOFactory.POSTGRESQL)
 					.getMovimentoScommessaDAO();
-			movimentoDao.save(movimento);
+			movimentoDao.save(movimento,connection);
 
-		} catch (SQLException e) {
-			throw new PersistenceException(e.getMessage());
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				throw new PersistenceException(e.getMessage());
-			}
-		}
 	}
 
 	@Override
@@ -182,13 +171,14 @@ public class ScommessaDaoJDBC implements ScommessaDao {
 			ContoDao contoDao = PostgresDAOFactory.getDAOFactory(PostgresDAOFactory.POSTGRESQL).getContoDAO();
 			ScommessaDao scommessaDao =PostgresDAOFactory.getDAOFactory(PostgresDAOFactory.POSTGRESQL).getScommessaDao();
 			Scommessa scommessa = scommessaDao.findByPrimaryKey(codiceScommessa);
-			Conto contoAssociato = scommessa.getConto_associato();
-			contoAssociato.setSaldo(contoAssociato.getSaldo()+scommessa.getSchema_scommessa().getVincita_potenziale());
-			contoDao.update(contoAssociato);
 			
 			if(esito_scommessa.equals("vinta")) {
+
+				Conto contoAssociato = scommessa.getConto_associato();
+				contoDao.update(contoAssociato,connection);
+				contoAssociato.setSaldo(contoAssociato.getSaldo()+scommessa.getSchema_scommessa().getVincita_potenziale());
 				MovimentoScommessaDao movimentoScommessa = PostgresDAOFactory.getDAOFactory(PostgresDAOFactory.POSTGRESQL).getMovimentoScommessaDAO();
-				movimentoScommessa.save(new MovimentoScommessa(scommessa.getSchema_scommessa().getVincita_potenziale(), TipoMovimento.VERSAMENTO, scommessa));
+				movimentoScommessa.save(new MovimentoScommessa(scommessa.getSchema_scommessa().getVincita_potenziale(), TipoMovimento.VERSAMENTO, scommessa),connection);
 			}
 
 		} catch (SQLException e) {

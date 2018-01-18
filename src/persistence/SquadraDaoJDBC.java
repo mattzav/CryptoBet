@@ -15,21 +15,15 @@ import persistence.dao.SquadraDao;
 public class SquadraDaoJDBC implements SquadraDao {
 
 	@Override
-	public void save(Squadra squadra, Connection connection) {
+	public void save(Squadra squadra, Connection connection)throws SQLException {
 		Squadra esistente = findByPrimaryKey(squadra.getNome());
 		if (esistente != null)
 			return;
-
 		String insert = "insert into squadra(nome,scudetto) values (?,?)";
-		try {
 			PreparedStatement statement = connection.prepareStatement(insert);
 			statement.setString(1, squadra.getNome());
 			statement.setString(2, squadra.getScudetto());
 			statement.executeUpdate();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 	}
 
