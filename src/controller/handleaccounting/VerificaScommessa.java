@@ -17,8 +17,10 @@ public class VerificaScommessa extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
 		ScommessaDao scommessa = PostgresDAOFactory.getDAOFactory(PostgresDAOFactory.POSTGRESQL).getScommessaDao();
 		HttpSession session=req.getSession();
+		
 		// prendo dalla richiesta il codice della scommessa e la verifico prendendomi l'esito
 		String esito = scommessa.verificaScommessa(Long.valueOf(req.getParameter("codiceScommessa")));
 		String response=esito;

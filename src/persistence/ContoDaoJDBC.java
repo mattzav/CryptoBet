@@ -19,25 +19,15 @@ public class ContoDaoJDBC implements ContoDao {
 
 
 	@Override
-	public void save(Conto conto) {
-		Connection connection = PostgresDAOFactory.dataSource.getConnection();
-		try {
-			String insert = "insert into conto(codice, saldo, data_apertura, codice_carta) values (?,?,?,?)";
-			PreparedStatement statement = connection.prepareStatement(insert);
-			statement.setLong(1,conto.getCodice());
-			statement.setFloat(2,conto.getSaldo());
-			statement.setDate(3, null);
-			statement.setString(4, conto.getCarta().getCodiceCarta());
-			statement.executeUpdate();
-		} catch (SQLException e) {
-			throw new PersistenceException(e.getMessage());
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				throw new PersistenceException(e.getMessage());
-			}
-		}
+	public void save(Conto conto,Connection connection)throws SQLException {
+
+		String insert = "insert into conto(codice, saldo, data_apertura, codice_carta) values (?,?,?,?)";
+		PreparedStatement statement = connection.prepareStatement(insert);
+		statement.setLong(1,conto.getCodice());
+		statement.setFloat(2,conto.getSaldo());
+		statement.setDate(3, null);
+		statement.setString(4, conto.getCarta().getCodiceCarta());
+		statement.executeUpdate();
 	}
 
 	@Override
@@ -71,24 +61,13 @@ public class ContoDaoJDBC implements ContoDao {
 	}
 
 	@Override
-	public void update(Conto conto) {
+	public void update(Conto conto,Connection connection)throws SQLException {
 		
-		Connection connection = PostgresDAOFactory.dataSource.getConnection();
-		try {
 			String update = "update conto SET saldo = ? where codice=? ";
 			PreparedStatement statement = connection.prepareStatement(update);
 			statement.setFloat(1, conto.getSaldo());
 			statement.setLong(2, conto.getCodice());
 			statement.executeUpdate();
-		} catch (SQLException e) {
-			throw new PersistenceException(e.getMessage());
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				throw new PersistenceException(e.getMessage());
-			}
-		}
 	}
 
 	@Override

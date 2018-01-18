@@ -56,8 +56,9 @@ public class ModificaQuota extends HttpServlet {
 			long codicePartita = Long.valueOf(req.getParameter("suggerimento"));
 			PartitaDao partitaDao = PostgresDAOFactory.getDAOFactory(PostgresDAOFactory.POSTGRESQL).getPartitaDao();
 			Connection connection=PostgresDAOFactory.dataSource.getConnection();
-			float quota = partitaDao.getQuota(codicePartita, esito,connection);
+			float quota=1.0f;
 			try {
+				quota = partitaDao.getQuota(codicePartita, esito,connection);
 				connection.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block

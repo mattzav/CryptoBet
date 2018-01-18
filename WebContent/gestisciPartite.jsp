@@ -112,7 +112,6 @@
 													<input class="btn btn-primary" type="submit" name="accesso"
 														value="Accedi"
 														onclick="<c:set var="page" value="gestisciPartite.jsp" scope="session"/>" />
-													<a class="btn btn-primary" href="Registrati.html" onclick="<c:set var="page" value="gestisciPartite.jsp" scope="session"/>">Registrati</a>
 												</div>
 											</form>
 										</div>

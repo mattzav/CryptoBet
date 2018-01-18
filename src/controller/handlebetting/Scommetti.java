@@ -2,6 +2,8 @@ package controller.handlebetting;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
@@ -29,68 +31,65 @@ import persistence.dao.ContoDao;
 import persistence.dao.EsitoPartitaDao;
 import persistence.dao.PartitaDao;
 
-public class Scommetti extends HttpServlet{
+public class Scommetti extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
+
 		CampionatoDao campionatoDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCampionatoDao();
 		req.getSession().setAttribute("campionati", campionatoDao.findAll());
-		req.getSession().removeAttribute("schema");
-		req.getSession().removeAttribute("partiteAttive");
-		req.getSession().removeAttribute("campionatiAttivi");
-		req.getSession().removeAttribute("esitiAttivi");
-		req.getSession().removeAttribute("campionato");
-		req.getSession().removeAttribute("importo");
-		ArrayList<Esito> esiti=(ArrayList<Esito>) PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getEsitoDao().findAll();
+		ArrayList<Esito> esiti = (ArrayList<Esito>) PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL)
+				.getEsitoDao().findAll();
 		req.getSession().setAttribute("esiti", esiti);
 		RequestDispatcher dispatcher = req.getRequestDispatcher("Scommetti.jsp");
 		dispatcher.forward(req, resp);
 	}
-	
+
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		EsitoPartitaDao esitoPartitaDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getEsitoPartitaDao();
 		PartitaDao partitaDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getPartitaDao();
 		HttpSession session = req.getSession();
-		
+
 		ArrayList<Partita> partiteAttive = (ArrayList<Partita>) session.getAttribute("partiteAttive");
 		ArrayList<String> campionatiAttivi = (ArrayList<String>) session.getAttribute("campionatiAttivi");
 		ArrayList<EsitoPartita> esitiAttivi = (ArrayList<EsitoPartita>) session.getAttribute("esitiAttivi");
 
-		if(partiteAttive == null) {
+		if (partiteAttive == null) {
 			partiteAttive = new ArrayList<>();
 			session.setAttribute("partiteAttive", partiteAttive);
 		}
 
-		if(esitiAttivi == null) {
+		if (esitiAttivi == null) {
 			esitiAttivi = new ArrayList<>();
 			session.setAttribute("esitiAttivi", esitiAttivi);
 		}
-		
-		if(campionatiAttivi == null) {
+
+		if (campionatiAttivi == null) {
 			campionatiAttivi = new ArrayList<>();
 			session.setAttribute("campionatiAttivi", campionatiAttivi);
 		}
-		
+
 		String current = req.getParameter("campionato");
-		SchemaDiScommessa schemaDiScommessa=(SchemaDiScommessa) session.getAttribute("schema");
-		
-		if(!(current==null || current.equals(""))) {
-			
-			//click su un campionato
-			if(!campionatiAttivi.contains(current)) {
-				
-				//aggiungi campionato
+		SchemaDiScommessa schemaDiScommessa = (SchemaDiScommessa) session.getAttribute("schema");
+
+		if (!(current == null || current.equals(""))) {
+
+			// click su un campionato
+			if (!campionatiAttivi.contains(current)) {
+
+				// aggiungi campionato
 				campionatiAttivi.add(current);
-				for(Partita partita:partitaDao.findAll(current)) {
-					ArrayList<EsitoPartita> listaEsiti=(ArrayList<EsitoPartita>) esitoPartitaDao.findByPartita(partita);
-					for(EsitoPartita esito : listaEsiti) {
-						if(schemaDiScommessa!=null) {
-							for(EsitoPartita esitoGiocato:schemaDiScommessa.getEsiti_giocati()) {
-								if(esito.getPartita().getCodice().equals(esitoGiocato.getPartita().getCodice()) && esito.getEsito().getDescrizione().equals(esitoGiocato.getEsito().getDescrizione()) )
-								{
+				for (Partita partita : partitaDao.findAll(current)) {
+					ArrayList<EsitoPartita> listaEsiti = (ArrayList<EsitoPartita>) esitoPartitaDao
+							.findByPartita(partita);
+					for (EsitoPartita esito : listaEsiti) {
+						if (schemaDiScommessa != null) {
+							for (EsitoPartita esitoGiocato : schemaDiScommessa.getEsiti_giocati()) {
+								if (esito.getPartita().getCodice().equals(esitoGiocato.getPartita().getCodice())
+										&& esito.getEsito().getDescrizione()
+												.equals(esitoGiocato.getEsito().getDescrizione())) {
 									System.out.println("giocato");
 									esito.setGiocato(true);
 									break;
@@ -101,112 +100,133 @@ public class Scommetti extends HttpServlet{
 					esitiAttivi.addAll(listaEsiti);
 					partiteAttive.add(partita);
 				}
-			}
-			else {
+			} else {
 				campionatiAttivi.remove(current);
 				ArrayList<EsitoPartita> esitiDaEliminare = new ArrayList<>();
-				
-				
-				for(EsitoPartita e:esitiAttivi)
-					if(e.getPartita().getCampionato().getNome().equals(current)) {
+
+				for (EsitoPartita e : esitiAttivi)
+					if (e.getPartita().getCampionato().getNome().equals(current)) {
 						esitiDaEliminare.add(e);
 						partiteAttive.remove(e.getPartita());
 					}
-				
+
 				esitiAttivi.removeAll(esitiDaEliminare);
 			}
-		}
-		else {
-			if(schemaDiScommessa==null) {
-				schemaDiScommessa=new SchemaDiScommessa(1.0f, 1.0f, 0.0f, 0, 1.0f, new ArrayList<EsitoPartita>());
+		} else {
+			if (schemaDiScommessa == null) {
+				schemaDiScommessa = new SchemaDiScommessa(1.0f, 1.0f, 0.0f, 0, 1.0f, new ArrayList<EsitoPartita>());
 				session.setAttribute("schema", schemaDiScommessa);
 			}
-			String importo=req.getParameter("importo");
-			if(importo!=null) {
+			String importo = req.getParameter("importo");
+			if (importo != null) {
 				session.setAttribute("importo", Float.valueOf(importo));
 				schemaDiScommessa.setImporto_giocato(Float.valueOf(importo));
-				PrintWriter pw =resp.getWriter();
-				pw.print(schemaDiScommessa.getVincita_potenziale()+";"+schemaDiScommessa.getBonus());
+				PrintWriter pw = resp.getWriter();
+				pw.print(schemaDiScommessa.getVincita_potenziale() + ";" + schemaDiScommessa.getBonus());
 				return;
-			}
-			else {
-				String btn=req.getParameterNames().nextElement();
-				if(btn.contains(";")) {
-					String[] datiEsitoSelezionato=btn.split(";");
-					Long codicePartita=Long.valueOf(datiEsitoSelezionato[0]);
-					String esitoSelezionato=datiEsitoSelezionato[1];
-					for(EsitoPartita esito:esitiAttivi) {
-						String desc=esito.getEsito().getDescrizione()+" ";
-						if(esito.getPartita().getCodice().equals(codicePartita) && desc.equals(esitoSelezionato)) {
-							if(schemaDiScommessa.canAdd(esito)) {
-								if(!esito.isGiocato()) {
-									if(schemaDiScommessa.getNumero_esiti()>=8) {
-										System.out.println(schemaDiScommessa.getNumero_esiti()+" "+schemaDiScommessa.getQuota_totale()+" "+schemaDiScommessa.getImporto_giocato());
+			} else {
+				String btn = req.getParameterNames().nextElement();
+				if (btn.contains(";")) {
+					String[] datiEsitoSelezionato = btn.split(";");
+					Long codicePartita = Long.valueOf(datiEsitoSelezionato[0]);
+					String esitoSelezionato = datiEsitoSelezionato[1];
+					for (EsitoPartita esito : esitiAttivi) {
+						String desc = esito.getEsito().getDescrizione() + " ";
+						if (esito.getPartita().getCodice().equals(codicePartita) && desc.equals(esitoSelezionato)) {
+							if (schemaDiScommessa.canAdd(esito)) {
+								if (!esito.isGiocato()) {
+									if (schemaDiScommessa.getNumero_esiti() >= 8) {
+										System.out.println(schemaDiScommessa.getNumero_esiti() + " "
+												+ schemaDiScommessa.getQuota_totale() + " "
+												+ schemaDiScommessa.getImporto_giocato());
 										resp.getWriter().print("Errore: Hai raggiunto il limite massimo");
 										return;
 									}
 									System.out.println("aggiunto");
 									schemaDiScommessa.addEsito(esito);
 									esito.setGiocato(true);
-								}
-								else {
+								} else {
 									System.out.println("rimosso");
 									schemaDiScommessa.removeEsito(esito);
 									esito.setGiocato(false);
 								}
-							}
-							else {
+							} else {
 								System.out.println("esito già presente per questa partita");
 							}
 							System.out.println(schemaDiScommessa.getQuota_totale());
-							resp.getWriter().print(esito.getPartita().getSquadra_casa().getNome()+";"
-													+esito.getPartita().getSquadra_ospite().getNome()+";"
-													+ esito.getQuota()+";"+schemaDiScommessa.getQuota_totale()+";"+
-													+schemaDiScommessa.getBonus()+";"+schemaDiScommessa.getVincita_potenziale());
+							resp.getWriter().print(esito.getPartita().getSquadra_casa().getNome() + ";"
+									+ esito.getPartita().getSquadra_ospite().getNome() + ";" + esito.getQuota() + ";"
+									+ schemaDiScommessa.getQuota_totale() + ";" + +schemaDiScommessa.getBonus() + ";"
+									+ schemaDiScommessa.getVincita_potenziale());
 							return;
 						}
 					}
-				}
-				else if(btn.equals("giocaScommessa")) {
+				} else if (btn.equals("giocaScommessa")) {
 					System.out.println("gioca scommessa");
-					if(session.getAttribute("utente")==null) {
+					if (session.getAttribute("utente") == null) {
 						System.out.println("nessun utente");
 						resp.getWriter().print("Errore : Utente non loggato");
 						return;
-					}
-					else if(schemaDiScommessa.getNumero_esiti()==0) {
+					} else if (schemaDiScommessa.getNumero_esiti() == 0) {
 						resp.getWriter().print("Errore : Non e' possibile giocare una scommessa vuota");
 						return;
-					}
-					else if(session.getAttribute("utente").equals("USER")) {
-						Giocatore utente= (Giocatore) session.getAttribute("loggato");
-						Conto contoUtente=utente.getConto();
-						if(contoUtente.preleva((Float) session.getAttribute("importo"))){
-							session.removeAttribute("schema");
-							PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getScommessaDao().save(new Scommessa(new Date(), contoUtente, schemaDiScommessa,"non verificata"));
-							ContoDao contoDao=PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getContoDAO();
-							contoDao.update(contoUtente);
+					} else if (session.getAttribute("utente").equals("USER")) {
+						
+						Giocatore utente = (Giocatore) session.getAttribute("loggato");
+						Conto contoUtente = utente.getConto();
+						if (contoUtente.preleva((Float) session.getAttribute("importo"))) {
+						
+							//prendo la connection per assicurare l'atomicità
+							Connection connection=PostgresDAOFactory.dataSource.getConnection();
+							try {
 							
-							for(EsitoPartita e:schemaDiScommessa.getEsiti_giocati()) {
-								e.setGiocato(false);
+								//transazione e memorizzazione scommessa
+								PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getScommessaDao()
+										.save(new Scommessa(new Date(), contoUtente, schemaDiScommessa, "non verificata"),connection);
+								ContoDao contoDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getContoDAO();
+								contoDao.update(contoUtente,connection);
+							
+							} catch (SQLException e1) {
+								if(connection!=null) {
+									try {
+										connection.rollback();
+									} catch (SQLException e2) {
+										// TODO Auto-generated catch block
+										e2.printStackTrace();
+									}
+									resp.getWriter().println("Errore: crollo della connessione");
+									return;
+								}
+							}finally {
+								try {
+									connection.close();
+								} catch (SQLException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
 							}
 							
+							//ripristino della session
+							session.removeAttribute("schema");
+							for (EsitoPartita e : schemaDiScommessa.getEsiti_giocati()) {
+								e.setGiocato(false);
+							}
 							resp.getWriter().println("ok");
 							resp.getWriter().println(contoUtente.getSaldo());
-						}
-						else {
+							
+						} else {
 							resp.getWriter().println("Errore : credito non sufficente");
 						}
 						return;
-					}else{
+						
+					} else {
 						System.out.println("ADMIN");
 						resp.getWriter().println("Errore : utente loggato come admin");
 						return;
 					}
-				}
-				else if(btn.equals("svuota")) {
+				} else if (btn.equals("svuota")) {
 					session.removeAttribute("schema");
-					for(EsitoPartita e:schemaDiScommessa.getEsiti_giocati()) {
+					for (EsitoPartita e : schemaDiScommessa.getEsiti_giocati()) {
 						e.setGiocato(false);
 					}
 				}
@@ -214,7 +234,7 @@ public class Scommetti extends HttpServlet{
 		}
 		RequestDispatcher dispatcher = req.getRequestDispatcher("Scommetti.jsp");
 		dispatcher.forward(req, resp);
-		
+
 	}
 
 }

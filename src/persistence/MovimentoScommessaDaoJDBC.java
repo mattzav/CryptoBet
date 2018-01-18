@@ -18,27 +18,16 @@ import persistence.dao.MovimentoScommessaDao;
 public class MovimentoScommessaDaoJDBC implements MovimentoScommessaDao {
 
 	@Override
-	public void save(MovimentoScommessa movimentoScommessa) {
+	public void save(MovimentoScommessa movimentoScommessa,Connection connection)throws SQLException {
 		
-		Connection connection = PostgresDAOFactory.dataSource.getConnection();
-		try {
-			String insert = "insert into movimentoscommessa(codice, importo, tipo, scommessa) values (?,?,?,?)";
-			PreparedStatement statement = connection.prepareStatement(insert);
-			statement.setLong(1, movimentoScommessa.getCodice_transazione());
-			statement.setFloat(2, movimentoScommessa.getImporto());
-			statement.setString(3, movimentoScommessa.getTipo_transazione());
-			statement.setLong(4, movimentoScommessa.getScommessa().getCodice());
-			statement.executeUpdate();
+		String insert = "insert into movimentoscommessa(codice, importo, tipo, scommessa) values (?,?,?,?)";
+		PreparedStatement statement = connection.prepareStatement(insert);
+		statement.setLong(1, movimentoScommessa.getCodice_transazione());
+		statement.setFloat(2, movimentoScommessa.getImporto());
+		statement.setString(3, movimentoScommessa.getTipo_transazione());
+		statement.setLong(4, movimentoScommessa.getScommessa().getCodice());
+		statement.executeUpdate();
 			
-		} catch (SQLException e) {
-			throw new PersistenceException(e.getMessage());
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				throw new PersistenceException(e.getMessage());
-			}
-		}
 	}
 
 	@Override

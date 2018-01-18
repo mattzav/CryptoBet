@@ -21,10 +21,8 @@ public class MovimentoCartaDaoJDBC implements MovimentoCartaDao{
 
 
 	@Override
-	public void save(MovimentoCarta movimento) {
+	public void save(MovimentoCarta movimento,Connection connection)throws SQLException {
 		
-		Connection connection = PostgresDAOFactory.dataSource.getConnection();
-		try {
 			String insert = "insert into movimentoCarta(codice, data, ora, tipo, importo, conto) values (?,?,?,?,?,?)";
 			PreparedStatement statement = connection.prepareStatement(insert);
 			statement.setLong(1, movimento.getCodice());
@@ -40,15 +38,6 @@ public class MovimentoCartaDaoJDBC implements MovimentoCartaDao{
 			statement.setLong(6, movimento.getConto().getCodice());
 			statement.executeUpdate();
 			
-		} catch (SQLException e) {
-			throw new PersistenceException(e.getMessage());
-		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				throw new PersistenceException(e.getMessage());
-			}
-		}
 	}
 
 	@Override
