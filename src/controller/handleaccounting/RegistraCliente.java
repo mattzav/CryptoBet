@@ -26,16 +26,20 @@ public class RegistraCliente extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		HttpSession session=req.getSession();
-		rispristinaSessione(session,false);
+		
+		HttpSession sessione=req.getSession();
+		
+		rispristinaSessione(sessione,false);
+		
 		RequestDispatcher dispatcher=req.getRequestDispatcher("Registrati.html");
 		dispatcher.forward(req, resp);
 	}
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
-		HttpSession session=req.getSession();
+		HttpSession sessione=req.getSession();
+		
+		//parametri registrazione
 		String nome = req.getParameter("name");
 		String cognome = req.getParameter("surname");
 		String codCarta =req.getParameter("creditCard");
@@ -43,49 +47,59 @@ public class RegistraCliente extends HttpServlet {
 		String username = req.getParameter("usr");
 		
 		if(req.getParameter("checkUsername")!=null) {
+		
+			//controllo username valido
 			if(PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCredenzialiDAO().findByPrimaryKey(username)!=null) {
 				resp.getWriter().print("errore");
-				session.setAttribute("erroreUsername", true);
+				sessione.setAttribute("erroreUsername", true);
 			}
 			else {
 				resp.getWriter().print("ok");
-				session.setAttribute("erroreUsername", false);
+				sessione.setAttribute("erroreUsername", false);
 			}
 			return;
 		}
 		if(req.getParameter("checkCreditCard")!=null) {
+			
+			//controllo carta di credito
 			if(PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCartaDiCreditoDAO().findByPrimaryKey(codCarta)!=null) {
-				session.setAttribute("erroreCreditCard", true);
+				sessione.setAttribute("erroreCreditCard", true);
 				resp.getWriter().print("errore");
 			}
 			else {
-				session.setAttribute("erroreCreditCard", false);
+				sessione.setAttribute("erroreCreditCard", false);
 				resp.getWriter().print("ok");
 			}
 			return;
 		}
-		String error = req.getParameterNames().nextElement();
-		if(error.contains("errore")) {
+		
+		
+		String errore = req.getParameterNames().nextElement();
+		
+		//notifica di un errore
+		if(errore.contains("errore")) {
 			boolean value=false;
-			if(req.getParameter(error).equals("true")) {
+			if(req.getParameter(errore).equals("true")) {
 				value=true;
 			}
-			session.setAttribute(error, value);
+			sessione.setAttribute(errore, value);
 		}
+		
+		//controllo se ci sono errori
+		boolean esisteErrore=false;
+		Enumeration<String> erroriPresenti = sessione.getAttributeNames();
+		while (erroriPresenti.hasMoreElements()) {
 			
-		boolean existError=false;
-		Enumeration<String> occursErrors = session.getAttributeNames();
-		while (occursErrors.hasMoreElements()) {
-			String string = (String) occursErrors.nextElement();
+			String string = (String) erroriPresenti.nextElement();
 			if(string.contains("errore")) {
-				boolean value=(boolean) session.getAttribute(string);
+				boolean value=(boolean) sessione.getAttribute(string);
 				if(value) {
-					System.out.println(string);
-					existError=true;
+					esisteErrore=true;
 				}
 			}
 		}
-		if(!existError && req.getParameter("button")!=null) {
+		
+		if(!esisteErrore && req.getParameter("button")!=null) {
 			
 			//creo le credenziali del nuovo giocatore
 			Credenziali nuovaCredenziale=new Credenziali(username,password);
@@ -102,28 +116,30 @@ public class RegistraCliente extends HttpServlet {
 			Giocatore nuovoGiocatore=new Giocatore(nome,cognome,nuovaCredenziale,conto);
 
 			//prendo la connessione
-			Connection connection=PostgresDAOFactory.dataSource.getConnection();
+			Connection connessione=PostgresDAOFactory.dataSource.getConnection();
 			
 			try {
+			
 				//salvataggio
-				cartaDao.save(carta,connection);
-				PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getContoDAO().save(conto,connection);
-				PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCredenzialiDAO().save(nuovaCredenziale,connection);
-				PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getGiocatoreDAO().save(nuovoGiocatore,connection);
+				cartaDao.save(carta,connessione);
+				PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getContoDAO().save(conto,connessione);
+				PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCredenzialiDAO().save(nuovaCredenziale,connessione);
+				PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getGiocatoreDAO().save(nuovoGiocatore,connessione);
+			
 			}catch (SQLException e) {
-				if(connection!=null) {
+				if(connessione!=null) {
 					try {
-						connection.rollback();
+						connessione.rollback();
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					rispristinaSessione(session, false);
+					rispristinaSessione(sessione, false);
 					return;
 				}
 			}finally {
 				try {
-					connection.close();
+					connessione.close();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -131,25 +147,27 @@ public class RegistraCliente extends HttpServlet {
 			}
 			
 			String messaggio="Benvenuto "+username+"  ";
-			session.setAttribute("username", username);
-			session.setAttribute("mex", messaggio);
-			session.setAttribute("loggato", nuovoGiocatore);
-			session.setAttribute("utente", TipoCredenziali.USER);
-			String page=(String) session.getAttribute("page");
+			sessione.setAttribute("username", username);
+			sessione.setAttribute("mex", messaggio);
+			sessione.setAttribute("loggato", nuovoGiocatore);
+			sessione.setAttribute("utente", TipoCredenziali.USER);
+			String page=(String) sessione.getAttribute("page");
+			rispristinaSessione(sessione,true);
+
 			RequestDispatcher dispatcher=req.getRequestDispatcher(page);
 			dispatcher.forward(req, resp);
-			rispristinaSessione(session,true);
+			return;
 		}
-		else if(existError && req.getParameter("button")!=null) {
-			System.out.println("rispistino con errori");
-			rispristinaSessione(session,false);
+		else if(esisteErrore && req.getParameter("button")!=null) {
+
+			rispristinaSessione(sessione,false);
+			RequestDispatcher dispatcher=req.getRequestDispatcher("Registrati.html");
+			dispatcher.forward(req, resp);
 		}
-		String page=(String) session.getAttribute("page");
-		RequestDispatcher dispatcher=req.getRequestDispatcher(page);
-		dispatcher.forward(req, resp);
 	}
 
 	private void rispristinaSessione(HttpSession session,boolean checked) {
+		
 		if(!checked) {
 			session.setAttribute("erroreName", true);
 			session.setAttribute("erroreSurname", true);

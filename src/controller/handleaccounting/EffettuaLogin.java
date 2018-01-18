@@ -22,44 +22,57 @@ public class EffettuaLogin extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-		HttpSession session=req.getSession();
+		HttpSession sessione=req.getSession();
+		
 		String username=req.getParameter("user");
-		String pwd=req.getParameter("pwd");
-		Credenziali c=new Credenziali(username, pwd);
-		String admin=req.getParameter("admin");
-		if(admin == null) {
+		String password=req.getParameter("pwd");
+		
+		Credenziali c=new Credenziali(username, password);
+		
+		String amministratore=req.getParameter("admin");
+		
+		if(amministratore == null) {
+			
+			//login come giocatore
 			Giocatore g=PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getGiocatoreDAO().findByCredenziali(c);
 			if(g!=null) {
 				String messaggio="Benvenuto "+username+"  ";
-				session.setAttribute("username", username);
-				session.setAttribute("mex", messaggio);
-				session.setAttribute("loggato", g);
-				session.setAttribute("utente", TipoCredenziali.USER);
+				sessione.setAttribute("username", username);
+				sessione.setAttribute("mex", messaggio);
+				sessione.setAttribute("loggato", g);
+				sessione.setAttribute("utente", TipoCredenziali.USER);
 			}
 		}else {
-			boolean result =PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getAmministratoreDAO().findByCredenziali(c);
-			if(result) {
+			
+			//login come amministratore
+			boolean risultato =PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getAmministratoreDAO().findByCredenziali(c);
+			if(risultato) {
 				String messaggio="Benvenuto Amministratore "+username+"    ";
-				session.setAttribute("username", username);
-				session.setAttribute("mex", messaggio);
-				session.setAttribute("loggato", true);
-				session.setAttribute("utente", TipoCredenziali.ADMIN);
+				sessione.setAttribute("username", username);
+				sessione.setAttribute("mex", messaggio);
+				sessione.setAttribute("loggato", true);
+				sessione.setAttribute("utente", TipoCredenziali.ADMIN);
 			}
 		}
+		
 		RequestDispatcher disp;
-		String page=(String) session.getAttribute("page");
+		String page=(String) sessione.getAttribute("page");
 		disp= req.getRequestDispatcher(page);
 		disp.forward(req, resp);
 	}
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
 		HttpSession session=req.getSession();
+		
+		//log-out
 		session.removeAttribute("username");
 		session.removeAttribute("loggato");
 		session.removeAttribute("utente");
-		RequestDispatcher disp;
 		String page=(String) session.getAttribute("page");
+		
+		RequestDispatcher disp;
 		disp= req.getRequestDispatcher(page);
 		disp.forward(req, resp);
 	}
