@@ -4,11 +4,14 @@ import java.io.Serializable;
 
 public class EsitoPartita implements Serializable {
 
+	// attributi del database
 	private String stato;
 	private Esito esito;
 	private float quota;
 	private Partita partita;
 	private boolean disponibile;
+	
+	// attributo di utilità
 	private boolean giocato;
 
 	public EsitoPartita(boolean disponibile, Esito esito, float quota, Partita partita, String stato) {
