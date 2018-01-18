@@ -15,13 +15,8 @@ import persistence.dao.ScommessaDao;
 import persistence.dao.SquadraDao;
 
 public class PostgresDAOFactory extends DAOFactory {
-
-	
 	
 	public static  DataSource dataSource;
-	
-
-	// --------------------------------------------
 
 	static {
 		try {
@@ -40,28 +35,24 @@ public class PostgresDAOFactory extends DAOFactory {
 
 	@Override
 	public AmministratoreDao getAmministratoreDAO() {
-		// TODO Auto-generated method stub
 		return new AmministratoreDaoJDBC();
 	}
 
 
 	@Override
 	public GiocatoreDao getGiocatoreDAO() {
-		// TODO Auto-generated method stub
 		return new GiocatoreDaoJDBC();
 	}
 
 
 	@Override
 	public CredenzialiDao getCredenzialiDAO() {
-		// TODO Auto-generated method stub
 		return new CredenzialiDaoJDBC();
 	}
 
 
 	@Override
 	public ContoDao getContoDAO() {
-		// TODO Auto-generated method stub
 		return new ContoDaoJDBC();
 	}
 
@@ -125,9 +116,7 @@ public class PostgresDAOFactory extends DAOFactory {
 
 	@Override
 	public ScommessaDao getScommessaDao() {
-		// TODO Auto-generated method stub
 		return new ScommessaDaoJDBC();
 	}
 	
-	// --------------------------------------------
 }
