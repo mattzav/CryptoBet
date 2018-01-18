@@ -172,13 +172,13 @@
 						<div>
 							<div class="col-sm-8">
 								<table class="table">
-									<tr>
+									<tr class="info">
 										<th>Squadra:</th>
 										<th>Scudetto:</th>
 									</tr>
 									<tbody>
 										<c:forEach items="${squadreVisibili}" var="squadra">
-											<tr>
+											<tr class="warning">
 												<td>${squadra.nome}</td>
 												<td><img class="${squadra.nome}"
 													src=${squadra.scudetto } width="75" height="75"></td>
