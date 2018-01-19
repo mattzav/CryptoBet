@@ -91,9 +91,10 @@ function getSquadre() {
 		},
 		error : function() {
 			alert("error passaggio dati");
+			$("#loadingSquadre").remove();
+			$("#squadre").prop("disabled",false);
 		},
 	}).done(function(){
-			alert("aggiornamento concluso");
 			$("#loadingSquadre").remove();
 			$("#squadre").prop("disabled",false);
 	});
@@ -170,6 +171,8 @@ function getPartite() {
 		},
 		error : function() {
 			alert("error partite");
+			$("#loadingSquadre").remove();
+			$("#squadre").prop("disabled",false);
 		},
 	}).done(function(){
 		$("#loadingPartite").remove();

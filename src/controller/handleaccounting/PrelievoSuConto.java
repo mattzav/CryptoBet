@@ -36,25 +36,33 @@ public class PrelievoSuConto extends HttpServlet{
 			//prendo una connessione unica
 			Connection connessione=PostgresDAOFactory.dataSource.getConnection();
 			try {
+				connessione.setAutoCommit(false);
+			} catch (SQLException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			try {
 			
 				//corpo transazione
 				PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCartaDiCreditoDAO().update(carta,connessione);
 				PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getContoDAO().update(contoUtente,connessione);
 				MovimentoCarta movimento=new MovimentoCarta(new java.util.Date(), TipoMovimento.PRELIEVO, Float.valueOf(importo), contoUtente);
 				PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getMovimentoCartaDAO().save(movimento,connessione);
-			
+				connessione.commit();
 			} catch (SQLException e) {
 			
 				if(connessione!=null) {
 					try {
 						connessione.rollback();
+						carta.preleva(importo);
+						contoUtente.versa(importo);
+						resp.getWriter().print("Errore: non e' stato possibile memorizzare l'operazione");
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}
-				resp.getWriter().print("Errore: Crollo della connessione;"+contoUtente.getSaldo());
-			
+				return;
 			}finally {
 				
 				try {

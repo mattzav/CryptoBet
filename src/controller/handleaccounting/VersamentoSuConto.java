@@ -37,6 +37,12 @@ public class VersamentoSuConto extends HttpServlet{
 			//prendo una connessione unica
 			Connection connessione=PostgresDAOFactory.dataSource.getConnection();
 			try {
+				connessione.setAutoCommit(false);
+			} catch (SQLException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			try {
 				
 				//corpo transazione 
 				PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCartaDiCreditoDAO().update(carta,connessione);
@@ -49,12 +55,14 @@ public class VersamentoSuConto extends HttpServlet{
 				if(connessione!=null) {
 					try {
 						connessione.rollback();
+						carta.versa(importo);
+						contoUtente.preleva(importo);
+						resp.getWriter().print("Errore: non e' stato possibile memorizzare l'operazione");
+						return;
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					resp.getWriter().print("Errore: Crollo della rete");
-					return;
 				}
 			}finally {
 				try {

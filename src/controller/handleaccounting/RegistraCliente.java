@@ -30,7 +30,14 @@ public class RegistraCliente extends HttpServlet {
 		HttpSession sessione=req.getSession();
 		
 		rispristinaSessione(sessione,false);
-		
+		String header=req.getHeader("errorePersistenza");
+		if(header!=null && header.equals("true")) {
+			boolean errore=(boolean) req.getSession().getAttribute("errorePersistenza");
+			if(errore) {
+				resp.getWriter().print("Errore di persistenza: non e' stato possibile registrare l'utente");
+				return;
+			}
+		}
 		RequestDispatcher dispatcher=req.getRequestDispatcher("Registrati.html");
 		dispatcher.forward(req, resp);
 	}
@@ -38,6 +45,7 @@ public class RegistraCliente extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
 		HttpSession sessione=req.getSession();
+		sessione.removeAttribute("errorePersistenza");
 		
 		//parametri registrazione
 		String nome = req.getParameter("name");
@@ -117,7 +125,12 @@ public class RegistraCliente extends HttpServlet {
 
 			//prendo la connessione
 			Connection connessione=PostgresDAOFactory.dataSource.getConnection();
-			
+			try {
+				connessione.setAutoCommit(false);
+			} catch (SQLException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
 			try {
 			
 				//salvataggio
@@ -125,7 +138,12 @@ public class RegistraCliente extends HttpServlet {
 				PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getContoDAO().save(conto,connessione);
 				PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCredenzialiDAO().save(nuovaCredenziale,connessione);
 				PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getGiocatoreDAO().save(nuovoGiocatore,connessione);
-			
+				try {
+					connessione.commit();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				
 			}catch (SQLException e) {
 				if(connessione!=null) {
 					try {
@@ -135,6 +153,9 @@ public class RegistraCliente extends HttpServlet {
 						e1.printStackTrace();
 					}
 					rispristinaSessione(sessione, false);
+					sessione.setAttribute("errorePersistenza", true);
+					RequestDispatcher dispatcher=req.getRequestDispatcher("Registrati.html");
+					dispatcher.forward(req, resp);
 					return;
 				}
 			}finally {
@@ -146,6 +167,7 @@ public class RegistraCliente extends HttpServlet {
 				}
 			}
 			
+			sessione.setAttribute("errorePersistenza", false);
 			String messaggio="Benvenuto "+username+"  ";
 			sessione.setAttribute("username", username);
 			sessione.setAttribute("mex", messaggio);
