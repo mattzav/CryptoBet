@@ -53,36 +53,36 @@
 							<form method="post" action="sendData">
 								<div class="form-group" id="nameDiv">
 									<label class="label" for="name"> Nome: </label>
-									<input type="text" class="form-control" id="name" name="name" onkeyup="checkName()">
+									<input type="text" class="form-control" id="name" name="name" onkeyup="controllaNome()">
 									<span class="label glyphicon glyphicon-remove" id="nameError" style="display:none"> Errore non può contenere numeri </span>
 								</div>
 								<div class="form-group">
 									<label for="surname" class="label"> Cognome </label>
-									<input type="text" class="form-control" id="surname" name="surname" onkeyup="checkSurname();">
+									<input type="text" class="form-control" id="surname" name="surname" onkeyup="controllaCognome();">
 									<span class="label glyphicon glyphicon-remove" id="surnameError" style="display:none"> Errore non può contenere numeri </span>
 								</div>
 								<div class="form-group">
 									<label for="creditCard" class="label"> Codice carta di credito: </label>
-									<input type="text" id="creditCard" class="form-control" name="creditCard" onkeyup="checkCreditCard()">
+									<input type="text" id="creditCard" class="form-control" name="creditCard" onkeyup="controllaCartaDiCredito()">
 									<span class="label glyphicon glyphicon-remove" id="creditCardError" style="display:none"> Carta non riconosciuta</span>
 								</div>
 								<div class="form-group">
 									<label for="usr" class="label"> Username: </label>
-									<input type="text" id="username" class="form-control" name="usr" onkeyup="checkUsername();">
+									<input type="text" id="username" class="form-control" name="usr" onkeyup="controllaUsername();">
 									<span class="label glyphicon glyphicon-remove" id="usernameError" style="display:none"> Username non valido </span>
 								</div>
 								<div class="form-group">
 									<label for="password" class="label"> Password: </label>
-									<input type="password" id="password" class="form-control" name="password" onkeyup="checkPassword();">
+									<input type="password" id="password" class="form-control" name="password" onkeyup="controllaPassword();">
 									<span class="label glyphicon glyphicon-remove" id="passwordError" style="display:none"> Errore non può essere vuoto </span>
 								</div>
 								<div class="form-group">
 									<label for="checkPwd" class="label"> Conferma password: </label>
-									<input type="password" id="checkPwd" class="form-control" name="checkPwd" onkeyup="checkCheckPwd();">
+									<input type="password" id="checkPwd" class="form-control" name="checkPwd" onkeyup="controllaConfermaPassword();">
 									<span class="label glyphicon glyphicon-remove" id="checkPwdError" style="display:none"> La password non coincide </span>
 								</div>
 								<div class="form-group">
-									<input type="submit" class="btn btn-primary" id="registerUser" onclick="sendData()" value="Registrati" name="button">
+									<input type="submit" class="btn btn-primary" id="registerUser" onclick="sendData" value="Registrati" name="button">
 								</div>
 							</form>
 						</div>

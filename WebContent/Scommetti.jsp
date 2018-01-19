@@ -184,7 +184,7 @@
 									<td colspan="3">
 										<form>
 											<div>
-												<input class="col-sm-4 btn btn-default btn-xs importo" type="text" name="importo" onkeyup="checkValue()" onmouseleave="getImporto()" value="${importo}">
+												<input class="col-sm-4 btn btn-default btn-xs importo" type="text" name="importo" onkeyup="controlloImporto()"  value="${importo}">
 												<span class="col-sm-4 vincita">
 													Vincita : ${schema.vincita_potenziale}
 												</span>

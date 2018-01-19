@@ -1,6 +1,7 @@
 /**
  * 
  */
+
 function checkImporto() {
 	var value = $(".importo").val();
 	$(".importo").addClass("btn-default");
@@ -175,6 +176,7 @@ function getListaMovimenti() {
 	$.ajax({
 				url : 'listaMovimenti',
 				type : 'get',
+				dataType : 'json',
 				cache : false,
 				error : function() {
 					alert('error');
@@ -199,30 +201,27 @@ function getListaMovimenti() {
 												+ "<tbody id=\"lista\">"
 												+ "</tbody>" + "</table>"
 												+ "</div>");
-						var rows = response.split("\n");
-						$.each(rows, function(i, item) {
-							if (item != "") {
-								var dati = item.split(";");
-								if (dati.length == 3) {
-									var tipo = "VERSAMENTO";
+						$.each(response, function(i, item) {
+							if (item.scommessa == null) {
+								var tipo = "VERSAMENTO";
 									var classe = "success";
-									if (dati[2] == 1) {
+									if (item.tipo == 1) {
 										tipo = "PRELIEVO";
-										classe = "danger"
+										classe = "danger";
 									}
 									$("#lista").append(
 											"<tr class=\"" + classe + "\">"
 													+ "<td>"
 													+ "Transazione dalla Carta"
 													+ "</td>" + "<td>"
-													+ dati[0] + "</td>"
-													+ "<td>" + dati[1]
+													+ item.codice + "</td>"
+													+ "<td>" + item.importo
 													+ "</td>" + "<td>" + tipo
 													+ "</td>" + "<td>" + " / "
 													+ "</td>" + "</tr>");
 								} else {
 									var classe = "success";
-									if (dati[2] == "PRELIEVO") {
+									if (item.tipo == "PRELIEVO") {
 										classe = "danger";
 									}
 									$("#lista").append(
@@ -230,14 +229,13 @@ function getListaMovimenti() {
 													+ "<td>"
 													+ "Transazione dal conto"
 													+ "</td>" + "<td>"
-													+ dati[0] + "</td>"
-													+ "<td>" + dati[1]
+													+ item.codice + "</td>"
+													+ "<td>" + item.importo
 													+ "</td>" + "<td>"
-													+ dati[2] + "</td>"
-													+ "<td>" + dati[3]
+													+ item.tipo + "</td>"
+													+ "<td>" + item.scomessa
 													+ "</td>" + "</tr>");
 								}
-							}
 						});
 					});
 }

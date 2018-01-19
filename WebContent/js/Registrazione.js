@@ -1,7 +1,10 @@
 /**
  * 
  */
-		function error(errore, nome){
+	
+
+	//notifica alla servlet l'aggiunta o la rimozione di un errore
+	function notificaErrore(errore, nome){
 			$.ajax({
 				url : 'sendData',
 				type:'POST',
@@ -12,42 +15,46 @@
 			});
 		}
 		
-		function checkName(){
+	//controlla che il nome non contenga numeri
+		function controllaNome(){
 			
-			var value=$("#name").val();
-			var errore= value.match(/\d+/g);
-			if (errore != null || value=="") {
+			var valore=$("#name").val();
+			var errore= valore.match(/\d+/g);
+			if (errore != null || valore=="") {
 				$("#nameError").css('display','block');
-				error("true","erroreName");
+				notificaErrore("true","erroreName");
 			}
 			else{
 				$("#nameError").css('display','none');
-				error("false","erroreName");
+				notificaErrore("false","erroreName");
 			}
 			
 		}
 		
-		function checkSurname(){
+		//controlla che il cognome non contenga numeri
+		function controllaCognome(){
 			
-			var value=$("#surname").val();
-			var errore= value.match(/\d+/g);
-			if (errore != null || value=="") {
+			var valore=$("#surname").val();
+			var errore= valore.match(/\d+/g);
+			if (errore != null || valore=="") {
 				$("#surnameError").css('display','block');
-				error("true","erroreSurname");
+				notificaErrore("true","erroreSurname");
 			}
 			else{
 				$("#surnameError").css('display','none');
-				error("false","erroreSurname");
+				notificaErrore("false","erroreSurname");
 			}
 		}
 		
-		function checkCreditCard(){
-			var value=$("#creditCard").val();
-			var format=/^\d{4}\s\d{4}\s\d{4}\s\d{4}$/;
-			var result= format.test(value);
-			if(result==false){
+		//che il formato della carta sia del tipo XXXX XXXX XXXX XXXX 
+		//e che non sia già registrata sul db
+		function controllaCartaDiCredito(){
+			var valore=$("#creditCard").val();
+			var formato=/^\d{4}\s\d{4}\s\d{4}\s\d{4}$/;
+			var risultato= formato.test(valore);
+			if(risultato==false){
 				$("#creditCardError").css('display','block');
-				error("true","erroreCreditCard");
+				notificaErrore("true","erroreCreditCard");
 			}
 			else{
 				$.ajax({
@@ -58,19 +65,21 @@
 		            error:function(){alert('error');},
 					async:false
 					
-				}).done(function(response){
-					if(response!="ok"){
+				}).done(function(risposta){
+					if(risposta!="ok"){
 						$("#creditCardError").css('display','block');
-						error("true","erroreCreditCard");
+						notificaErrore("true","erroreCreditCard");
 					}else{
 						$("#creditCardError").css('display','none');
-						error("false","erroreCreditCard");
+						notificaErrore("false","erroreCreditCard");
 					}
 				});
 			}
 		
 		}
-		function checkUsername(){
+		
+		//controlla che non sia già presente sul db questo username contattando la servlet
+		function controllaUsername(){
 			$.ajax({
 				url:'sendData',
 				data:"usr=" +$("#username").val()+ "&checkUsername=check",
@@ -79,39 +88,41 @@
 	            error:function(){alert('error');},
 				async:false
 				
-			}).done(function(response){
-				if(response!="ok"){
+			}).done(function(risposta){
+				if(risposta!="ok"){
 					$("#usernameError").css('display','block');
-					error("true","erroreUsername");
+					notificaErrore("true","erroreUsername");
 				}else{
 					$("#usernameError").css('display','none');
-					error("false","erroreUsername");
+					notificaErrore("false","erroreUsername");
 				}
 			});
 		}
 		
-		function checkPassword(){
+		//controlla che il campo password non sia vuoto
+		function controllaPassword(){
 			var pwd=$("#password").val();
 			if (pwd=="") {
 				$("#passwordError").css('display', 'block');
-				error("true","errorePassword");
+				notificaErrore("true","errorePassword");
 			}
 			else{
 				$("#passwordError").css('display', 'none');
-				error("false","errorePassword");
+				notificaErrore("false","errorePassword");
 			}
-			checkCheckPwd();
+			controllaConfermaPassword();
 		}
 		
-		function checkCheckPwd(){
-			var confPwd=$("#checkPwd").val();
-			var pwd=$("#password").val();
-			if (confPwd != pwd) {
+		//controlla che il campo conferma password sia uguale al campo password 		function controllaConfermaPassword(){
+			
+			var confermaPassword=$("#checkPwd").val();
+			var password=$("#password").val();
+			if (confermaPassword != password) {
 				$("#checkPwdError").css('display', 'block');
-				error("true","erroreCheckPassword");
+				notificaErrore("true","erroreCheckPassword");
 			}
 			else{
 				$("#checkPwdError").css('display', 'none');
-				error("false","erroreCheckPassword");
+				notificaErrore("false","erroreCheckPassword");
 			}
 		}

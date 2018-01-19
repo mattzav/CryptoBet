@@ -2,11 +2,13 @@
  * 
  */
 function getSquadre() {
+	
 	$("#aggiornaSquadre").append("<div id=\"loadingSquadre\" class=\"loader\"></div>");
 	$("#squadre").prop("disabled",true);
 	var squadre = [];
 	var campionati = [];
 	var scudetti = [];
+
 	$.ajax({
 		headers : {
 			'X-Auth-Token' : '9c8c10fb6ee545a5a46161e402d73dee'
@@ -47,18 +49,16 @@ function getSquadre() {
 				type : 'GET',
 				async : false,
 			}).done(function(_response) {
-				
 				$.each(_response, function(i, _item) {
-					if (i == "teams") {
-						$.each(_item, function(_i, item2) {
-							if(item2.crestUrl != null){
-								scudetti.push(item2.name+"endScudetto"+item2.crestUrl+"endSquadra");
-							}
-						});
-					}
+						if (i == "teams") {
+							$.each(_item, function(_i, item2) {
+								if(item2.crestUrl != null){
+									scudetti.push(item2.name+"endScudetto"+item2.crestUrl+"endSquadra");
+								}
+							});
+						}
 				});
 			});
-			
 		});
 	});
 	var result_squadre = "";
@@ -80,7 +80,6 @@ function getSquadre() {
 	$.each(scudetti, function(i, item) {
 		result_scudetti+=item;
 	});
-	
 	$.ajax({
 		url : 'aggiornaDati',
 		type : 'POST',
@@ -91,13 +90,13 @@ function getSquadre() {
 			aggiorna : "Aggiorna"
 		},
 		error : function() {
-			alert("error");
+			alert("error passaggio dati");
 		},
 	}).done(function(){
 			alert("aggiornamento concluso");
 			$("#loadingSquadre").remove();
 			$("#squadre").prop("disabled",false);
-		});
+	});
 	
 }
 

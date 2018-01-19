@@ -26,7 +26,6 @@ public class AggiornaDati extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		req.getSession().removeAttribute("loadingPartite");
 		RequestDispatcher disp = req.getRequestDispatcher("gestisciPartite.jsp");
 		disp.forward(req, resp);
 	}
@@ -39,6 +38,7 @@ public class AggiornaDati extends HttpServlet {
 		// se il parametro aggiorna ha valore Aggiorna significa che l'amministratore ha
 		// richiesto un aggiornamento delle squadre e dei campionati
 		if (req.getParameter("aggiorna").equals("Aggiorna")) {
+			System.out.println("inizio aggiornamento");
 			
 			// aggiungo il loader nella session 
 			session.setAttribute("loadingSquadre", true);
@@ -104,6 +104,8 @@ public class AggiornaDati extends HttpServlet {
 				}
 			}
 			session.removeAttribute("loadingSquadre");
+			System.out.println("fine aggiornamento");
+
 		}
 		// se invece il parametro aggiorna ha valore AggiornaPartite significa che
 		// l'amministratore ha richiesto un aggiornamento delle partite
