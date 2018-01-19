@@ -30,35 +30,38 @@ function mostraUltimeScommesse() {
 			.ajax({
 				type : 'GET',
 				url : 'mostraScommesse',
+				dataType : 'json',
 				success : function(data) {
-					var scommesse = data.split(";");
-					for (var i = 0; i < scommesse.length - 1; i++) {
-						var dati = scommesse[i].split(":");
-						var classe = "warning";
-						for (var j = 0; j < dati.length; j++) {
-							var verifica = "";
-							if (!(dati[5] == "vinta" || dati[5] == "persa")) {
-								verifica = "<td id=\""+dati[0]+"\" class=\"verificata\"><button class=\"glyphicon glyphicon-ok\"  onclick=\"verificaScommessa("
-										+ dati[0] + ");\"></td>";
-							} else {
-								if (dati[5] == "vinta")
-									classe = "success";
-								else
-									classe = "danger";
-								verifica = '<td> Gia\' verificata</td>';
-							}
-
-						}
-						$("#operazione>table").append(
-								"<tr id=\""+dati[0]+"\" class=\"" + classe + "\">" + "<td>"
-										+ dati[0] + "</td>" + "<td>" + dati[1]
-										+ "</td>" + "<td>" + dati[2] + "</td>"
-										+ "<td>" + dati[3] + "</td>" + "<td>"
-										+ dati[4] + "</td>"
-										+ "<td id=\""+dati[0]+"\" class=\"stato\">" + dati[5]
+							alert(data);
+							$.each(data, function(i,item){
+							alert("ciao");
+							var classe = "warning";
+								var verifica = "";
+								if (!(item.stato == "vinta" || item.stato == "persa")) {
+									verifica = "<td id=\""+item.codice+"\" class=\"verificata\"><button class=\"glyphicon glyphicon-ok\"  onclick=\"verificaScommessa("
+									+ item.codice + ");\"></td>";
+								} else {
+									if (item.stato == "vinta")
+										classe = "success";
+									else
+										classe = "danger";
+									verifica = '<td> Gia\' verificata</td>';
+								}
+								
+								$("#operazione>table").append(
+										"<tr id=\""+item.codice+"\" class=\"" + classe + "\">" + "<td>"
+										+ item.codice + "</td>" + "<td>" + item.data
+										+ "</td>" + "<td>" + item.importo + "</td>"
+										+ "<td>" + item.numeroEsiti + "</td>" + "<td>"
+										+ item.vincitaPotenziale + "</td>"
+										+ "<td id=\""+item.codice+"\" class=\"stato\">" + item.stato
 										+ "</td>" + verifica + "</tr>");
-					}
+					
+						});
 				},
+				error: function() {
+					alert("errore");
+				}
 			});
 }
 
@@ -70,7 +73,7 @@ function verificaScommessa(codice) {
 			codiceScommessa : codice
 		},
 		error : function() {
-			alert("buonasera");
+			alert("error");
 		},
 		success : function(data) {
 			if (data != "non conclusa") {
@@ -201,6 +204,7 @@ function getListaMovimenti() {
 												+ "<tbody id=\"lista\">"
 												+ "</tbody>" + "</table>"
 												+ "</div>");
+						alert(response);
 						$.each(response, function(i, item) {
 							if (item.scommessa == null) {
 								var tipo = "VERSAMENTO";
