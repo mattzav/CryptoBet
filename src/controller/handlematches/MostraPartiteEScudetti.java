@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.google.gson.JsonObject;
+
 import model.footballdata.Squadra;
 import persistence.PostgresDAOFactory;
 import persistence.dao.SquadraDao;
@@ -24,78 +26,70 @@ public class MostraPartiteEScudetti extends HttpServlet {
 
 		SquadraDao squadraDao = PostgresDAOFactory.getDAOFactory(PostgresDAOFactory.POSTGRESQL).getSquadraDAO();
 		ArrayList<Squadra> squadre = (ArrayList<Squadra>) squadraDao.findAllWithTitle();
-		HttpSession session = req.getSession();
-		session.removeAttribute("squadreVisibili");
-		session.removeAttribute("paginaCorrente");
-		session.removeAttribute("statoPrevious");
-		session.removeAttribute("statoNext");
 
-		session.setAttribute("squadreVisibili", squadre.subList(0, Math.min(25, squadre.size())));
-		session.setAttribute("paginaCorrente", 1);
-		session.setAttribute("statoPrevious", "disabled");
-		session.setAttribute("statoNext", "");
+		JsonObject jsonRisultato = new JsonObject();
 
-		RequestDispatcher dispatcher = req.getRequestDispatcher("SquadreCampionati.jsp");
-		dispatcher.forward(req, resp);
+		for (int i = 0; i < Math.min(25, squadre.size()); i++) {
+			JsonObject squadra = new JsonObject();
+			squadra.addProperty("nome", squadre.get(i).getNome());
+			squadra.addProperty("scudetto", squadre.get(i).getScudetto());
+
+			jsonRisultato.add("squadra" + String.valueOf(i), squadra);
+		}
+
+		JsonObject ultimaPagina = new JsonObject();
+		
+		if(squadre.size() < 25)
+			ultimaPagina.addProperty("ultima", true);
+		else
+			ultimaPagina.addProperty("ultima", false);
+		
+		jsonRisultato.add("ultimaPagina", ultimaPagina);
+
+		resp.getWriter().println(jsonRisultato.toString());
+
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-		RequestDispatcher dispatcher = req.getRequestDispatcher("SquadreCampionati.jsp");
+		// prendo il parametro per vedere il numero della pagina
+		int numeroPagina = Integer.valueOf(((String) req.getParameter("numeroPagina")));
 		
-		Enumeration<String> parametri = req.getParameterNames();
 		
-		// prendo il parametro per vedere che metodo è stato invocato
-		String metodo = parametri.nextElement();
-
 		SquadraDao squadraDao = PostgresDAOFactory.getDAOFactory(PostgresDAOFactory.POSTGRESQL).getSquadraDAO();
 		ArrayList<Squadra> squadre = (ArrayList<Squadra>) squadraDao.findAllWithTitle();
-		HttpSession sessione = req.getSession();
 
-		// se metodo è uguale a "next" significa che devo spostare la pagina avanti
-		if (metodo.equals("next")) {
-			// se ho premuto su next e il tasto era disabilitato non eseguo alcuna operazione
-			if (sessione.getAttribute("statoNext").equals("disabled")) {
-				dispatcher.forward(req, resp);
-				return;
-			}
-			// altrimenti aumento la pagina corrente di 1
-			sessione.setAttribute("paginaCorrente", (Integer) sessione.getAttribute("paginaCorrente") + 1);
-		} 
-		// se metodo è uguale a "previous" significa che devo spostare la pagina indietro
-		else if (metodo.equals("previous")) {
-			// se il tasto premuto era disabilitato, non eseguo alcuna operazione
-			if (sessione.getAttribute("statoPrevious").equals("disabled")) {
-				dispatcher.forward(req, resp);
-				return;
-			}
-			// altrimenti diminuisco la pagina corrente di 1
-			sessione.setAttribute("paginaCorrente", (Integer) sessione.getAttribute("paginaCorrente") - 1);
-		}
-		
-		List<Squadra> subList = new ArrayList<>();
-		sessione.setAttribute("squadreVisibili", subList);
+		// creo il JSON da restituire
+		JsonObject jsonRisultato = new JsonObject();
 
+		int dimensione = 0;
 		// carico la nuova lista delle squadre di cui il client vedrà gli scudetti
-		for (int i = 25 * ((Integer) sessione.getAttribute("paginaCorrente") - 1); i < Math.min(squadre.size(),
-				25 * ((Integer) sessione.getAttribute("paginaCorrente"))); i++) {
-			subList.add(squadre.get(i));
+		for (int i = 25 * (numeroPagina - 1); i < Math.min(squadre.size(),
+				25 * numeroPagina); i++) {
+			
+			//creo un oggetto json per ogni squadra
+			JsonObject jsonSquadra = new JsonObject();
+			jsonSquadra.addProperty("nome", squadre.get(i).getNome());
+			jsonSquadra.addProperty("scudetto", squadre.get(i).getScudetto());
+			
+			//aggiungo al risultato finale, il json con la squadra appena creato
+			jsonRisultato.add("squadra"+i, jsonSquadra);
+			dimensione++;
 		}
 
-		// se la nuova lista ha meno di 25 elementi devo disabilitare il tasto "next"
-		if (subList.size() < 25)
-			sessione.setAttribute("statoNext", "disabled");
+		JsonObject ultimaPagina = new JsonObject();
+		
+		// se la nuova lista ha meno di 25 elementi devo disabilitare il tasto premuto
+		if (dimensione < 25)
+			ultimaPagina.addProperty("ultima", true);
 		else
-			sessione.setAttribute("statoNext", "");
+			ultimaPagina.addProperty("ultima", false);
 
-		// se sono arrivato alla prima pagina devo disattivare il tasto "previous"
-		if ((Integer) sessione.getAttribute("paginaCorrente") == 1)
-			sessione.setAttribute("statoPrevious", "disabled");
-		else
-			sessione.setAttribute("statoPrevious", "");
+		jsonRisultato.add("ultimaPagina", ultimaPagina);
 
-		dispatcher.forward(req, resp);
+		// restituisco il risultato sotto forma di json al client
+		resp.getWriter().println(jsonRisultato.toString());
 
 	}
 

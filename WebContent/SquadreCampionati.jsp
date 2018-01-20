@@ -63,9 +63,32 @@
 <link rel="stylesheet" href="css/style.css">
 
 
+
+<script src="js/jquery.min.js"></script>
+<!-- jQuery Easing -->
+<script src="js/jquery.easing.1.3.js"></script>
+<!-- Bootstrap -->
+<script src="js/bootstrap.min.js"></script>
+<!-- Waypoints -->
+<script src="js/jquery.waypoints.min.js"></script>
+<!-- Stellar -->
+<script src="js/jquery.stellar.min.js"></script>
+<!-- Superfish -->
+<script src="js/hoverIntent.js"></script>
+<script src="js/superfish.js"></script>
+<script src="js/SquadreCampionati.js"></script>
+
+<!-- Main JS (Do not remove) -->
+<script src="js/main.js"></script>
+
 <!-- Modernizr JS -->
 <script src="js/modernizr-2.6.2.min.js"></script>
 <script src="js/SquadreCampionati.js"></script>
+<script>
+	$(document).ready(function() {
+		caricaScudettiIniziali();
+	});
+</script>
 <!-- FOR IE9 below -->
 <!--[if lt IE 9]>
 	<script src="js/respond.min.js"></script>
@@ -138,7 +161,7 @@
 							class="col-md-8 col-md-offset-2 col-sm-12 col-sm-offset-0 col-xs-12 col-xs-offset-0 text-center fh5co-table">
 							<div class="fh5co-intro fh5co-table-cell animate-box">
 								<h1 class="text-center">
-									<strong>CryptoBet</strong> è la novità!!
+									<strong>CryptoBet</strong>
 								</h1>
 								<br> <br>
 								<p>
@@ -155,40 +178,29 @@
 			<div id="fh5co-team-section">
 				<div class="container">
 					<div>
-						<div class="col-sm-9">
-							<nav aria-label="Page navigation example">
-								<ul class="pagination pagination-sm">
-									<form method="post" action="partiteEScudetti">
-										<input
-											class="${statoPrevious} btn btn-xs btn-success glyphicon glyphicon-chevron-left"
-											type="submit" value="PREVIOUS" name="previous"> <label>
-											${paginaCorrente}</label> <input
-											class="${statoNext} btn btn-xs btn-success glyphicon glyphicon-chevron-right"
-											type="submit" value="NEXT" name="next">
-									</form>
-								</ul>
-							</nav>
-						</div>
 						<div>
-							<div class="col-sm-8">
+							<button
+								class="previous disabled btn btn-xs btn-success glyphicon glyphicon-chevron-left"
+								type="button" value="PREVIOUS" name="previous" onclick="caricaScudetti(true);"></button>
+							<label class="page"> </label>
+							<button
+								class="next btn btn-xs btn-success glyphicon glyphicon-chevron-right"
+								type="button" value="NEXT" name="next" onclick=	"caricaScudetti(false);"></button>
+
+						</div>
+						<div >
+							<div class="col-sm-7">
 								<table class="table">
 									<tr class="info">
-										<th>Squadra:</th>
-										<th>Scudetto:</th>
+										<th colspan="1">Squadra:</th>
+										<th colspan="1">Scudetto:</th>
 									</tr>
-									<tbody>
-										<c:forEach items="${squadreVisibili}" var="squadra">
-											<tr class="warning">
-												<td>${squadra.nome}</td>
-												<td><img class="${squadra.nome}"
-													src=${squadra.scudetto } width="75" height="75"></td>
-											</tr>
-										</c:forEach>
+									<tbody class="tabellaScudetti">
 									</tbody>
 								</table>
 							</div>
 							<div class="col-sm-1"></div>
-							<div class="embed-responsive embed-responsive-16by9 col-sm-3">
+							<div class="embed-responsive embed-responsive-16by9 col-sm-4">
 								<iframe class="embed-responsive-item"
 									src="http://www.gazzetta.it/"></iframe>
 							</div>
@@ -275,23 +287,6 @@
 	<!-- END fh5co-wrapper -->
 
 	<!-- jQuery -->
-
-
-	<script src="js/jquery.min.js"></script>
-	<!-- jQuery Easing -->
-	<script src="js/jquery.easing.1.3.js"></script>
-	<!-- Bootstrap -->
-	<script src="js/bootstrap.min.js"></script>
-	<!-- Waypoints -->
-	<script src="js/jquery.waypoints.min.js"></script>
-	<!-- Stellar -->
-	<script src="js/jquery.stellar.min.js"></script>
-	<!-- Superfish -->
-	<script src="js/hoverIntent.js"></script>
-	<script src="js/superfish.js"></script>
-
-	<!-- Main JS (Do not remove) -->
-	<script src="js/main.js"></script>
 
 </body>
 </html>
