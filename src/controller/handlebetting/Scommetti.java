@@ -191,12 +191,19 @@ public class Scommetti extends HttpServlet {
 							//prendo la connection per assicurare l'atomicità
 							Connection connessione=PostgresDAOFactory.dataSource.getConnection();
 							try {
+								connessione.setAutoCommit(false);
+							} catch (SQLException e3) {
+								// TODO Auto-generated catch block
+								e3.printStackTrace();
+							}
+							try {
 							
 								//transazione e memorizzazione scommessa
 								PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getScommessaDao()
 										.save(new Scommessa(new Date(), contoUtente, schemaDiScommessa, "non verificata"),connessione);
 								ContoDao contoDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getContoDAO();
 								contoDao.update(contoUtente,connessione);
+								connessione.commit();
 							
 							} catch (SQLException e1) {
 								if(connessione!=null) {
@@ -206,7 +213,8 @@ public class Scommetti extends HttpServlet {
 										// TODO Auto-generated catch block
 										e2.printStackTrace();
 									}
-									resp.getWriter().println("Errore: crollo della connessione");
+									contoUtente.versa(Float.valueOf((Float) sessione.getAttribute("importo")));
+									resp.getWriter().println("Errore: non è stato possibile memorizzare l'operazione");
 									return;
 								}
 							}finally {

@@ -80,25 +80,32 @@
 		
 		//controlla che non sia già presente sul db questo username contattando la servlet
 		function controllaUsername(){
-			$.ajax({
-				url:'sendData',
-				data:"usr=" +$("#username").val()+ "&checkUsername=check",
-	            type:'POST',
-	            cache:false,
-	            error:function(){alert('error');},
-				async:false
-				
-			}).done(function(risposta){
-				if(risposta!="ok"){
-					$("#usernameError").css('display','block');
-					notificaErrore("true","erroreUsername");
-				}else{
-					$("#usernameError").css('display','none');
-					notificaErrore("false","erroreUsername");
-				}
-			});
+			var format=/\s+/;
+			if($("#username").val()!="" && !( format.test($("#username").val()))){
+				$.ajax({
+					url:'sendData',
+					data:"usr=" +$("#username").val()+ "&checkUsername=check",
+					type:'POST',
+					cache:false,
+					error:function(){alert('error');},
+					async:false
+					
+				}).done(function(risposta){
+					
+					if(risposta!="ok"){
+						$("#usernameError").css('display','block');
+						notificaErrore("true","erroreUsername");
+					}else{
+						$("#usernameError").css('display','none');
+						notificaErrore("false","erroreUsername");
+					}
+				});
+			}
+			else{
+				$("#usernameError").css('display','block');
+				notificaErrore("true","erroreUsername");
+			}
 		}
-		
 		//controlla che il campo password non sia vuoto
 		function controllaPassword(){
 			var pwd=$("#password").val();
@@ -125,4 +132,18 @@
 				$("#checkPwdError").css('display', 'none');
 				notificaErrore("false","erroreCheckPassword");
 			}
+		}
+
+		function controllaErrorePersistenza(){
+			alert("controllo");
+			$.ajax({
+				url: 'sendData',
+				type: 'get',
+				headers : {
+					'errorePersistenza' : 'true'
+				},
+				error: function(){alert("errore");}
+			}).done(function(response){
+				alert(response);
+			});
 		}
