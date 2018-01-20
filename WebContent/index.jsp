@@ -57,16 +57,16 @@
 							<a href="index.jsp">Crypto<span>Bet</span></a>
 						</h1>
 						<!-- START #fh5co-menu-wrap -->
-						<nav id="fh5co-menu-wrap" role="navigation">
-						<ul class="sf-menu" id="fh5co-primary-menu">
-							<li><a href="index.jsp">Home</a></li>
-							<li><a href="scommetti">Scommesse</a></li>
-							<li><a href="MioConto.jsp">Il Mio Conto</a></li>
-							<li><a href="aggiornaDati"> Gestisci Partite</a></li>
-							<li><a href="about.html">About</a></li>
-							<li><a href="contact.html">Contact</a></li>
-						</ul>
-						</nav>
+					<nav id="fh5co-menu-wrap" role="navigation">
+							<ul class="sf-menu" id="fh5co-primary-menu">
+								<li><a href="index.jsp">Home</a></li>
+								<li><a href="scommetti">Scommesse</a></li>
+								<li><a href="MioConto.jsp">Il Mio Conto</a></li>
+								<li><a href="gestisciPartite.jsp"> Gestisci Partite</a></li>
+								<li><a href="SquadreCampionati.jsp">Tutte le squadre</a></li>
+								<li><a href="contact.html">Informazioni su di noi</a></li>
+							</ul>
+							</nav>
 					</div>
 				</div>
 				</header>
