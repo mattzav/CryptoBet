@@ -1,11 +1,11 @@
 var google;
 
 function init() {
-	var myLatlng = new google.maps.LatLng(39.363156, 16.226185);
+	var latlng = new google.maps.LatLng(39.363156, 16.226185);
 
-	var mapOptions = {
+	var opzioniMappa = {
 		zoom : 10,
-		center : myLatlng,
+		center : latlng,
 
 		scrollwheel : false,
 		styles : [ {
@@ -89,33 +89,33 @@ function init() {
 		} ]
 	};
 
-	var mapElement = document.getElementById('map');
+	var elementoMappa = document.getElementById('map');
 
-	var map = new google.maps.Map(mapElement, mapOptions);
+	var mappa = new google.maps.Map(elementoMappa, opzioniMappa);
 
 	var input = (document.getElementById('pac-input'));
 
-	var searchBox = new google.maps.places.SearchBox((input));
+	var boxRicerca = new google.maps.places.SearchBox((input));
 	
-	google.maps.event.addListener(searchBox, 'places_changed', function() {
-		var places = searchBox.getPlaces();
+	google.maps.event.addListener(boxRicerca, 'places_changed', function() {
+		var posti = boxRicerca.getPlaces();
 
-		if (places.length == 0) {
+		if (posti.length == 0) {
 			return;
 		}
 
-		places.forEach(function(place) {
-			calcolaPercorso(place.geometry.location);
+		posti.forEach(function(posto) {
+			calcolaPercorso(posto.geometry.location);
 		});
 	});
 
-	var addresses = [ 'Dipartimento di matematica e informatica universita della calabria	' ];
+	var indirizzi = [ 'Dipartimento di matematica e informatica universita della calabria' ];
 
-	for (var x = 0; x < addresses.length; x++) {
+	for (var x = 0; x < indirizzi.length; x++) {
 		$
 				.getJSON(
 						'http://maps.googleapis.com/maps/api/geocode/json?address='
-								+ addresses[x] + '&sensor=false',
+								+ indirizzi[x] + '&sensor=false',
 						null,
 						function(data) {
 
@@ -123,7 +123,7 @@ function init() {
 							var latlng = new google.maps.LatLng(p.lat, p.lng);
 							var marker = new google.maps.Marker({
 								position : latlng,
-								map : map,
+								map : mappa,
 								icon : 'images/loc.png'
 							});
 							var infowindow = new google.maps.InfoWindow();
@@ -135,7 +135,7 @@ function init() {
 											function() {
 												infowindow
 														.setContent("Sede CryptoBet dove potrai giocare le tue scommesse!");
-												infowindow.open(map, this);
+												infowindow.open(mappa, this);
 											});
 
 						});
@@ -144,47 +144,46 @@ function init() {
 }
 google.maps.event.addDomListener(window, 'load', init);
 
-function calculateAndDisplayRoute(directionsService, directionsDisplay, pointA,
-		pointB) {
-	directionsService.route({
-		origin : pointA,
-		destination : pointB,
+function calcolaEMostraPercorso(servizioDirezione, displayDirezione, puntoA,
+		puntoB) {
+	servizioDirezione.route({
+		origin : puntoA,
+		destination : puntoB,
 		travelMode : google.maps.TravelMode.DRIVING
 	}, function(response, status) {
 		if (status == google.maps.DirectionsStatus.OK) {
-			directionsDisplay.setDirections(response);
+			displayDirezione.setDirections(response);
 		} else {
-			window.alert('Directions request failed due to ' + status);
+			window.alert('Richiesta fallita ' + status);
 		}
 	});
 }
 
-function calcolaPercorso(pos) {
+function calcolaPercorso(posizioneArrivo) {
 
-	var pointA = new google.maps.LatLng(39.363156, 16.226185), pointB = pos, myOptions = {
+	var puntoA = new google.maps.LatLng(39.363156, 16.226185), puntoB = posizioneArrivo, myOptions = {
 		zoom : 7,
-		center : pointA
+		center : puntoA
 	}, map = new google.maps.Map(document.getElementById('map'), myOptions),
-	// Instantiate a directions service
-	directionsService = new google.maps.DirectionsService, directionsDisplay = new google.maps.DirectionsRenderer(
+
+	servizioDirezione = new google.maps.DirectionsService, displayDirezione = new google.maps.DirectionsRenderer(
 			{
 
 				map : map
 			}), markerA = new google.maps.Marker({
-		position : pointA,
-		title : "point A",
+		position : puntoA,
+		title : "punto A",
 		label : "A",
 		map : map
 	}), markerB = new google.maps.Marker({
-		position : pointB,
-		title : "point B",
+		position : puntoB,
+		title : "punto B",
 		label : "B",
 		map : map
 	});
 
 	
-	// get route from A to
-	calculateAndDisplayRoute(directionsService, directionsDisplay, pointA,
-			pointB);
+	calcolaEMostraPercorso(servizioDirezione, displayDirezione, puntoA,
+			puntoB);
 
 }
