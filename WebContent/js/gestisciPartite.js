@@ -81,7 +81,7 @@ function getSquadre() {
 		result_scudetti+=item;
 	});
 	$.ajax({
-		url : 'aggiornaDati',
+		url : 'aggiornaSquadreCampionati',
 		type : 'POST',
 		data : {
 			squadre : result_squadre,
@@ -163,7 +163,7 @@ function getPartite() {
 		result = result.concat(";");
 	});
 	$.ajax({
-		url : 'aggiornaDati',
+		url : 'aggiornaPartite',
 		type : 'POST',
 		data : {
 			aggiorna : "Aggiorna Partite",

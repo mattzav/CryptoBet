@@ -8,6 +8,24 @@
    		<load-on-startup>1</load-on-startup>
 	</servlet>
  
+	<servlet>
+    	<servlet-name>AggiornaSquadreCampionati</servlet-name>
+    	<servlet-class>controller.handlematches.AggiornaSquadreCampionati</servlet-class>
+  	</servlet>
+  	<servlet-mapping>
+    	<servlet-name>AggiornaSquadreCampionati</servlet-name>
+    	<url-pattern>/aggiornaSquadreCampionati</url-pattern>
+  	</servlet-mapping>  
+
+	<servlet>
+    	<servlet-name>AggiornaPartite</servlet-name>
+    	<servlet-class>controller.handlematches.AggiornaPartite</servlet-class>
+  	</servlet>
+  	<servlet-mapping>
+    	<servlet-name>AggiornaPartite</servlet-name>
+    	<url-pattern>/aggiornaPartite</url-pattern>
+  	</servlet-mapping>  
+
   <servlet>
     <servlet-name>InserisciImporto</servlet-name>
     <servlet-class>controller.handlebetting.InserisciImporto</servlet-class>
