@@ -109,7 +109,7 @@ function init() {
 		});
 	});
 
-	var indirizzi = [ 'Dipartimento di matematica e informatica universita della calabria' ];
+	var indirizzi = [ 'Dipartimento di matematica e informatica universita della calabria','Lamezia Terme'];
 
 	for (var x = 0; x < indirizzi.length; x++) {
 		$
@@ -161,7 +161,20 @@ function calcolaEMostraPercorso(servizioDirezione, displayDirezione, puntoA,
 
 function calcolaPercorso(posizioneArrivo) {
 
-	var puntoA = new google.maps.LatLng(39.363156, 16.226185), puntoB = posizioneArrivo, myOptions = {
+	var puntoA1 = {lat:39.363156,long: 16.226185};
+	var puntoA2 = {lat:38.962912,long: 16.3092719};
+	var punti = [puntoA1,puntoA2];
+	
+	var piuVicino = punti[0];
+	
+	
+	if(Math.abs(punti[1]["lat"]-posizioneArrivo.lat())+Math.abs(punti[1]["long"]-posizioneArrivo.lng()) < Math.abs(punti[0]["lat"]-posizioneArrivo.lat())+Math.abs(punti[0]["long"]-posizioneArrivo.lng()))
+	{
+		alert("buso");
+		piuVicino= punti[1];
+	}
+	
+	var puntoA = new google.maps.LatLng(piuVicino["lat"], piuVicino["long"]), puntoB = posizioneArrivo, myOptions = {
 		zoom : 7,
 		center : puntoA
 	}, map = new google.maps.Map(document.getElementById('map'), myOptions),
