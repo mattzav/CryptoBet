@@ -171,8 +171,8 @@ function getPartite() {
 		},
 		error : function() {
 			alert("error partite");
-			$("#loadingSquadre").remove();
-			$("#squadre").prop("disabled",false);
+			$("#loadingPartite").remove();
+			$("#partite").prop("disabled",false);
 		},
 	}).done(function(){
 		$("#loadingPartite").remove();

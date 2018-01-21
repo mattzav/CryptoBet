@@ -32,9 +32,7 @@ function mostraUltimeScommesse() {
 				url : 'mostraScommesse',
 				dataType : 'json',
 				success : function(data) {
-							alert(data);
 							$.each(data, function(i,item){
-							alert("ciao");
 							var classe = "warning";
 								var verifica = "";
 								if (!(item.stato == "vinta" || item.stato == "persa")) {
@@ -204,7 +202,6 @@ function getListaMovimenti() {
 												+ "<tbody id=\"lista\">"
 												+ "</tbody>" + "</table>"
 												+ "</div>");
-						alert(response);
 						$.each(response, function(i, item) {
 							if (item.scommessa == null) {
 								var tipo = "VERSAMENTO";
@@ -237,7 +234,7 @@ function getListaMovimenti() {
 													+ "<td>" + item.importo
 													+ "</td>" + "<td>"
 													+ item.tipo + "</td>"
-													+ "<td>" + item.scomessa
+													+ "<td>" + item.scommessa
 													+ "</td>" + "</tr>");
 								}
 						});

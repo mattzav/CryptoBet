@@ -147,7 +147,7 @@ public class ScommessaDaoJDBC implements ScommessaDao {
 		Connection connection = PostgresDAOFactory.dataSource.getConnection();
 		String esito_scommessa = "vinta";
 		try {
-			String query = "select (e.stato) from scommessa_esitopartita as s, esitopartita as e where s.scommessa=? and s.esito=e.esito and s.partita=e.partita";
+			String query = "select e.stato from scommessa_esitopartita as s, esitopartita as e where s.scommessa=? and s.esito=e.esito and s.partita=e.partita";
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setLong(1, codiceScommessa);
 			ResultSet result = statement.executeQuery();
@@ -175,8 +175,8 @@ public class ScommessaDaoJDBC implements ScommessaDao {
 			if(esito_scommessa.equals("vinta")) {
 
 				Conto contoAssociato = scommessa.getConto_associato();
-				contoDao.update(contoAssociato,connection);
 				contoAssociato.setSaldo(contoAssociato.getSaldo()+scommessa.getSchema_scommessa().getVincita_potenziale());
+				contoDao.update(contoAssociato,connection);
 				MovimentoScommessaDao movimentoScommessa = PostgresDAOFactory.getDAOFactory(PostgresDAOFactory.POSTGRESQL).getMovimentoScommessaDAO();
 				movimentoScommessa.save(new MovimentoScommessa(scommessa.getSchema_scommessa().getVincita_potenziale(), TipoMovimento.VERSAMENTO, scommessa),connection);
 			}

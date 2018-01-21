@@ -10,9 +10,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
 import model.footballdata.Campionato;
+import model.footballdata.EsitoPartita;
 import model.footballdata.Partita;
 import persistence.DAOFactory;
 import persistence.PostgresDAOFactory;
+import persistence.dao.EsitoDao;
+import persistence.dao.EsitoPartitaDao;
 import persistence.dao.PartitaDao;
 
 
@@ -27,6 +30,7 @@ public class AggiornamentoAutomatico extends HttpServlet {
 			public void run() {
 				
 				while(true) {
+					System.out.println("aggiornamento automatico iniziato");
 					Date data=new Date();
 					Connection connessione=PostgresDAOFactory.dataSource.getConnection();
 					try {
@@ -38,11 +42,12 @@ public class AggiornamentoAutomatico extends HttpServlet {
 							for(Partita p: partite) {
 								if(p.getData_ora().getTime()<data.getTime()) {
 									p.setFinita(true);
-									partitaDao.save(p, connessione);
+									partitaDao.update(p, connessione);
 								}
 							}
 						}
 						connessione.commit();
+						System.out.println("aggiornamento effettuato");
 					} catch (SQLException e1) {
 						System.out.println("Errore di persistenza");
 						try {
@@ -51,7 +56,6 @@ public class AggiornamentoAutomatico extends HttpServlet {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						continue;
 					}finally {
 						try {
 							connessione.close();
@@ -60,8 +64,9 @@ public class AggiornamentoAutomatico extends HttpServlet {
 							e.printStackTrace();
 						}
 					}
+					System.out.println("aggiornamento automatico concluso");
 					try {
-						sleep(1000*60*60);
+						sleep(1000*60*15);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

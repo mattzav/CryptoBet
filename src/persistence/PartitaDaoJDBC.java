@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -91,7 +92,11 @@ public class PartitaDaoJDBC implements PartitaDao {
 		statement.executeUpdate();
 		String[] esiti;
 		if (partita.isFinita()) {
-			if (partita.getGoal_casa() > partita.getGoal_ospite()) {
+			
+			if(partita.getGoal_casa()==-1 || partita.getGoal_ospite()==-1) {
+				return;
+			}
+			else if (partita.getGoal_casa() > partita.getGoal_ospite()) {
 				update = "update esitopartita SET stato=? where partita=?  and (esito=? or esito=? or esito=?)";
 				esiti = new String[] { "1", "1X", "12" };
 			}
@@ -152,6 +157,19 @@ public class PartitaDaoJDBC implements PartitaDao {
 	}
 
 	@Override
+	public Partita findByPrimaryKey(Long codice, Connection connection) throws SQLException {
+			PreparedStatement statement;
+			String query = "select * from partita as p where p.codice=? ";
+			statement = connection.prepareStatement(query);
+			statement.setLong(1, codice);
+			ResultSet result = statement.executeQuery();
+			if (result.next()) {
+				return new Partita(new Squadra(result.getString(2)), new Squadra(result.getString(3)), result.getInt(8), result.getInt(9), new Campionato(result.getLong(4),""), new java.util.Date(result.getDate(5).getTime()), result.getBoolean(7));
+			}
+			return null;
+	}
+	
+	@Override
 	public Long findExistingMatch(Partita p, Connection connection) throws SQLException {
 			PreparedStatement statement;
 			String query = "select p.codice from partita as p where p.squadracasa=? and p.squadraospite=? and p.campionato=? ";
@@ -169,9 +187,9 @@ public class PartitaDaoJDBC implements PartitaDao {
 	@Override
 	public List<Partita> findAll(String nomeCampionato) {
 		Connection connection = PostgresDAOFactory.dataSource.getConnection();
-		List<Partita> partite = new LinkedList<>();
+		List<Partita> partite = new ArrayList<>();
 			PreparedStatement statement;
-			String query = "select p.codice,p.squadraCasa,p.squadraOspite,p.data,p.ora,p.finita,p.goalCasa,p.goalOspite,p.codice from partita as p, campionato as c where p.campionato=c.codice and c.nome=? and p.finita=?";
+			String query = "select p.codice,p.squadraCasa,p.squadraOspite,p.data,p.ora,p.finita,p.goalCasa,p.goalOspite,c.codice from partita as p, campionato as c where p.campionato=c.codice and c.nome=? and p.finita=?";
 			try {
 				statement = connection.prepareStatement(query);
 			statement.setString(1, nomeCampionato);

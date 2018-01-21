@@ -9,12 +9,40 @@
 	</servlet>
  
   <servlet>
-    <servlet-name>thread</servlet-name>
+    <servlet-name>InserisciImporto</servlet-name>
+    <servlet-class>controller.handlebetting.InserisciImporto</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>thread</servlet-name>
-    <url-pattern>/aggiornamentoAutomatico</url-pattern>
-  </servlet-mapping> 
+    <servlet-name>InserisciImporto</servlet-name>
+    <url-pattern>/inserisciImporto</url-pattern>
+  </servlet-mapping>  
+
+  <servlet>
+    <servlet-name>SvuotaScommessa</servlet-name>
+    <servlet-class>controller.handlebetting.SvuotaScommessa</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SvuotaScommessa</servlet-name>
+    <url-pattern>/svuotaScommessa</url-pattern>
+  </servlet-mapping>
+ 
+  <servlet>
+    <servlet-name>SelezionaEsito</servlet-name>
+    <servlet-class>controller.handlebetting.SelezionaEsito</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SelezionaEsito</servlet-name>
+    <url-pattern>/selezionaEsito</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>SelezionaCampionato</servlet-name>
+    <servlet-class>controller.handlebetting.SelezionaCampionato</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SelezionaCampionato</servlet-name>
+    <url-pattern>/selezionaCampionato</url-pattern>
+  </servlet-mapping>
   
   <servlet>
     <servlet-name>Login</servlet-name>
@@ -24,6 +52,7 @@
     <servlet-name>Login</servlet-name>
     <url-pattern>/login</url-pattern>
   </servlet-mapping>  
+  
   <servlet>
     <servlet-name>Registra</servlet-name>
     <servlet-class>controller.handleaccounting.RegistraCliente</servlet-class>

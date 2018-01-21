@@ -12,6 +12,7 @@ public interface PartitaDao {
 
 	public void save(Partita partita,Connection connection)throws SQLException;  // Create
 	public Long findExistingMatch(Partita p, Connection connection)throws SQLException;     // Retrieve
+	public Partita findByPrimaryKey(Long codice, Connection connection) throws SQLException;
 	public List<Partita> findAll(String nome_campionato);   
 	public void update(Partita partita,Connection connection)throws SQLException;
 	public float[] getPuntiSquadre(long codice,Connection connection)throws SQLException;

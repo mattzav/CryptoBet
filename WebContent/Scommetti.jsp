@@ -210,7 +210,7 @@
 									<c:forEach items="${campionati}" var="campionato">
 										<tr>
 											<td>
-												<form method="post" action="scommetti">
+												<form method="post" action="selezionaCampionato">
 													<input class="btn btn-primary btn-xs" type="submit" value="${campionato.nome}" name="campionato">
 												</form>
 											</td>

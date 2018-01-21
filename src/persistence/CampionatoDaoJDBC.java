@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class CampionatoDaoJDBC implements CampionatoDao {
 	@Override
 	public List<Campionato> findAll() {
 		Connection connection = PostgresDAOFactory.dataSource.getConnection();
-		List<Campionato> campionati = new LinkedList<>();
+		List<Campionato> campionati = new ArrayList<>();
 		try {
 			
 			PreparedStatement statement;

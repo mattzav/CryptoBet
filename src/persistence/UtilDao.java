@@ -77,7 +77,16 @@ public class UtilDao {
 		}
 	}
 	public static void main(String[] args) {
-		UtilDao u = new UtilDao();
+		Connection connessione=PostgresDAOFactory.dataSource.getConnection();
+		Partita p=new Partita(Long.valueOf(213),new Squadra("Atalanta BC"), new Squadra("SSC Napoli"), -1, -1,new Campionato(Long.valueOf(456)," "), new Date().getTime(), false);
+		try {
+			connessione.setAutoCommit(false);
+			PostgresDAOFactory.getDAOFactory(PostgresDAOFactory.POSTGRESQL).getPartitaDao().update(p, connessione);
+			connessione.commit();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//u.createDatabase();
 		//u.addTable("scommessa", new String[]{"codice bigint primary key, data_emissione date, conto_associato bigint references conto(\"codice\"), importo_giocato float, quota_totale float,bonus float,numero_esiti int,vincita_potenziale float"});
 		//u.addTable("scommessa_esitopartita", new String[]{"scommessa bigint not null references scommessa(\"codice\"), esito varchar(255) not null, partita bigint not null, primary key(scommessa,esito,partita),FOREIGN KEY  (esito, partita) REFERENCES esitopartita (esito, partita)"});

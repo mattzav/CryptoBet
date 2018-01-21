@@ -19,7 +19,7 @@ function controlloImporto(){
 		}else{
 			$("#messageDivision").remove();
 			$.ajax({
-				url:'scommetti',
+				url:'inserisciImporto',
 				type:'post',
 				data:{
 					importo:valore
@@ -54,8 +54,10 @@ function controlloImporto(){
 	function esitoSelezionato(esito){
 			$.ajax(
 					{
-						url:'scommetti',
-						data: esito+" = null",
+						url:'selezionaEsito',
+						data: {
+							"bottone":esito,
+						},
 						type:'POST',
 						cache:false,
 						error:function(){alert('error');}
@@ -107,7 +109,9 @@ function controlloImporto(){
 		if(controlloImporto()){
 			$.ajax({
 				url:'scommetti',
-				data: 'giocaScommessa=null',
+				data: {
+					"bottone": "giocaScommessa"
+				},
 				type:'POST',
 	            cache:false,
 	            error:function(){alert('error');}
@@ -152,8 +156,10 @@ function controlloImporto(){
 	//notifica alla servlet la richiesta di svuotare la scommessa
 	function pulisciScommessa(){
 		$.ajax({
-			url:'scommetti',
-			data: 'svuota',
+			url:'svuotaScommessa',
+			data: {
+				"bottone":"svuota" 
+			},
 			type:'POST',
             cache:false,
             error:function(){alert('error');}

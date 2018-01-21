@@ -47,12 +47,12 @@ public class ListaMovimenti extends HttpServlet{
 			}
 		
 		if(movimentiScommessa!=null)
-			for(MovimentoScommessa movimento:movimentiScommessa) {
+			for(MovimentoScommessa movimentoScommessa:movimentiScommessa) {
 				JsonObject movimentoCorrente=new JsonObject();
-				movimentoCorrente.addProperty("codice", movimento.getCodice_transazione());
-				movimentoCorrente.addProperty("importo", movimento.getImporto());
-				movimentoCorrente.addProperty("tipo", movimento.getTipo_transazione());
-				movimentoCorrente.addProperty("scommessa", movimento.getScommessa().getCodice());
+				movimentoCorrente.addProperty("codice", movimentoScommessa.getCodice_transazione());
+				movimentoCorrente.addProperty("importo", movimentoScommessa.getImporto());
+				movimentoCorrente.addProperty("tipo", movimentoScommessa.getTipo_transazione());
+				movimentoCorrente.addProperty("scommessa", movimentoScommessa.getScommessa().getCodice());
 				risultato.add(String.valueOf(i), movimentoCorrente);
 				i++;
 			}
