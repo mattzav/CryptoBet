@@ -27,6 +27,7 @@ public class AggiornaDati extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		RequestDispatcher disp = req.getRequestDispatcher("gestisciPartite.jsp");
+		req.getSession().removeAttribute("loadingSquadre");
 		disp.forward(req, resp);
 	}
 

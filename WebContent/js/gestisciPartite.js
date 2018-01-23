@@ -94,7 +94,7 @@ function getSquadre() {
 			$("#loadingSquadre").remove();
 			$("#squadre").prop("disabled",false);
 		},
-	}).done(function(){
+	}).done(function(response){
 			$("#loadingSquadre").remove();
 			$("#squadre").prop("disabled",false);
 	});

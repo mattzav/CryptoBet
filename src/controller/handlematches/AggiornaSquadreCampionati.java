@@ -47,6 +47,7 @@ public class AggiornaSquadreCampionati extends HttpServlet{
 			for (String s : squadre.split(";")) {
 				squadraDao.save(new Squadra(s),connection);
 			}
+			System.out.println("ho finito le squadre");
 			
 			// salvo tutti gli scudetti relative alle squadre
 			for(String s:scudetti.split("endSquadra")) {
@@ -55,6 +56,8 @@ public class AggiornaSquadreCampionati extends HttpServlet{
 				squadra_con_scudetto.setScudetto(squadra_scudetto[1]);
 				squadraDao.update(squadra_con_scudetto, connection);
 			}
+			
+
 
 			// salvo tutti i campionati
 			for (String s : campionati.split(";")) {
