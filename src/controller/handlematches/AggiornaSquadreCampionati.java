@@ -44,6 +44,7 @@ public class AggiornaSquadreCampionati extends HttpServlet{
 		Connection connection = PostgresDAOFactory.dataSource.getConnection();
 		try {
 			
+			connection.setAutoCommit(false);
 			// salvo tutte le squadre
 			for (String s : squadre.split(";")) {
 				squadraDao.save(new Squadra(s),connection);
@@ -72,6 +73,9 @@ public class AggiornaSquadreCampionati extends HttpServlet{
 				String nome_campionato = s.substring(index + 1, s.length());
 				campionatoDao.save(new Campionato(Long.valueOf(id), nome_campionato),connection);
 			}
+			
+			connection.commit();
+			
 		}catch (SQLException e) {
 			if(connection!=null) {
 				try {
