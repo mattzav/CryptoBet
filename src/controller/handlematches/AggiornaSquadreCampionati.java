@@ -40,6 +40,7 @@ public class AggiornaSquadreCampionati extends HttpServlet{
 		CampionatoDao campionatoDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCampionatoDao();
 
 		// prendo un'unica connessione per l'intera sessione di aggiornamento per evitare di effettuare troppe connessioni al db
+		System.out.println("inizio aggiornamento");
 		Connection connection = PostgresDAOFactory.dataSource.getConnection();
 		try {
 			
@@ -89,5 +90,6 @@ public class AggiornaSquadreCampionati extends HttpServlet{
 			}
 		}
 		sessione.removeAttribute("loadingSquadre");
+		System.out.println("fine aggiornamento");
 	}
 }
