@@ -49,7 +49,8 @@ public class VersamentoSuConto extends HttpServlet{
 				PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getContoDAO().update(contoUtente,connessione);
 				MovimentoCarta movimento=new MovimentoCarta(new java.util.Date(), TipoMovimento.VERSAMENTO, Float.valueOf(importo), contoUtente);
 				PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getMovimentoCartaDAO().save(movimento,connessione);
-			
+				connessione.commit();
+				
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				if(connessione!=null) {

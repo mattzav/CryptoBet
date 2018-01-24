@@ -227,6 +227,7 @@
 								<table class="table" id="esitiasd">
 									<tr>
 										<th>${campionato}</th>
+										<th> Orario </th>
 										<c:forEach items="${esiti}" var="esitoPossibile">
 											<th>${esitoPossibile.descrizione}</th>
 										</c:forEach>
@@ -236,6 +237,9 @@
 											<tr>
 												<td>
 													${partita.squadra_casa.nome} vs ${partita.squadra_ospite.nome} 
+												</td>
+												<td>
+													${partita.data_ora}
 												</td>
 												<c:forEach items="${esiti}" var="esitoPossibile">
 													<c:forEach items="${esitiAttivi}" var="esito">

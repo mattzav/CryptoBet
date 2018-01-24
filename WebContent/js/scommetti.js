@@ -10,7 +10,7 @@ function controlloImporto(){
 		$(".importo").addClass("btn-default");
 		$(".importo").removeClass("btn-danger");
 		$("#scommetti").prop('disabled',false);
-		if(!($.isNumeric( valore )) || valore==""){
+		if(!($.isNumeric( valore )) || valore=="" || valore < 1){
 			$(".importo").removeClass("btn-default");
 			$(".importo").addClass("btn-danger");
 			$("#scommetti").prop('disabled',true);
