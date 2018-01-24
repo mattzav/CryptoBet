@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -58,10 +59,14 @@ public class SelezionaCampionato extends HttpServlet {
 
 				// aggiungi campionato
 				campionatiAttivi.add(campionatoCorrente);
+				Date data=new Date();
 				Connection connessione = PostgresDAOFactory.dataSource.getConnection();
 				for (Partita partita : partitaDao.findAll(campionatoCorrente, connessione)) {
+					if(partita.getData_ora().getTime()<data.getTime())
+						continue;
 					ArrayList<EsitoPartita> listaEsiti = (ArrayList<EsitoPartita>) esitoPartitaDao
 							.findByPartita(partita);
+					
 					for (EsitoPartita esito : listaEsiti) {
 						if (schemaDiScommessa != null) {
 							for (EsitoPartita esitoGiocato : schemaDiScommessa.getEsiti_giocati()) {

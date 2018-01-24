@@ -77,10 +77,11 @@ public class Scommetti extends HttpServlet {
 				Giocatore utente = (Giocatore) sessione.getAttribute("loggato");
 				Conto contoUtente = utente.getConto();
 				Connection connessione=PostgresDAOFactory.dataSource.getConnection();
+				Date data =new Date();
 				for(EsitoPartita esito:schemaDiScommessa.getEsiti_giocati()) {
 					try {
 						Partita partitaGiocata=partitaDao.findByPrimaryKey(esito.getPartita().getCodice(), connessione);
-						if(partitaGiocata.isFinita()) {
+						if(partitaGiocata.getData_ora().getTime()<data.getTime()) {
 							resp.getWriter().print("Errore : La partita "+partitaGiocata.getSquadra_casa().getNome()+" vs "+partitaGiocata.getSquadra_ospite().getNome()+" e' gia' iniziata, rimuovi l'esito selezionato");
 							return;
 						}

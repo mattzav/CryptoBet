@@ -169,7 +169,7 @@ public class PartitaDaoJDBC implements PartitaDao {
 			statement.setLong(1, codice);
 			ResultSet result = statement.executeQuery();
 			if (result.next()) {
-				return new Partita(new Squadra(result.getString(2)), new Squadra(result.getString(3)), result.getInt(8), result.getInt(9), new Campionato(result.getLong(4),""), new java.util.Date(result.getDate(5).getTime()), result.getBoolean(7));
+				return new Partita(new Squadra(result.getString(2)), new Squadra(result.getString(3)), result.getInt(8), result.getInt(9), new Campionato(result.getLong(4),""), new java.util.Date(result.getDate(5).getTime()+result.getTime(6).getTime()), result.getBoolean(7));
 			}
 			return null;
 	}

@@ -3,12 +3,6 @@
   <display-name>CryptoBet</display-name>
 
 	<servlet>
-		<servlet-name>Inizializza</servlet-name>
-    	<servlet-class>controller.handlematches.AggiornamentoAutomatico</servlet-class>
-   		<load-on-startup>1</load-on-startup>
-	</servlet>
- 
-	<servlet>
     	<servlet-name>AggiornaSquadreCampionati</servlet-name>
     	<servlet-class>controller.handlematches.AggiornaSquadreCampionati</servlet-class>
   	</servlet>
