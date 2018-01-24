@@ -5,7 +5,6 @@ import java.util.Date;
 
 import persistence.IdBroker;
 import persistence.PostgresDAOFactory;
-import persistence.UtilDao;
 
 public class Conto implements Serializable{
 	

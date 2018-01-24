@@ -105,7 +105,7 @@ function getPartite() {
 	$("#aggiornaPartite").append("<div id=\"loadingPartite\" class=\"loader\"></div>");
 	$("#partite").prop("disabled",true);
 	var data = new Date();
-	var data_inizio = new Date(data.getTime() - 1000 * 60 * 60 * 24 * 7);
+	var data_inizio = new Date(data.getTime() - 1000 * 60 * 60 * 24 * 3);
 	var data_inizio_string = data_inizio.getFullYear() + "-"
 			+ (data_inizio.getMonth() + 1) + "-" + data_inizio.getDate();
 	if (data_inizio_string[7] != '-') {
@@ -116,7 +116,7 @@ function getPartite() {
 		data_inizio_string = data_inizio_string.substr(0, 8) + "0"
 				+ data_inizio_string[8];
 	}
-	var data_fine = new Date(data.getTime() + 1000 * 60 * 60 * 24 * 7);
+	var data_fine = new Date(data.getTime() + 1000 * 60 * 60 * 24 * 3);
 	var data_fine_string = data_fine.getFullYear() + "-"
 			+ (data_fine.getMonth() + 1) + "-" + data_fine.getDate();
 	if (data_fine_string[7] != '-') {

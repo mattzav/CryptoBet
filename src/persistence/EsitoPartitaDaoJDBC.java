@@ -49,7 +49,8 @@ public class EsitoPartitaDaoJDBC implements EsitoPartitaDao {
 			throw new PersistenceException(e.getMessage());
 		} finally {
 			try {
-				connection.close();
+				if(connection!=null)
+					connection.close();
 			} catch (SQLException e) {
 				throw new PersistenceException(e.getMessage());
 			}
@@ -75,7 +76,8 @@ public class EsitoPartitaDaoJDBC implements EsitoPartitaDao {
 			throw new PersistenceException(e.getMessage());
 		} finally {
 			try {
-				connection.close();
+				if(connection!=null)
+					connection.close();
 			} catch (SQLException e) {
 				throw new PersistenceException(e.getMessage());
 			}
@@ -109,7 +111,8 @@ public class EsitoPartitaDaoJDBC implements EsitoPartitaDao {
 			throw new PersistenceException(e.getMessage());
 		} finally {
 			try {
-				connection.close();
+				if(connection!=null)
+					connection.close();
 			} catch (SQLException e) {
 				throw new PersistenceException(e.getMessage());
 			}

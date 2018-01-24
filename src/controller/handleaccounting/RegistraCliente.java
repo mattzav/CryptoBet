@@ -126,7 +126,8 @@ public class RegistraCliente extends HttpServlet {
 			//prendo la connessione
 			Connection connessione=PostgresDAOFactory.dataSource.getConnection();
 			try {
-				connessione.setAutoCommit(false);
+				if(connessione!=null)
+					connessione.setAutoCommit(false);
 			} catch (SQLException e2) {
 				// TODO Auto-generated catch block
 				e2.printStackTrace();
@@ -139,7 +140,8 @@ public class RegistraCliente extends HttpServlet {
 				PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCredenzialiDAO().save(nuovaCredenziale,connessione);
 				PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getGiocatoreDAO().save(nuovoGiocatore,connessione);
 				try {
-					connessione.commit();
+					if(connessione!=null)
+						connessione.commit();
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
@@ -160,7 +162,8 @@ public class RegistraCliente extends HttpServlet {
 				}
 			}finally {
 				try {
-					connessione.close();
+					if(connessione!=null)
+						connessione.close();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

@@ -30,7 +30,8 @@ public class AggiornaPartite extends HttpServlet {
 		Connection connection = PostgresDAOFactory.dataSource.getConnection();
 		try {
 			System.out.println("aggiornamento partite in corso");
-			connection.setAutoCommit(false);
+			if(connection!=null)
+				connection.setAutoCommit(false);
 			sessione.setAttribute("loadingPartite", true);
 
 			PartitaDao partitaDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getPartitaDao();
@@ -70,7 +71,8 @@ public class AggiornaPartite extends HttpServlet {
 				// salvo la partita
 				System.out.println(match.getCodice());
 				partitaDao.save(match, connection);
-				connection.commit();
+				if(connection!=null)
+					connection.commit();
 
 			}
 			System.out.println("aggiornamento partite concluso");
@@ -86,7 +88,8 @@ public class AggiornaPartite extends HttpServlet {
 			}
 		} finally {
 			try {
-				connection.close();
+				if(connection!=null)
+					connection.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

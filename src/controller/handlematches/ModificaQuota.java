@@ -63,7 +63,8 @@ public class ModificaQuota extends HttpServlet {
 			float quota=1.0f;
 			try {
 				quota = partitaDao.getQuota(codicePartita, esito,connection);
-				connection.close();
+				if(connection!=null)
+					connection.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

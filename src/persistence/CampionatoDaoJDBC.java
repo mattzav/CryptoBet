@@ -65,7 +65,8 @@ public class CampionatoDaoJDBC implements CampionatoDao {
 			throw new PersistenceException(e.getMessage());
 		} finally {
 			try {
-				connection.close();
+				if(connection!=null)
+					connection.close();
 			} catch (SQLException e) {
 				throw new PersistenceException(e.getMessage());
 			}

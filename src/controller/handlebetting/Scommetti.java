@@ -94,7 +94,8 @@ public class Scommetti extends HttpServlet {
 				
 					//prendo la connection per assicurare l'atomicità
 					try {
-						connessione.setAutoCommit(false);
+						if(connessione!=null)
+							connessione.setAutoCommit(false);
 					} catch (SQLException e3) {
 						// TODO Auto-generated catch block
 						e3.printStackTrace();
@@ -106,7 +107,8 @@ public class Scommetti extends HttpServlet {
 								.save(new Scommessa(new Date(), contoUtente, schemaDiScommessa, "non verificata"),connessione);
 						ContoDao contoDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getContoDAO();
 						contoDao.update(contoUtente,connessione);
-						connessione.commit();
+						if(connessione!=null)
+							connessione.commit();
 					
 					} catch (SQLException e1) {
 						if(connessione!=null) {
@@ -122,7 +124,8 @@ public class Scommetti extends HttpServlet {
 						}
 					}finally {
 						try {
-							connessione.close();
+							if(connessione!=null)
+								connessione.close();
 						} catch (SQLException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();

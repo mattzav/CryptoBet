@@ -88,7 +88,8 @@ public class AggiornaQuote extends HttpServlet {
 					partiteAttive.add(partita);
 				}
 				try {
-					connessione.close();
+					if(connessione!=null)
+						connessione.close();
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}

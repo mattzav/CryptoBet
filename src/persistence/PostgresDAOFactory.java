@@ -72,12 +72,6 @@ public class PostgresDAOFactory extends DAOFactory {
 
 
 	@Override
-	public UtilDao getUtilDAO() {
-		return new UtilDao();
-	}
-
-
-	@Override
 	public SquadraDao getSquadraDAO() {
 		// TODO Auto-generated method stub
 		return new SquadraDaoJDBC();

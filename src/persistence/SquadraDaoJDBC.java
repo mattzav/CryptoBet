@@ -45,7 +45,8 @@ public class SquadraDaoJDBC implements SquadraDao {
 			throw new PersistenceException(e.getMessage());
 		} finally {
 			try {
-				connection.close();
+				if(connection!=null)
+					connection.close();
 			} catch (SQLException e) {
 				throw new PersistenceException(e.getMessage());
 			}
@@ -75,7 +76,8 @@ public class SquadraDaoJDBC implements SquadraDao {
 			throw new PersistenceException(e.getMessage());
 		} finally {
 			try {
-				connection.close();
+				if(connection!=null)
+					connection.close();
 			} catch (SQLException e) {
 				throw new PersistenceException(e.getMessage());
 			}
@@ -123,7 +125,8 @@ public class SquadraDaoJDBC implements SquadraDao {
 			throw new PersistenceException(e.getMessage());
 		} finally {
 			try {
-				connection.close();
+				if(connection!=null)
+					connection.close();
 			} catch (SQLException e) {
 				throw new PersistenceException(e.getMessage());
 			}

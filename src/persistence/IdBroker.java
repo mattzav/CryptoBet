@@ -44,7 +44,8 @@ public class IdBroker {
 			throw new PersistenceException(e.getMessage());
 		}finally {
 			try {
-				connection.close();
+				if(connection!=null)
+					connection.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

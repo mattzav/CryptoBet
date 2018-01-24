@@ -39,8 +39,6 @@ public abstract class DAOFactory {
 	
 	public abstract MovimentoCartaDao getMovimentoCartaDAO();
 
-	public abstract persistence.UtilDao getUtilDAO();
-
 	public abstract SquadraDao getSquadraDAO();
 	
 	public abstract CampionatoDao getCampionatoDao();
