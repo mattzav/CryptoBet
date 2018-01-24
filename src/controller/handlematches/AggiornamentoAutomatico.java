@@ -38,7 +38,7 @@ public class AggiornamentoAutomatico extends HttpServlet {
 						ArrayList<Campionato> campionati=(ArrayList<Campionato>) PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getCampionatoDao().findAll();
 						for(Campionato c : campionati) {
 							PartitaDao partitaDao=PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getPartitaDao();
-							ArrayList<Partita> partite = (ArrayList<Partita>) partitaDao.findAll(c.getNome());
+							ArrayList<Partita> partite = (ArrayList<Partita>) partitaDao.findAll(c.getNome(),connessione);
 							for(Partita p: partite) {
 								if(p.getData_ora().getTime()<data.getTime()) {
 									p.setFinita(true);
@@ -58,7 +58,8 @@ public class AggiornamentoAutomatico extends HttpServlet {
 						}
 					}finally {
 						try {
-							connessione.close();
+							if(connessione!=null)
+								connessione.close();
 						} catch (SQLException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();

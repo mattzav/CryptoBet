@@ -1,6 +1,8 @@
 package controller.handlebetting;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
@@ -23,16 +25,16 @@ public class SelezionaCampionato extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-		HttpSession sessione=req.getSession();
+		HttpSession sessione = req.getSession();
 		PartitaDao partitaDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getPartitaDao();
 		EsitoPartitaDao esitoPartitaDao = PostgresDAOFactory.getDAOFactory(DAOFactory.POSTGRESQL).getEsitoPartitaDao();
-		
+
 		ArrayList<String> campionatiAttivi = (ArrayList<String>) sessione.getAttribute("campionatiAttivi");
 		if (campionatiAttivi == null) {
 			campionatiAttivi = new ArrayList<>();
 			sessione.setAttribute("campionatiAttivi", campionatiAttivi);
 		}
-		
+
 		ArrayList<Partita> partiteAttive = (ArrayList<Partita>) sessione.getAttribute("partiteAttive");
 		ArrayList<EsitoPartita> esitiAttivi = (ArrayList<EsitoPartita>) sessione.getAttribute("esitiAttivi");
 
@@ -56,9 +58,10 @@ public class SelezionaCampionato extends HttpServlet {
 
 				// aggiungi campionato
 				campionatiAttivi.add(campionatoCorrente);
-				
-				for (Partita partita : partitaDao.findAll(campionatoCorrente)) {
-					ArrayList<EsitoPartita> listaEsiti = (ArrayList<EsitoPartita>) esitoPartitaDao.findByPartita(partita);
+				Connection connessione = PostgresDAOFactory.dataSource.getConnection();
+				for (Partita partita : partitaDao.findAll(campionatoCorrente, connessione)) {
+					ArrayList<EsitoPartita> listaEsiti = (ArrayList<EsitoPartita>) esitoPartitaDao
+							.findByPartita(partita);
 					for (EsitoPartita esito : listaEsiti) {
 						if (schemaDiScommessa != null) {
 							for (EsitoPartita esitoGiocato : schemaDiScommessa.getEsiti_giocati()) {
@@ -74,9 +77,15 @@ public class SelezionaCampionato extends HttpServlet {
 					esitiAttivi.addAll(listaEsiti);
 					partiteAttive.add(partita);
 				}
+				try {
+					if (connessione != null)
+						connessione.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 			} else {
-				
-				//campionato gia selezionato
+
+				// campionato gia selezionato
 				campionatiAttivi.remove(campionatoCorrente);
 				ArrayList<EsitoPartita> esitiDaEliminare = new ArrayList<>();
 
