@@ -1,6 +1,8 @@
 package controller.handlematches;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
@@ -78,10 +80,17 @@ public class AggiornaQuote extends HttpServlet {
 			// se il campionato passato nella richiesta non è attivo lo attivo e attivo tutte gli esiti relativi alle partite di quel campionato
 			if (!campionatiAttivi.contains(current)) {
 
+				//aggiunto zav
+				Connection connessione = PostgresDAOFactory.dataSource.getConnection();
 				campionatiAttivi.add(current);
-				for (Partita partita : partitaDao.findAll(current)) {
+				for (Partita partita : partitaDao.findAll(current,connessione)) {
 					esitiAttivi.addAll(esitoPartitaDao.findByPartita(partita));
 					partiteAttive.add(partita);
+				}
+				try {
+					connessione.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
 				}
 			} 
 			//se invece è attivo lo rimuovo e rimuovo tutti gli esiti relativi alle partite di quel campionato
