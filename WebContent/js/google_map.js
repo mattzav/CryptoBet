@@ -170,7 +170,6 @@ function calcolaPercorso(posizioneArrivo) {
 	
 	if(Math.abs(punti[1]["lat"]-posizioneArrivo.lat())+Math.abs(punti[1]["long"]-posizioneArrivo.lng()) < Math.abs(punti[0]["lat"]-posizioneArrivo.lat())+Math.abs(punti[0]["long"]-posizioneArrivo.lng()))
 	{
-		alert("buso");
 		piuVicino= punti[1];
 	}
 	

@@ -39,6 +39,26 @@
 		<div id="fh5co-page">
 			<div id="fh5co-header">
 				<header id="fh5co-header-section">
+					<c:if test="${loggato!=null}">
+						<div class="info">
+							<div class="col-sm-5">
+								<span id="messaggio" class="btn col-sm-6"> ${mex} </span>
+							</div>
+							<span class="col-sm-5"> <c:if test="${utente==\"USER\"}">
+									<h2>
+										<a href="MioConto.jsp" class="btn">Saldo conto :
+											${loggato.conto.saldo}</a>
+									</h2>
+								</c:if>
+							</span>
+							<div class="col-sm-2">
+								<span class="col-sm-6"> <a href="login"><input
+										type="button" class="btn btn-primary" value=LOG-OUT
+										onclick="<c:set var="page" value="SquadreCampionati.jsp" scope="session" />"></a>
+								</span>
+							</div>
+						</div>
+					</c:if>
 					<div class="container">
 						<div class="nav-header">
 							<a href="#" class="js-fh5co-nav-toggle fh5co-nav-toggle"><i></i></a>
@@ -47,14 +67,15 @@
 							</h1>
 							<!-- START #fh5co-menu-wrap -->
 							<nav id="fh5co-menu-wrap" role="navigation">
-							<ul class="sf-menu" id="fh5co-primary-menu">
-								<li><a href="index.jsp">Home</a></li>
-								<li><a href="scommetti">Scommesse</a></li>
-								<li><a href="MioConto.jsp">Il Mio Conto</a></li>
-								<li><a href="gestisciPartite.jsp"> Gestisci Partite</a></li>
-								<li><a href="SquadreCampionati.jsp">Tutte le squadre</a></li>
-								<li><a href="InformazioniSuDiNoi.html">Informazioni su di noi</a></li>
-							</ul> 
+								<ul class="sf-menu" id="fh5co-primary-menu">
+									<li><a href="index.jsp">Home</a></li>
+									<li><a href="scommetti">Scommesse</a></li>
+									<li><a href="MioConto.jsp">Il Mio Conto</a></li>
+									<li><a href="gestisciPartite.jsp"> Gestisci Partite</a></li>
+									<li><a href="SquadreCampionati.jsp">Tutte le squadre</a></li>
+									<li><a href="InformazioniSuDiNoi.html">Informazioni su di
+											noi</a></li>
+								</ul>
 							</nav>
 						</div>
 					</div>
@@ -71,6 +92,7 @@
 							class="col-md-8 col-md-offset-2 col-sm-12 col-sm-offset-0 col-xs-12 col-xs-offset-0 text-center fh5co-table">
 							<div class="fh5co-intro fh5co-table-cell animate-box">
 								<h1 class="text-center">
+									<br><br>
 									<strong>CryptoBet</strong>
 								</h1>
 								<br> <br>
@@ -91,14 +113,16 @@
 						<div>
 							<button
 								class="previous disabled btn btn-xs btn-success glyphicon glyphicon-chevron-left"
-								type="button" value="PREVIOUS" name="previous" onclick="caricaScudetti(true);"></button>
+								type="button" value="PREVIOUS" name="previous"
+								onclick="caricaScudetti(true);"></button>
 							<label class="page"> </label>
 							<button
 								class="next btn btn-xs btn-success glyphicon glyphicon-chevron-right"
-								type="button" value="NEXT" name="next" onclick=	"caricaScudetti(false);"></button>
+								type="button" value="NEXT" name="next"
+								onclick="caricaScudetti(false);"></button>
 
 						</div>
-						<div >
+						<div>
 							<div class="col-sm-7">
 								<table class="table">
 									<tr class="warning">
@@ -144,8 +168,9 @@
 						<div class="col-md-4 animate-box">
 							<h3 class="section-title">I nostri contatti</h3>
 							<ul class="contact-info">
-								<li><i class="icon-map-marker"></i>Dipartimento	di Matematica e Informatica, Università Della Calabria.
-								<br>Ponte Pietro Bucci, 87036 Quattromiglia CS</li>
+								<li><i class="icon-map-marker"></i>Dipartimento di
+									Matematica e Informatica, Università Della Calabria. <br>Ponte
+									Pietro Bucci, 87036 Quattromiglia CS</li>
 								<li><i class="icon-phone"></i>+ 345 1234 567</li>
 								<li><i class="icon-envelope"></i><a href="#">cryptoBetTeam@unical.it</a></li>
 								<li><i class="icon-globe2"></i><a href="#">www.CryptoBet.com</a></li>
