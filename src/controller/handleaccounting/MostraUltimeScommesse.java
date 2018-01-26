@@ -40,7 +40,6 @@ public class MostraUltimeScommesse extends HttpServlet{
 		// invio al client tutte le scommesse relative a quel cliente
 		int i=0;
 		for(Scommessa s: scommesse) {
-			System.out.println(s.getCodice());
 			
 			JsonObject jsonScommessa = new JsonObject();
 			

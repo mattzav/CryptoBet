@@ -85,9 +85,7 @@ public class SchemaDiScommessa implements Serializable{
 	}
 
 	public void removeEsito(EsitoPartita esito) {
-		System.out.println(quota_totale);
 		quota_totale/=esito.getQuota();
-		System.out.println(quota_totale);
 		numero_esiti--;
 		updateBonus();
 		vincita_potenziale=(quota_totale*importo_giocato)+bonus;

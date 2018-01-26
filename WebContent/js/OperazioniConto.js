@@ -64,6 +64,7 @@ function mostraUltimeScommesse() {
 }
 
 function verificaScommessa(codice) {
+	$("#response").append("<div id=\"loadingVerifica\" class=\"loader\"></div>");
 	$.ajax({
 		type : 'POST',
 		url : 'verificaScommessa',
@@ -72,8 +73,10 @@ function verificaScommessa(codice) {
 		},
 		error : function() {
 			alert("error");
+			$("#loadingVerifica").remove();
 		},
 		success : function(data) {
+			$("#loadingVerifica").remove();
 			if (data != "non conclusa") {
 				var stato=data.split(";")[0];
 				var saldo=data.split(";")[1];
@@ -88,6 +91,11 @@ function verificaScommessa(codice) {
 				else{
 					$("#" + codice).addClass("danger");
 				}
+			}else{
+				$("#response").append(
+						"<div id=\"messageDivision\" class=\"alert alert-warning alert-dismissable\">" +
+							"<a class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">x</a>"+
+							"<strong> Scommessa non conclusa : </strong> non tutte le partite sono concluse !</div>");
 			}
 		}
 	});

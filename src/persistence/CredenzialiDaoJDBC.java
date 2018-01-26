@@ -37,7 +37,6 @@ public class CredenzialiDaoJDBC implements CredenzialiDao {
 			statement.setString(1, matricola);
 			ResultSet result = statement.executeQuery();
 			if (result.next()) {
-				System.out.println("trovato");
 				Credenziali c=new Credenziali(matricola,result.getString(1));
 				return c;
 			}

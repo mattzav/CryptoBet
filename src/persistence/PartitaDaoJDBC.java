@@ -55,9 +55,8 @@ public class PartitaDaoJDBC implements PartitaDao {
 					
 
 				EsitoDao esitoDao = PostgresDAOFactory.getDAOFactory(PostgresDAOFactory.POSTGRESQL).getEsitoDao();
-				PartitaDao partitaDao = PostgresDAOFactory.getDAOFactory(PostgresDAOFactory.POSTGRESQL).getPartitaDao();
 				for (Esito e : esitoDao.findAll()) {
-					float quota = partitaDao.getQuota(partita.getCodice(), e.getDescrizione(), connection);
+					float quota = getQuota(partita.getCodice(), e.getDescrizione(), connection);
 					insert = "insert into esitopartita(esito,partita,quota,disponibile,stato) values (?,?,?,?,?)";
 					statement = connection.prepareStatement(insert);
 					statement.setString(1, e.getDescrizione());

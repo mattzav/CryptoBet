@@ -20,7 +20,6 @@ public class GiocatoreDaoJDBC implements GiocatoreDao {
 	
 		String insert = "insert into giocatore(codice, nome, cognome, data_nascita, username, conto) values (?,?,?,?,?,?)";
 		PreparedStatement statement = connection.prepareStatement(insert);
-		System.out.println(giocatore.getCodice());
 		statement.setLong(1, giocatore.getCodice());
 		statement.setString(2, giocatore.getNome());
 		statement.setString(3, giocatore.getCognome());

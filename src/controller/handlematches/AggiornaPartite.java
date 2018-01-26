@@ -69,7 +69,6 @@ public class AggiornaPartite extends HttpServlet {
 				}
 
 				// salvo la partita
-				System.out.println(match.getCodice());
 				partitaDao.save(match, connection);
 				if(connection!=null)
 					connection.commit();
@@ -80,7 +79,6 @@ public class AggiornaPartite extends HttpServlet {
 		} catch (SQLException e1) {
 			try {
 				if (connection != null) {
-					System.out.println("ciso");
 					connection.rollback();
 				}
 			} catch (SQLException e) {
