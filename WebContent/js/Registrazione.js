@@ -109,7 +109,9 @@
 		//controlla che il campo password non sia vuoto
 		function controllaPassword(){
 			var pwd=$("#password").val();
-			if (pwd=="") {
+			var formato=/^[A-Z].{5,}\d+/;
+			var spazi=/\s+/;
+			if (pwd=="" || !(formato.test(pwd)) || spazi.test(pwd) ) {
 				$("#passwordError").css('display', 'block');
 				notificaErrore("true","errorePassword");
 			}

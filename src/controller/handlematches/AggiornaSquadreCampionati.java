@@ -49,6 +49,8 @@ public class AggiornaSquadreCampionati extends HttpServlet{
 			// salvo tutte le squadre
 			for (String s : squadre.split(";")) {
 				squadraDao.save(new Squadra(s),connection);
+				if(connection!=null)
+					connection.commit();
 			}
 			System.out.println("ho finito le squadre");
 			
@@ -60,6 +62,8 @@ public class AggiornaSquadreCampionati extends HttpServlet{
 				squadraDao.update(squadra_con_scudetto, connection);
 			}
 			
+			if(connection!=null)
+				connection.commit();
 
 
 			// salvo tutti i campionati
@@ -73,10 +77,9 @@ public class AggiornaSquadreCampionati extends HttpServlet{
 				
 				String nome_campionato = s.substring(index + 1, s.length());
 				campionatoDao.save(new Campionato(Long.valueOf(id), nome_campionato),connection);
+				if(connection!=null)
+					connection.commit();
 			}
-			
-			if(connection!=null)
-				connection.commit();
 			
 		}catch (SQLException e) {
 			if(connection!=null) {
