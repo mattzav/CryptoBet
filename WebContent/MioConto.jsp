@@ -5,7 +5,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CryptoBet</title>
 
 <link rel="shortcut icon" href="favicon.ico">
@@ -22,6 +22,7 @@
 <link rel="stylesheet" href="css/style.css">
 <script src="js/modernizr-2.6.2.min.js"></script>
 <script src="js/OperazioniConto.js"></script>
+<link href="css/utility.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 	<div id="fh5co-wrapper">

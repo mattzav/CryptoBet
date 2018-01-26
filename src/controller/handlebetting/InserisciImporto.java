@@ -2,6 +2,7 @@ package controller.handlebetting;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
@@ -34,7 +35,8 @@ public class InserisciImporto extends HttpServlet{
 			sessione.setAttribute("importo", Float.valueOf(importo));
 			schemaDiScommessa.setImporto_giocato(Float.valueOf(importo));
 			PrintWriter pw = resp.getWriter();
-			pw.print(schemaDiScommessa.getVincita_potenziale() + ";" + schemaDiScommessa.getBonus());
+			DecimalFormat formato=new DecimalFormat("#.##");
+			pw.print(formato.format(schemaDiScommessa.getVincita_potenziale()) + ";" + formato.format(schemaDiScommessa.getBonus()));
 			return;
 			
 		}

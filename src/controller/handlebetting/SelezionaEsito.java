@@ -1,6 +1,7 @@
 package controller.handlebetting;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
@@ -78,10 +79,11 @@ public class SelezionaEsito extends HttpServlet {
 						} 
 						
 						//dati scommessa aggiornati
+						DecimalFormat formato = new DecimalFormat("#.##");
 						resp.getWriter().print(esito.getPartita().getSquadra_casa().getNome() + ";"
-								+ esito.getPartita().getSquadra_ospite().getNome() + ";" + esito.getQuota() + ";"
-								+ schemaDiScommessa.getQuota_totale() + ";" + +schemaDiScommessa.getBonus() + ";"
-								+ schemaDiScommessa.getVincita_potenziale());
+								+ esito.getPartita().getSquadra_ospite().getNome() + ";" + formato.format(esito.getQuota()) + ";"
+								+ formato.format(schemaDiScommessa.getQuota_totale()) + ";" +formato.format(schemaDiScommessa.getBonus()) + ";"
+								+ formato.format(schemaDiScommessa.getVincita_potenziale()));
 						return;
 					}
 				}

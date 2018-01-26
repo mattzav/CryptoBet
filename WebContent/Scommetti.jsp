@@ -6,7 +6,7 @@
 
 <head>
 <meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CryptoBet</title>
 <link rel="shortcut icon" href="favicon.ico">
 
@@ -139,7 +139,7 @@
 					</div>
 				</div>
 				<div class="row">
-					<div>
+					<div class="scroll-table">
 						<table class="table table-responsive">
 							<tr class="danger">
 								<th colspan="2">
@@ -324,6 +324,11 @@
 	<script src="js/superfish.js"></script>
 
 	<script src="js/main.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			window.location.href = "#esitiasd";
+		});
+	</script>
 
 </body>
 </html>

@@ -58,7 +58,6 @@ public class AmministratoreDaoJDBC implements AmministratoreDao {
 			statement.setString(1, credenziali.getUsername());
 			statement.setString(2, credenziali.getPassword());
 			statement.setString(3, TipoCredenziali.ADMIN);
-			System.out.println(credenziali.getUsername()+" "+credenziali.getPassword());
 			ResultSet result = statement.executeQuery();
 			if (result.next()) {
 				return true;

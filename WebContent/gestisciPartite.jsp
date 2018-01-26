@@ -5,7 +5,7 @@
 <html class="no-js">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CryptoBet</title>
 
 <link rel="shortcut icon" href="favicon.ico">
@@ -18,12 +18,12 @@
 <link rel="stylesheet" href="css/icomoon.css">
 <link rel="stylesheet" href="css/bootstrap.css">
 <link rel="stylesheet" href="css/superfish.css">
-<link href="css/utility.css" rel="stylesheet" type="text/css"/>
 
 <link rel="stylesheet" href="css/style.css">
 
 <script src="js/modernizr-2.6.2.min.js"></script>
 <script src="js/gestisciPartite.js"></script>
+<link href="css/utility.css" rel="stylesheet" type="text/css"/>
 
 </head>
 <body>
@@ -58,14 +58,14 @@
 							</h1>
 							<!-- START #fh5co-menu-wrap -->
 							<nav id="fh5co-menu-wrap" role="navigation">
-							<ul class="sf-menu" id="fh5co-primary-menu">
-								<li><a href="index.jsp">Home</a></li>
-								<li><a href="scommetti">Scommesse</a></li>
-								<li><a href="MioConto.jsp">Il Mio Conto</a></li>
-								<li><a href="gestisciPartite.jsp"> Gestisci Partite</a></li>
-								<li><a href="SquadreCampionati.jsp">Tutte le squadre</a></li>
-								<li><a href="InformazioniSuDiNoi.html">Su di noi</a></li>
-							</ul>
+								<ul class="sf-menu" id="fh5co-primary-menu">
+									<li><a href="index.jsp">Home</a></li>
+									<li><a href="scommetti">Scommesse</a></li>
+									<li><a href="MioConto.jsp">Il Mio Conto</a></li>
+									<li><a href="gestisciPartite.jsp"> Gestisci Partite</a></li>
+									<li><a href="SquadreCampionati.jsp">Tutte le squadre</a></li>
+									<li><a href="InformazioniSuDiNoi.html">Su di noi</a></li>
+								</ul>
 							</nav>
 						</div>
 					</div>
@@ -82,8 +82,10 @@
 							class="col-md-8 col-md-offset-2 col-sm-12 col-sm-offset-0 col-xs-12 col-xs-offset-0 text-center fh5co-table">
 							<div class="fh5co-intro fh5co-table-cell animate-box">
 								<c:if test="${utente==\"ADMIN\"}">
+									<br>
+									<br>
+									<br>
 									<h1 class="text-center">Aggiorna il tuo sito</h1>
-									<br />
 									<p>Qui potrai modificare le quote relative alle partite
 										disponibili o richiedere un aggiornamento completo dei tuoi
 										dati</p>
