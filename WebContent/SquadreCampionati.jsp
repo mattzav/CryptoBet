@@ -63,7 +63,7 @@
 						<div class="nav-header">
 							<a href="#" class="js-fh5co-nav-toggle fh5co-nav-toggle"><i></i></a>
 							<h1 id="fh5co-logo">
-								<a href="index.html">Crypto<span>Bet</span></a>
+								<a href="index.jsp">Crypto<span>Bet</span></a>
 							</h1>
 							<!-- START #fh5co-menu-wrap -->
 							<nav id="fh5co-menu-wrap" role="navigation">
@@ -168,7 +168,7 @@
 							<h3 class="section-title">I nostri contatti</h3>
 							<ul class="contact-info">
 								<li><i class="icon-map-marker"></i>Dipartimento di
-									Matematica e Informatica, Università Della Calabria. <br>Ponte
+									Matematica e Informatica, Universita' Della Calabria. <br>Ponte
 									Pietro Bucci, 87036 Quattromiglia CS</li>
 								<li><i class="icon-phone"></i>+ 345 1234 567</li>
 								<li><i class="icon-envelope"></i><a href="#">cryptoBetTeam@unical.it</a></li>
