@@ -109,7 +109,7 @@
 									<c:forEach items="${partiteAttive}" var="partita">
 										<c:if test="${partita.campionato.nome==campionato}">
 											<tr class="info">
-												<td>${partita.squadra_casa.nome}vs
+												<td>${partita.squadra_casa.nome} vs
 													${partita.squadra_ospite.nome}</td>
 												<c:forEach items="${esiti}" var="esitoOrdinato">
 													<c:forEach items="${esitiAttivi}" var="esito">
